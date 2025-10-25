@@ -56,7 +56,7 @@ export default function About() {
   return (
     <div className="space-y-8">
       <div className="text-center space-y-6">
-        <h2 className="text-5xl font-extrabold text-yellow-300 a-pop">Aura-7F</h2>
+  <h2 className="text-4xl sm:text-5xl font-extrabold text-yellow-300 a-pop">Aura-7F</h2>
 
   <div className="flex items-center justify-center gap-6 max-w-4xl mx-auto px-4 sm:px-0">
           <div
@@ -89,7 +89,7 @@ export default function About() {
       </div>
 
       <div className="mt-6">
-  <h3 className="text-3xl font-bold text-yellow-300 mb-4 text-center a-fade-up">Our Philosophy</h3>
+    <h3 className="text-2xl sm:text-3xl font-bold text-yellow-300 mb-4 text-center a-fade-up">Our Philosophy</h3>
   <p className="text-aura max-w-4xl mx-auto text-center a-fade-up px-4 sm:px-0">Like a star that burns brightest in the vast cosmos, Aura-7F represents the pinnacle of positive energy in the digital universe. We believe that true innovation happens when brilliant minds unite under a shared constellation of values.
     Our name embodies our commitment to reaching the highest levels of excellence (7F in hexadecimal) while maintaining the radiant, inspiring presence of a guiding star (Aura) for others in the tech community.</p>
       </div>

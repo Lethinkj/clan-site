@@ -361,6 +361,10 @@ body::before {
 
 @media (max-width: 640px) {
   /* keep header logo aligned top-left and ensure body content has bottom padding to avoid overlap with nav */
-  body { padding-bottom: 84px; }
+  body { padding-bottom: 110px; }
 }
+
+/* mobile bottom nav sizing tweaks */
+.mobile-bottom-nav { height: 64px; align-items: center; padding-left: 12px; padding-right: 12px; }
+.mobile-bottom-nav .nav-link { padding: 0 10px; }
 

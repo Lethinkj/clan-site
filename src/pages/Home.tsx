@@ -3,15 +3,15 @@ import React from 'react'
 export default function Home() {
   return (
     <div className="space-y-12">
-      <div className="text-center space-y-6">
-        <h2 className="text-5xl font-bold text-yellow-300 mb-4 a-fade-up">Together We Build Tomorrow's Solutions</h2>
-  <p className="text-xl text-aura leading-relaxed max-w-3xl mx-auto a-fade-up">
-            We(Aura-7F),the Clan of Byte Bash Blitz, United by passion, driven by purpose. We're a team of developers committed to crafting exceptional software through collaboration and innovation.
+      <div className="text-center space-y-6 px-4 sm:px-0">
+        <h2 className="text-3xl sm:text-5xl font-bold text-yellow-300 mb-4 a-fade-up">Together We Build Tomorrow's Solutions</h2>
+  <p className="text-base sm:text-xl text-aura leading-relaxed max-w-3xl mx-auto a-fade-up">
+            We (Aura-7F), the Clan of Byte Bash Blitz — united by passion, driven by purpose. We're a team of developers committed to crafting exceptional software through collaboration and innovation.
         </p>
       </div>
 
           <div className="mt-12">
-            <h3 className="text-3xl font-bold text-yellow-300 mb-8 text-center a-fade-up">Our Core Principles</h3>
+            <h3 className="text-2xl sm:text-3xl font-bold text-yellow-300 mb-8 text-center a-fade-up">Our Core Principles</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 a-stagger">
                 <div className="bg-black/50 border border-yellow-300/20 p-6 rounded-lg shadow-md aura-card a-fade-up">
                   <div className="text-4xl mb-4">🤝</div>
@@ -35,8 +35,8 @@ export default function Home() {
           </div>
 
       <div className="mt-12">
-        <h3 className="text-3xl font-bold text-yellow-300 mb-8 text-center a-fade-up">Team Aura</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 a-stagger">
+  <h3 className="text-2xl sm:text-3xl font-bold text-yellow-300 mb-8 text-center a-fade-up">Team Aura</h3>
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 a-stagger">
           <div className="bg-black/50 border border-yellow-300/20 p-6 rounded-lg shadow-md aura-card text-center a-pop">
             <div className="text-3xl font-bold text-yellow-300 mb-2">99.9%</div>
               <p className="text-aura">Collaboration</p>

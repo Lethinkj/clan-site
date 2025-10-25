@@ -11,7 +11,7 @@ export default function Events() {
     <div className="space-y-8">
       <div className="text-center">
         <h2 className="text-4xl font-bold text-yellow-300 mb-4 a-fade-up">Events</h2>
-  <p className="text-xl text-aura mb-8 a-fade-up">Join our community events to expand your knowledge and network</p>
+  <p className="text-base sm:text-xl text-aura mb-8 a-fade-up">Join our community events to expand your knowledge and network</p>
         <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mb-12 a-stagger">
           <div className="bg-black/50 border border-yellow-300/20 p-4 rounded-lg shadow-md aura-card a-fade-up">
             <div className="text-3xl font-bold text-yellow-300 mb-1">3+</div>
