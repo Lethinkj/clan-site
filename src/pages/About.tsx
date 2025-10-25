@@ -14,13 +14,14 @@ export default function About() {
 
   const timelineRef = useRef<HTMLDivElement | null>(null)
   const [beeTop, setBeeTop] = useState<number | null>(null)
+  const [beeLeft, setBeeLeft] = useState<number | null>(null)
   const [beeVisible, setBeeVisible] = useState(false)
 
   useEffect(() => {
-    const container = timelineRef.current
-    if (!container) return
-    const dots = Array.from(container.querySelectorAll('.timeline-dot')) as HTMLElement[]
-    if (!dots.length) return
+  const container = timelineRef.current
+  if (!container) return
+  const dots = Array.from(container.querySelectorAll('.timeline-dot')) as HTMLElement[]
+  if (!dots.length) return
 
     const obs = new IntersectionObserver(
       (entries) => {
@@ -32,6 +33,15 @@ export default function About() {
             // compute top relative to container
             const top = elRect.top - containerRect.top + elRect.height / 2
             setBeeTop(top)
+            // compute left so on mobile the bee sits to the left of the dot, on desktop keep center line
+            if (window.innerWidth < 768) {
+              // place bee slightly left of the dot
+              const left = Math.max(16, elRect.left - containerRect.left - 36)
+              setBeeLeft(left)
+            } else {
+              // center
+              setBeeLeft(containerRect.width / 2)
+            }
             setBeeVisible(true)
           }
         })
@@ -110,8 +120,8 @@ export default function About() {
 
           {/* animated bee that moves to each visible timeline dot */}
           <div
-            className="timeline-bee z-50 hidden md:block"
-            style={{ top: beeTop ? `${beeTop}px` : '-48px', opacity: beeVisible ? 1 : 0 }}
+            className="timeline-bee z-50"
+            style={{ top: beeTop ? `${beeTop}px` : '-48px', left: beeLeft != null ? `${beeLeft}px` : '50%', opacity: beeVisible ? 1 : 0, transform: beeLeft != null ? 'translate(-50%, -50%)' : undefined }}
             aria-hidden
           >
             <svg width="28" height="28" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
@@ -158,9 +168,9 @@ export default function About() {
             ].map((evt, idx) => {
               const isLeft = idx % 2 === 0
               return (
-                <div key={idx} className="md:grid md:grid-cols-2 items-center">
+                  <div key={idx} className="md:grid md:grid-cols-2 items-center flex flex-col md:flex-row gap-4">
                   {/* left column */}
-                  <div className={`${isLeft ? 'md:pr-8 md:text-right' : 'md:order-2 md:pl-8'}`}>
+                    <div className={`${isLeft ? 'md:pr-8 md:text-right' : 'md:order-2 md:pl-8'}`}>
                     {isLeft && (
                       <AnimateOnView animation="a-fade-up" threshold={0.2} once style={{ animationDelay: `${idx * 100}ms` }}>
                         <div className="inline-block bg-black/50 border border-yellow-300/20 p-6 rounded-lg shadow-md aura-card">
