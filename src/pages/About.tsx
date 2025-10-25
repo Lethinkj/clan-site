@@ -48,7 +48,7 @@ export default function About() {
       <div className="text-center space-y-6">
         <h2 className="text-5xl font-extrabold text-yellow-300 a-pop">Aura-7F</h2>
 
-        <div className="flex items-center justify-center gap-6 max-w-4xl mx-auto">
+  <div className="flex items-center justify-center gap-6 max-w-4xl mx-auto px-4 sm:px-0">
           <div
             className="inline-block aura-card bg-black/60 border border-yellow-300/20 p-8 rounded-lg shadow-md text-center"
           >
@@ -71,7 +71,7 @@ export default function About() {
         </div>
 
         <div
-          className="mx-auto max-w-4xl mt-6 p-8 rounded-xl border border-yellow-300/20 aura-card text-center"
+          className="mx-auto max-w-4xl mt-6 p-6 sm:p-8 rounded-xl border border-yellow-300/20 aura-card text-center px-4"
         >
           <h3 className="text-3xl font-bold text-yellow-300 mb-4">"A Star Shines in a High Place with Full of Positive Energy"</h3>
             <p className="text-aura">This is the essence of our clan — reaching the highest potential while spreading positivity and illumination to all we touch.</p>
@@ -80,13 +80,13 @@ export default function About() {
 
       <div className="mt-6">
   <h3 className="text-3xl font-bold text-yellow-300 mb-4 text-center a-fade-up">Our Philosophy</h3>
-  <p className="text-aura max-w-4xl mx-auto text-center a-fade-up">Like a star that burns brightest in the vast cosmos, Aura-7F represents the pinnacle of positive energy in the digital universe. We believe that true innovation happens when brilliant minds unite under a shared constellation of values.
+  <p className="text-aura max-w-4xl mx-auto text-center a-fade-up px-4 sm:px-0">Like a star that burns brightest in the vast cosmos, Aura-7F represents the pinnacle of positive energy in the digital universe. We believe that true innovation happens when brilliant minds unite under a shared constellation of values.
     Our name embodies our commitment to reaching the highest levels of excellence (7F in hexadecimal) while maintaining the radiant, inspiring presence of a guiding star (Aura) for others in the tech community.</p>
       </div>
 
       <div className="space-y-6">
   <h3 className="text-3xl font-bold text-yellow-300 mb-4 a-fade-up">Seven Fundamental Values</h3>
-  <p className="text-lg text-aura mb-6">The 7F that defines our highest positive energy</p>
+  <p className="text-lg text-aura mb-6 px-4 sm:px-0">The 7F that defines our highest positive energy</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 a-stagger">
           {values.map((value, i) => (

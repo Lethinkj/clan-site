@@ -37,9 +37,9 @@ export default function Members() {
       <div>
   <h2 className="text-4xl font-bold text-yellow-300 mb-2 a-fade-up">Captain Bash</h2>
         <p className="text-gray-400 mb-6 a-fade-up">Members (2)</p>
-        <div className="grid grid-cols-1 gap-6 a-stagger">
+        <div className="grid grid-cols-1 gap-6 a-stagger justify-items-center">
           {captains.map((member, i) => (
-            <div key={i} className="bg-black/50 border border-yellow-300/20 p-6 rounded-lg shadow-md aura-card hover:shadow-lg transition-all a-fade-up">
+            <div key={i} className="w-full max-w-xl bg-black/50 border border-yellow-300/20 p-6 rounded-lg shadow-md aura-card hover:shadow-lg transition-all a-fade-up">
               <h3 className="text-2xl font-bold text-yellow-300 mb-2">{member.name}</h3>
               <div className="text-yellow-200 font-semibold mb-1">{member.role}</div>
               <div className="text-sm text-yellow-200 mb-3">Specialization: {member.specialization}</div>
@@ -62,9 +62,9 @@ export default function Members() {
       <div>
   <h2 className="text-4xl font-bold text-yellow-300 mb-2 a-fade-up">Our Amazing Team</h2>
         <p className="text-gray-400 mb-6 a-fade-up">Members (10)</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 a-stagger">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 a-stagger justify-items-center">
           {teamMembers.map((member, i) => (
-            <div key={i} className="bg-black/50 border border-yellow-300/20 p-5 rounded-lg shadow-md aura-card hover:shadow-lg transition-all a-fade-up">
+            <div key={i} className="w-full max-w-xl bg-black/50 border border-yellow-300/20 p-5 rounded-lg shadow-md aura-card hover:shadow-lg transition-all a-fade-up">
               <h3 className="text-xl font-bold text-yellow-300 mb-2">{member.name}</h3>
               <div className="text-yellow-200 font-semibold mb-1">{member.role}</div>
               <div className="text-sm text-yellow-200 mb-3">Specialization: {member.specialization}</div>
