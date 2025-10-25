@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 import { NavLink, Link } from 'react-router-dom'
 import { Home, Users, Calendar, Info } from 'lucide-react'
 
@@ -10,6 +11,7 @@ const navItems = [
 ]
 
 export default function Header() {
+  const location = useLocation()
   const [logoLoaded, setLogoLoaded] = useState(false)
   const [hideLogo, setHideLogo] = useState(false)
   const lastY = useRef<number>(0)
@@ -38,6 +40,12 @@ export default function Header() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Reset header visibility when the route changes so the logo doesn't animate in from bottom
+  useEffect(() => {
+    setHideLogo(false)
+    lastY.current = 0
+  }, [location.pathname])
 
   return (
     <header className="sticky top-0 z-50 bg-transparent">

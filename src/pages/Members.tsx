@@ -30,9 +30,10 @@ const captains: Person[] = [
 
 const teamMembers: Person[] = [
   { name: 'Lethin', role: 'Data Analyst', specialization: 'Data Analysis', bio: 'Passionate about creating scalable web applications and mentoring junior developers.', skills: ['React', 'Node.js', 'Python', 'AWS'], portfolio: 'https://lethin.work.gd/', github: 'https://github.com/Lethinkj', linkedin: 'https://www.linkedin.com/in/lethin-k-j-510674293' },
+  // you can add social links per-member (portfolio, linkedin, github)
   { name: 'Jijo Rogerz', role: 'Full-Stack Developer', specialization: 'Web Development', bio: 'Dedicated to crafting intuitive and beautiful user interfaces that enhance user experience.', skills: ['Figma', 'Adobe XD', 'CSS', 'Design Systems'] },
   { name: 'Bennyhinn Sam', role: 'Software Engineer', specialization: 'Software Engineering', bio: 'Expert in building robust backend systems and optimizing database performance.', skills: ['Java', 'Spring', 'PostgreSQL', 'Docker'] },
-  { name: 'Anitus', role: 'Java Developer', specialization: 'Modern Web Technologies', bio: 'Enthusiastic about creating responsive and interactive web experiences using cutting-edge technologies.', skills: ['Vue.js', 'TypeScript', 'CSS3', 'WebGL'] },
+  { name: 'Anitus', role: 'Java Developer', specialization: 'Modern Web Technologies', bio: 'Enthusiastic about creating responsive and interactive web experiences using cutting-edge technologies.', skills: ['Vue.js', 'TypeScript', 'CSS3', 'WebGL'], portfolio: 'https://anitus.dev', github: 'https://github.com/anitus', linkedin: 'https://www.linkedin.com/in/anitus' },
   { name: 'Lifnan Shijo', role: 'DevOps Engineer', specialization: 'Cloud Infrastructure', bio: 'Focused on automating deployment processes and maintaining scalable cloud infrastructure.', skills: ['Kubernetes', 'Terraform', 'Jenkins', 'Azure'] },
   { name: 'Archana', role: 'QA Engineer', specialization: 'Test Automation', bio: 'Committed to ensuring software quality through comprehensive testing strategies and automation.', skills: ['Selenium', 'Jest', 'Cypress', 'API Testing'] },
   { name: 'Alisha', role: 'QA Engineer', specialization: 'Test Automation', bio: 'Committed to ensuring software quality through comprehensive testing strategies and automation.', skills: ['Selenium', 'Jest', 'Cypress', 'API Testing'] },

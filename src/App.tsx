@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import { Footer, Visuals } from './components/index'
@@ -7,8 +7,22 @@ import { Home, About, Members, Events } from './pages/index'
 export default function App() {
   const location = useLocation()
 
-  // Scroll to top on route change to ensure mobile navigations land at the top
+  // When navigating, scroll to top. If the user navigated from a scrolled position
+  // we briefly disable entrance animations (body.no-entry) so content doesn't
+  // visually 'come from bottom' due to our a-fade-up / a-stagger CSS animations.
+  const lastScroll = useRef(0)
   useEffect(() => {
+    // capture previous scroll before we reset
+    const prev = window.scrollY || window.pageYOffset || 0
+    lastScroll.current = prev
+
+    if (prev > 80) {
+      document.body.classList.add('no-entry')
+      // remove after a short time so future animations work
+      window.setTimeout(() => document.body.classList.remove('no-entry'), 160)
+    }
+
+    // perform immediate scroll-to-top to land at the top of the new page
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
   }, [location.pathname])
 
