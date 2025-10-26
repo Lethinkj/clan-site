@@ -8,6 +8,18 @@ import { Analytics } from "@vercel/analytics/react";
 export default function App() {
   const location = useLocation()
 
+  // Disable browser's automatic scroll restoration to avoid it overriding our
+  // manual scroll-to-top logic when navigating SPA routes.
+  useEffect(() => {
+    if ('scrollRestoration' in history) {
+      const prev = history.scrollRestoration
+      try { history.scrollRestoration = 'manual' } catch (e) { /* ignore */ }
+      return () => {
+        try { history.scrollRestoration = prev } catch (e) { /* ignore */ }
+      }
+    }
+  }, [])
+
   // When navigating, scroll to top. If the user navigated from a scrolled position
   // we briefly disable entrance animations (body.no-entry) so content doesn't
   // visually 'come from bottom' due to our a-fade-up / a-stagger CSS animations.
@@ -41,11 +53,13 @@ export default function App() {
     scrollToTop()
     // after next paint
     requestAnimationFrame(() => scrollToTop())
-    // also after a short delay to catch late-rendered content
-    const lateScroll = window.setTimeout(scrollToTop, 60)
-    // clear the timeout in cleanup below
+    // schedule a couple delayed attempts to catch late-rendered content
+    const timers: number[] = []
+    timers.push(window.setTimeout(scrollToTop, 60))
+    timers.push(window.setTimeout(scrollToTop, 180))
+
     return () => {
-      window.clearTimeout(lateScroll)
+      timers.forEach((t) => window.clearTimeout(t))
     }
   }, [location.pathname])
 
