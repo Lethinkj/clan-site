@@ -23,8 +23,30 @@ export default function App() {
       window.setTimeout(() => document.body.classList.remove('no-entry'), 160)
     }
 
-    // perform immediate scroll-to-top to land at the top of the new page
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
+    // perform reliable scroll-to-top to land at the top of the new page.
+    // Some browsers ignore scroll requests if run before the new route's
+    // content is laid out. Run multiple attempts (immediate, rAF, timeout)
+    // and also clear document/body scroll positions for broader compatibility.
+    const scrollToTop = () => {
+      try {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+      } catch (e) {
+        // fallback for older browsers
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+      }
+    }
+
+    // immediate
+    scrollToTop()
+    // after next paint
+    requestAnimationFrame(() => scrollToTop())
+    // also after a short delay to catch late-rendered content
+    const lateScroll = window.setTimeout(scrollToTop, 60)
+    // clear the timeout in cleanup below
+    return () => {
+      window.clearTimeout(lateScroll)
+    }
   }, [location.pathname])
 
   // Add page-load and scroll-based animations for text and cards.
