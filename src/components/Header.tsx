@@ -52,20 +52,21 @@ export default function Header() {
       <div className="container mx-auto px-4 py-3 flex items-center">
         <div className={`flex items-center gap-3 transition-all duration-300 ${hideLogo ? 'opacity-0 -translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
           {/* logo - clickable to home; title next to logo is clickable on all sizes */}
-          <Link to="/" aria-label="Home" className="flex items-center gap-3">
-            <img
-              src="/Aura-7f.jpeg"
-              alt="Aura-7F logo"
-              className="w-10 h-10 object-contain"
-              onLoad={() => setLogoLoaded(true)}
-              onError={(e) => {
-                const img = e.currentTarget as HTMLImageElement
-                if (!img.src.endsWith('.png')) img.src = '/Aura-7f.png'
-                else setLogoLoaded(false)
-              }}
-            />
-
-            <h1 className="text-base font-extrabold text-yellow-300 neon-text leading-none">AURA-7f</h1>
+          <Link to="/" aria-label="Home" className="flex flex-col items-center">
+            <div className="w-12 h-12 rounded-full overflow-hidden bg-yellow-800/10 flex items-center justify-center">
+              <img
+                src="/Aura-7f.jpeg"
+                alt="Aura-7F logo"
+                className="w-full h-full object-cover"
+                onLoad={() => setLogoLoaded(true)}
+                onError={(e) => {
+                  const img = e.currentTarget as HTMLImageElement
+                  if (!img.src.endsWith('.png')) img.src = '/Aura-7f.png'
+                  else setLogoLoaded(false)
+                }}
+              />
+            </div>
+            <span className="text-sm font-extrabold text-yellow-300 neon-text leading-tight mt-1">AURA-7F</span>
           </Link>
         </div>
 
