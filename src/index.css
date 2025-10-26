@@ -18,6 +18,9 @@ html, body, #root {
   --aura-white: #ffffff;
   --aura-text: #60a5fa; /* medium-readable blue */
   --aura-text-strong: #2563eb; /* stronger blue for accents */
+  /* text glow intensity (0..1) - can be overridden via body[data-text-glow] */
+  --text-glow-intensity: 0.06; /* default low */
+  --heading-glow-intensity: 0.18; /* default stronger for headings */
 }
 
 body {
@@ -310,6 +313,57 @@ body::before {
 .a-stagger.animated > *:nth-child(5) { animation-delay: 400ms; }
 .a-stagger.animated > *:nth-child(6) { animation-delay: 480ms; }
 
+/* Text glow utilities -------------------------------------------------- */
+/* Use data attribute on body to select low/high preference: data-text-glow="low|medium|high" */
+body[data-text-glow="low"] { --text-glow-intensity: 0.04; --heading-glow-intensity: 0.12; }
+body[data-text-glow="medium"] { --text-glow-intensity: 0.08; --heading-glow-intensity: 0.22; }
+body[data-text-glow="high"] { --text-glow-intensity: 0.14; --heading-glow-intensity: 0.34; }
+
+/* keyframes for a slow subtle pulse used for headings and text glow */
+@keyframes text-glow-pulse {
+  0% { filter: drop-shadow(0 0 calc(var(--text-glow-intensity) * 18px) rgba(241,176,17,0.06)); }
+  50% { filter: drop-shadow(0 0 calc(var(--text-glow-intensity) * 28px) rgba(241,176,17,0.11)); }
+  100% { filter: drop-shadow(0 0 calc(var(--text-glow-intensity) * 18px) rgba(241,176,17,0.06)); }
+}
+
+@keyframes heading-glow-pulse {
+  0% { filter: drop-shadow(0 0 calc(var(--heading-glow-intensity) * 20px) rgba(241,176,17,0.16)); }
+  50% { filter: drop-shadow(0 0 calc(var(--heading-glow-intensity) * 36px) rgba(241,176,17,0.26)); }
+  100% { filter: drop-shadow(0 0 calc(var(--heading-glow-intensity) * 20px) rgba(241,176,17,0.16)); }
+}
+
+/* Apply to all non-heading text with low glow
+   Use .text-glow to allow per-element opt-out if needed */
+body :where(p, li, span, a, small, label, .text-aura, .text-white) {
+  text-shadow: 0 0 calc(var(--text-glow-intensity) * 8px) rgba(241,176,17,0.06);
+  transition: text-shadow 260ms ease, filter 260ms ease, opacity 200ms ease;
+}
+
+/* Headings stronger glow */
+h1, h2, h3, h4, h5, h6 {
+  text-shadow: 0 0 calc(var(--heading-glow-intensity) * 10px) rgba(241,176,17,0.12);
+  transition: text-shadow 260ms ease, filter 260ms ease;
+}
+
+/* Pulse animation applied at launch and slowly while visible */
+.heading-glow-anim { animation: heading-glow-pulse 2200ms ease-in-out infinite; }
+.text-glow-anim { animation: text-glow-pulse 3000ms ease-in-out infinite; }
+
+/* Card entrance animation (used on initial page load and on scroll into view) */
+.aura-card { transform: translateY(6px) scale(1); opacity: 0; }
+.aura-card.animate-in { animation: card-enter 520ms cubic-bezier(.2,.9,.3,1) both; }
+@keyframes card-enter {
+  0% { transform: translateY(18px) scale(.995); opacity: 0; }
+  60% { transform: translateY(-6px) scale(1.006); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* If user prefers reduced motion, disable animations and glows */
+@media (prefers-reduced-motion: reduce) {
+  .heading-glow-anim, .text-glow-anim, .aura-card.animate-in, .a-stagger.animated > * { animation: none !important; }
+  body :where(p, li, span, a, small, label, .text-aura, .text-white) { text-shadow: none !important; }
+}
+
 /* Neon / glow utilities for header/nav */
 .neon-text {
   text-shadow: 0 0 8px rgba(241,176,17,0.95), 0 0 20px rgba(241,176,17,0.45);
@@ -394,6 +448,17 @@ body::before {
 @media (max-width: 640px) {
   /* keep header logo aligned top-left and ensure body content has bottom padding to avoid overlap with nav */
   body { padding-bottom: 110px; }
+
+  /* On mobile, keep aura-cards gently glowing by default for visual clarity */
+  .aura-card {
+    box-shadow: 0 8px 32px rgba(241,176,17,0.09);
+    border-color: rgba(241,176,17,0.06) !important;
+    transform: translateY(0) !important;
+    transition: box-shadow .32s ease, transform .18s ease;
+  }
+
+  /* Slightly stronger subtle glow for primary sections */
+  .aura-card.glow, .aura-card { box-shadow: 0 10px 40px rgba(241,176,17,0.11); }
 }
 
 /* mobile bottom nav sizing tweaks */
