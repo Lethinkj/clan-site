@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useLayoutEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import { Footer, Visuals } from './components/index'
@@ -24,7 +24,7 @@ export default function App() {
   // we briefly disable entrance animations (body.no-entry) so content doesn't
   // visually 'come from bottom' due to our a-fade-up / a-stagger CSS animations.
   const lastScroll = useRef(0)
-  useEffect(() => {
+  useLayoutEffect(() => {
     // capture previous scroll before we reset
     const prev = window.scrollY || window.pageYOffset || 0
     lastScroll.current = prev
@@ -35,7 +35,7 @@ export default function App() {
       window.setTimeout(() => document.body.classList.remove('no-entry'), 160)
     }
 
-    // perform reliable scroll-to-top to land at the top of the new page.
+  // perform reliable scroll-to-top to land at the top of the new page.
     // Some browsers ignore scroll requests if run before the new route's
     // content is laid out. Run multiple attempts (immediate, rAF, timeout)
     // and also clear document/body scroll positions for broader compatibility.
@@ -49,7 +49,7 @@ export default function App() {
       }
     }
 
-    // immediate
+    // immediate (synchronous with layout) and retries
     scrollToTop()
     // after next paint
     requestAnimationFrame(() => scrollToTop())
