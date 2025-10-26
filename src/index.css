@@ -145,7 +145,7 @@ a, button, [role="button"], .nav-link {
 .hex-overlay {
   mix-blend-mode: overlay;
   filter: blur(10px);
-  opacity: 0.03; /* slightly dimmer idle overlay */
+  opacity: 0.02; /* slightly dimmer idle overlay */
 }
 
 /* Dim the overall scene slightly by adding a top-level overlay layer at 20% black. 
@@ -179,6 +179,27 @@ body::before {
   100% { opacity: 0.035; filter: blur(10px); }
 }
 .hex-flash-fade { animation: hex-flash-fade 1000ms ease-out both; will-change: opacity, filter; }
+
+/* Hex-shaped glow that follows the cursor. Subtle, low-brightness gold radial gradient with blur.
+   It's placed beneath the cursor dot and uses clip-path to form a hexagon. Hidden on small screens. */
+.cursor-hex-glow {
+  position: fixed;
+  pointer-events: none;
+  width: 140px;
+  height: 120px;
+  transform: translate(-50%, -30%);
+  z-index: 9998; /* slightly below the custom cursor dot */
+  filter: blur(18px) saturate(0.95);
+  opacity: 0.85;
+  mix-blend-mode: screen;
+  background: radial-gradient(circle at 50% 30%, rgba(241,176,17,0.14) 0%, rgba(241,176,17,0.08) 20%, rgba(241,176,17,0.02) 45%, rgba(0,0,0,0) 60%);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  transition: transform 160ms cubic-bezier(.2,.9,.2,1), opacity 160ms ease;
+}
+
+@media (max-width: 640px) {
+  .cursor-hex-glow { display: none; }
+}
 
 /* sweep overlay is implemented with an absolutely positioned div (.hex-sweep) */
 .hex-sweep {

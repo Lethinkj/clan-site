@@ -8,6 +8,7 @@ const Visuals: React.FC = () => {
   const [beeRotation, setBeeRotation] = useState(0)
   const [beePosMobile, setBeePosMobile] = useState({ x: 60, y: 160 })
   const cursorRef = useRef<HTMLDivElement | null>(null)
+  const hexGlowRef = useRef<HTMLDivElement | null>(null)
   const cursorStateRef = useRef<HTMLDivElement | null>(null)
   const ringRef = useRef<HTMLDivElement | null>(null)
   const rippleRef = useRef<HTMLDivElement | null>(null)
@@ -76,6 +77,11 @@ const Visuals: React.FC = () => {
     if (spinnerRef.current) {
       spinnerRef.current.style.left = `${mousePos.x}px`
       spinnerRef.current.style.top = `${mousePos.y}px`
+    }
+    if (hexGlowRef.current) {
+      // offset the glow slightly downward so it appears 'below' the cursor
+      hexGlowRef.current.style.left = `${mousePos.x}px`
+      hexGlowRef.current.style.top = `${mousePos.y + 18}px`
     }
   }, [mousePos])
 
@@ -311,19 +317,19 @@ const Visuals: React.FC = () => {
           <svg className="hex-svg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="hexagons" width="100" height="87" patternUnits="userSpaceOnUse" patternTransform="translate(0,0) scale(1.5)">
-                <polygon points="25,0 75,0 100,43.5 75,87 25,87 0,43.5" fill="none" stroke="#b87400" strokeWidth="2">
-                    <animate attributeName="stroke-opacity" values="0.12;0.8;0.12" dur="3s" repeatCount="indefinite" />
-                    <animate attributeName="stroke" values="#ffd166ff;#f1b011;#e09b00;#b87400" dur="6s" repeatCount="indefinite" />
+                <polygon points="25,0 75,0 100,43.5 75,87 25,87 0,43.5" fill="none" stroke="#9a6b00" strokeWidth="2">
+                    <animate attributeName="stroke-opacity" values="0.06;0.28;0.06" dur="4s" repeatCount="indefinite" />
+                    <animate attributeName="stroke" values="#c89a3aff;#b07a00;#9a6b00" dur="8s" repeatCount="indefinite" />
                   </polygon>
-                  <polygon points="25,0 75,0 100,43.5 75,87 25,87 0,43.5" fill="none" stroke="#e09b00" strokeWidth="1" transform="translate(50,0)">
-                    <animate attributeName="stroke-opacity" values="0.06;0.6;0.06" dur="3.5s" repeatCount="indefinite" begin="0.5s" />
-                    <animate attributeName="stroke" values="#ffd166ff;#f1b011;#d08a00;#e09b00" dur="7s" repeatCount="indefinite" />
+                  <polygon points="25,0 75,0 100,43.5 75,87 25,87 0,43.5" fill="none" stroke="#8a5a00" strokeWidth="1" transform="translate(50,0)">
+                    <animate attributeName="stroke-opacity" values="0.04;0.24;0.04" dur="4.5s" repeatCount="indefinite" begin="0.6s" />
+                    <animate attributeName="stroke" values="#c89a3aff;#b07a00;#8a5a00" dur="9s" repeatCount="indefinite" />
                   </polygon>
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#hexagons)" />
             {/* overlay layer for subtle glow */}
-            <rect ref={hexRef} className="hex-overlay" width="100%" height="100%" fill="url(#hexagons)" opacity="0.08" />
+            <rect ref={hexRef} className="hex-overlay" width="100%" height="100%" fill="url(#hexagons)" opacity="0.04" />
           </svg>
           {/* sweep overlay (mild line sweep) */}
           <div ref={sweepRef} className="hex-sweep pointer-events-none" aria-hidden />
@@ -362,6 +368,8 @@ const Visuals: React.FC = () => {
             style={{ position: 'absolute', transform: 'translate(-50%, -50%)' }}
             aria-hidden
           />
+              {/* hex glow under cursor */}
+              <div ref={hexGlowRef} className="cursor-hex-glow hidden md:block" aria-hidden />
           <div
             ref={ringRef}
             className="cursor-ring hidden md:block"
