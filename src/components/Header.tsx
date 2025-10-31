@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { NavLink, Link } from 'react-router-dom'
-import { Home, Users, Calendar, Info } from 'lucide-react'
+import { Home, Users, Calendar, Info, Menu, X } from 'lucide-react'
 
 const navItems = [
   { to: '/', icon: Home, label: 'Home' },
@@ -14,6 +14,7 @@ export default function Header() {
   const location = useLocation()
   const [logoLoaded, setLogoLoaded] = useState(false)
   const [hideLogo, setHideLogo] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const lastY = useRef<number>(0)
   const ticking = useRef(false)
 
@@ -44,8 +45,31 @@ export default function Header() {
   // Reset header visibility when the route changes so the logo doesn't animate in from bottom
   useEffect(() => {
     setHideLogo(false)
+    setMobileMenuOpen(false)
     lastY.current = 0
   }, [location.pathname])
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (!target.closest('.mobile-menu-container') && !target.closest('.mobile-menu-button')) {
+        setMobileMenuOpen(false)
+      }
+    }
+    
+    // Small delay to prevent immediate closing when opening
+    const timer = setTimeout(() => {
+      document.addEventListener('click', handleClickOutside)
+    }, 100)
+
+    return () => {
+      clearTimeout(timer)
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [mobileMenuOpen])
 
   return (
     <header className="sticky top-0 z-50 bg-transparent">
@@ -86,24 +110,41 @@ export default function Header() {
           </nav>
         </div>
 
-        {/* right area is intentionally empty on desktop; mobile nav is rendered separately at bottom */}
-        <div className="flex items-center gap-4" />
+        {/* Mobile menu toggle button */}
+        <div className="sm:hidden">
+          <button 
+            onClick={(e) => {
+              e.stopPropagation()
+              setMobileMenuOpen(!mobileMenuOpen)
+            }}
+            className="mobile-menu-button p-2 text-yellow-300 hover:text-yellow-400 transition-colors relative z-50"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
 
       </div>
 
-      {/* mobile bottom nav: centered pill at bottom */}
-  <nav className="fixed bottom-4 left-1/2 transform -translate-x-1/2 sm:hidden bg-[#061a28]/95 text-aura rounded-full px-2 py-2 shadow-xl flex gap-1 z-50 mobile-bottom-nav">
-        {navItems.map(({ to, icon: Icon, label }) => (
-          <NavLink
-            key={to + '-mobile'}
-            to={to}
-            className={({ isActive }) => `inline-flex items-center gap-2 transition-all ${isActive ? 'bg-yellow-400 text-[#07192b] px-3 py-2 rounded-full font-semibold' : 'text-aura opacity-90 px-3 py-2 rounded-full hover:text-yellow-300'}`}
-          >
-            <Icon size={14} />
-            <span className="text-xs font-medium">{label}</span>
-          </NavLink>
-        ))}
-      </nav>
+      {/* Mobile dropdown menu */}
+      <div 
+        className={`sm:hidden mobile-menu-container fixed top-16 right-4 bg-[#061a28]/95 backdrop-blur-md rounded-2xl shadow-2xl border border-yellow-300/20 overflow-hidden transition-all duration-300 z-50 ${mobileMenuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-4 pointer-events-none'}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <nav className="flex flex-col p-2">
+          {navItems.map(({ to, icon: Icon, label }) => (
+            <NavLink
+              key={to + '-mobile'}
+              to={to}
+              onClick={() => setMobileMenuOpen(false)}
+              className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive ? 'bg-yellow-400 text-[#07192b] font-semibold' : 'text-aura hover:bg-yellow-300/10 hover:text-yellow-300'}`}
+            >
+              <Icon size={20} />
+              <span className="text-sm font-medium">{label}</span>
+            </NavLink>
+          ))}
+        </nav>
+      </div>
     </header>
   )
 }
