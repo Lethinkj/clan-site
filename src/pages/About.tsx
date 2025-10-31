@@ -18,66 +18,117 @@ export default function About() {
   const [beeVisible, setBeeVisible] = useState(false)
 
   useEffect(() => {
-  const container = timelineRef.current
-  if (!container) return
-  const dots = Array.from(container.querySelectorAll('.timeline-dot')) as HTMLElement[]
-  if (!dots.length) return
+    const container = timelineRef.current
+    if (!container) return
+    
+    const dots = Array.from(container.querySelectorAll('.timeline-dot')) as HTMLElement[]
+    if (!dots.length) return
+
+    const updateBeePosition = () => {
+      const containerRect = container.getBoundingClientRect()
+      if (window.innerWidth < 768) {
+        setBeeLeft(32) // Mobile: left side
+      } else {
+        setBeeLeft(containerRect.width / 2) // Desktop: center
+      }
+    }
+
+    updateBeePosition()
+    window.addEventListener('resize', updateBeePosition)
 
     const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const el = entry.target as HTMLElement
-            const containerRect = container.getBoundingClientRect()
-            const elRect = el.getBoundingClientRect()
-            // compute top relative to container
-            const top = elRect.top - containerRect.top + elRect.height / 2
-            setBeeTop(top)
-            // compute left so on mobile the bee sits to the left of the dot, on desktop keep center line
-            if (window.innerWidth < 768) {
-              // place bee slightly left of the dot
-              const left = Math.max(16, elRect.left - containerRect.left - 36)
-              setBeeLeft(left)
-            } else {
-              // center
-              setBeeLeft(containerRect.width / 2)
-            }
-            setBeeVisible(true)
+      (entries: IntersectionObserverEntry[]) => {
+        let bestEntry: IntersectionObserverEntry | null = null
+        let bestRatio = 0
+
+        for (const entry of entries) {
+          if (entry.isIntersecting && entry.intersectionRatio > bestRatio) {
+            bestRatio = entry.intersectionRatio
+            bestEntry = entry
           }
-        })
+        }
+
+        if (bestEntry) {
+          const element = bestEntry.target as HTMLElement
+          const containerRect = container.getBoundingClientRect()
+          const elementRect = element.getBoundingClientRect()
+          
+          // Calculate relative position
+          const top = elementRect.top - containerRect.top + elementRect.height / 2
+          setBeeTop(top)
+          setBeeVisible(true)
+
+          // Add active class to most visible dot
+          dots.forEach((dot) => {
+            if (dot === element) {
+              dot.classList.add('timeline-dot-active')
+            } else {
+              dot.classList.remove('timeline-dot-active')
+            }
+          })
+        } else {
+          const anyVisible = entries.some(entry => entry.isIntersecting)
+          if (!anyVisible) {
+            setBeeVisible(false)
+            dots.forEach((dot) => dot.classList.remove('timeline-dot-active'))
+          }
+        }
       },
-      { threshold: 0.35 }
+      { 
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+        rootMargin: '-20% 0px'
+      }
     )
 
     dots.forEach((d) => obs.observe(d))
-    return () => obs.disconnect()
+    
+    return () => {
+      obs.disconnect()
+      window.removeEventListener('resize', updateBeePosition)
+    }
   }, [])
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-8">
       <div className="text-center space-y-6">
-  <h2 className="text-4xl sm:text-5xl font-extrabold text-yellow-300 a-pop">Aura-7F</h2>
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-yellow-300 a-pop px-4">Aura-7F</h2>
 
-  <div className="flex items-center justify-center gap-6 max-w-4xl mx-auto px-4 sm:px-0">
-          <div
-            className="inline-block aura-card bg-black/60 border border-yellow-300/20 p-8 rounded-lg shadow-md text-center"
-          >
-            <h3 className="text-2xl font-bold text-yellow-300 mb-2">Aura</h3>
-          <p className="text-aura">Resembles a Star<br />A radiant energy that illuminates</p>
+        {/* Desktop Layout */}
+        <div className="hidden md:flex items-center justify-center gap-4 lg:gap-6 max-w-4xl mx-auto px-4">
+          <div className="inline-block aura-card bg-black/60 border border-yellow-300/20 p-6 lg:p-8 rounded-lg shadow-md text-center">
+            <h3 className="text-xl lg:text-2xl font-bold text-yellow-300 mb-2">Aura</h3>
+            <p className="text-sm lg:text-base text-aura">Resembles a Star<br />A radiant energy that illuminates</p>
           </div>
 
-          <div className="text-4xl font-extrabold text-yellow-300">+</div>
+          <div className="text-3xl lg:text-4xl font-extrabold text-yellow-300">+</div>
 
-          <div
-            className="inline-block aura-card bg-black/60 border border-yellow-300/20 p-8 rounded-lg shadow-md text-center"
-          >
-            <h3 className="text-2xl font-bold text-yellow-300 mb-2">7F</h3>
-          <p className="text-aura">Hexadecimal's highest positive number<br />Maximum positive energy</p>
+          <div className="inline-block aura-card bg-black/60 border border-yellow-300/20 p-6 lg:p-8 rounded-lg shadow-md text-center">
+            <h3 className="text-xl lg:text-2xl font-bold text-yellow-300 mb-2">7F</h3>
+            <p className="text-sm lg:text-base text-aura">Hexadecimal's highest positive number<br />Maximum positive energy</p>
           </div>
 
-          <div className="text-4xl font-extrabold text-yellow-300">=</div>
+          <div className="text-3xl lg:text-4xl font-extrabold text-yellow-300">=</div>
 
-          <div className="text-4xl text-yellow-300">∞</div>
+          <div className="text-3xl lg:text-4xl text-yellow-300">∞</div>
+        </div>
+
+        {/* Mobile Layout */}
+        <div className="md:hidden flex flex-col items-center gap-4 px-4">
+          <div className="w-full aura-card bg-black/60 border border-yellow-300/20 p-5 rounded-lg shadow-md text-center">
+            <h3 className="text-lg font-bold text-yellow-300 mb-2">Aura</h3>
+            <p className="text-sm text-aura">Resembles a Star<br />A radiant energy that illuminates</p>
+          </div>
+
+          <div className="text-2xl font-extrabold text-yellow-300">+</div>
+
+          <div className="w-full aura-card bg-black/60 border border-yellow-300/20 p-5 rounded-lg shadow-md text-center">
+            <h3 className="text-lg font-bold text-yellow-300 mb-2">7F</h3>
+            <p className="text-sm text-aura">Hexadecimal's highest positive number<br />Maximum positive energy</p>
+          </div>
+
+          <div className="text-2xl font-extrabold text-yellow-300">=</div>
+
+          <div className="text-2xl text-yellow-300">∞</div>
         </div>
 
         <div
@@ -94,56 +145,59 @@ export default function About() {
     Our name embodies our commitment to reaching the highest levels of excellence (7F in hexadecimal) while maintaining the radiant, inspiring presence of a guiding star (Aura) for others in the tech community.</p>
       </div>
 
-      <div className="space-y-6">
-  <h3 className="text-3xl font-bold text-yellow-300 mb-4 a-fade-up">Seven Fundamental Values</h3>
-  <p className="text-lg text-aura mb-6 px-4 sm:px-0">The 7F that defines our highest positive energy</p>
+      <div className="space-y-6 px-4">
+        <h3 className="text-2xl sm:text-3xl font-bold text-yellow-300 mb-4 a-fade-up text-center">Seven Fundamental Values</h3>
+        <p className="text-base sm:text-lg text-aura mb-6 text-center">The 7F that defines our highest positive energy</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 a-stagger">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 a-stagger max-w-4xl mx-auto">
           {values.map((value, i) => (
             <div
               key={i}
-              className="bg-black/50 border border-yellow-300/20 p-5 rounded-lg shadow-md a-fade-up aura-card"
+              className="bg-black/50 border border-yellow-300/20 p-4 sm:p-5 rounded-lg shadow-md a-fade-up aura-card"
             >
-              <h4 className="text-xl font-bold text-yellow-300 mb-2">{value.title}</h4>
-                <p className="text-aura">{value.desc}</p>
+              <h4 className="text-lg sm:text-xl font-bold text-yellow-300 mb-2">{value.title}</h4>
+              <p className="text-sm sm:text-base text-aura">{value.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="mt-12 relative">
-        <h3 className="text-3xl font-bold text-yellow-400 mb-8 a-fade-up">Our Stellar Journey</h3>
+      <div className="mt-12 px-4">
+        <h3 className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-8 a-fade-up text-center">Our Stellar Journey</h3>
 
-  <div className="relative" ref={timelineRef}>
-          {/* central vertical line (visible on md+) */}
-          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-6 bottom-0 w-1 bg-yellow-800/30" />
+        <div className="relative max-w-4xl mx-auto" ref={timelineRef}>
+          {/* Desktop: central vertical line */}
+          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-1 bg-yellow-800/30 z-0" />
+          
+          {/* Mobile: left vertical line */}
+          <div className="md:hidden absolute left-6 top-0 bottom-0 w-1 bg-yellow-800/30 z-0" />
 
-          {/* animated bee that moves to each visible timeline dot */}
-          <div
-            className="timeline-bee z-50"
-            style={{ top: beeTop ? `${beeTop}px` : '-48px', left: beeLeft != null ? `${beeLeft}px` : '50%', opacity: beeVisible ? 1 : 0, transform: beeLeft != null ? 'translate(-50%, -50%)' : undefined }}
-            aria-hidden
-          >
-            <svg width="28" height="28" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-              <g>
-                <ellipse cx="28" cy="30" rx="8" ry="10" fill="#f1b011" />
-                <ellipse cx="18" cy="18" rx="6" ry="4" fill="#fff3cc" opacity="0.95" />
-                <ellipse cx="38" cy="18" rx="6" ry="4" fill="#fff3cc" opacity="0.95" />
-              </g>
-            </svg>
-          </div>
-          {/* small bee accent centered on the timeline */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 mt-6 z-30">
-            <svg width="36" height="36" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-              <g>
-                <ellipse cx="28" cy="30" rx="8" ry="10" fill="#f1b011" />
-                <ellipse cx="18" cy="18" rx="8" ry="5" fill="#fff3cc" opacity="0.95" />
-                <ellipse cx="38" cy="18" rx="8" ry="5" fill="#fff3cc" opacity="0.95" />
-              </g>
-            </svg>
-          </div>
+          {/* Animated bee that follows scroll */}
+          {beeVisible && (
+            <div
+              className="timeline-bee absolute z-50 pointer-events-none"
+              style={{ 
+                top: beeTop ? `${beeTop}px` : '0px', 
+                left: beeLeft != null ? `${beeLeft}px` : '50%',
+                transform: 'translate(-50%, -50%)',
+                transition: 'all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)',
+                opacity: beeVisible ? 1 : 0
+              }}
+              aria-hidden
+            >
+              <svg width="32" height="32" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-lg">
+                <g>
+                  <ellipse cx="28" cy="30" rx="8" ry="10" fill="#f1b011" />
+                  <ellipse cx="18" cy="18" rx="6" ry="4" fill="#fff3cc" opacity="0.95" />
+                  <ellipse cx="38" cy="18" rx="6" ry="4" fill="#fff3cc" opacity="0.95" />
+                  <circle cx="22" cy="24" r="1.5" fill="#000" />
+                  <circle cx="34" cy="24" r="1.5" fill="#000" />
+                </g>
+              </svg>
+            </div>
+          )}
 
-          <div className="space-y-10 mt-8" ref={timeline => { /* timeline items container */ }}>
+          <div className="space-y-8 sm:space-y-12 pt-4">
             {[
               {
                 title: 'Genesis - 2024',
@@ -168,42 +222,66 @@ export default function About() {
             ].map((evt, idx) => {
               const isLeft = idx % 2 === 0
               return (
-                  <div key={idx} className="md:grid md:grid-cols-2 items-center flex flex-col md:flex-row gap-4">
-                  {/* left column */}
-                    <div className={`${isLeft ? 'md:pr-8 md:text-right' : 'md:order-2 md:pl-8'}`}>
-                    {isLeft && (
-                      <AnimateOnView animation="a-fade-up" threshold={0.2} once style={{ animationDelay: `${idx * 100}ms` }}>
-                        <div className="inline-block bg-black/50 border border-yellow-300/20 p-6 rounded-lg shadow-md aura-card">
-                          <h4 className="text-lg font-bold text-yellow-300 mb-2">{evt.title}</h4>
-                    <p className="text-aura">{evt.body}</p>
+                <div key={idx} className="relative">
+                  {/* Mobile Layout */}
+                  <div className="md:hidden flex gap-4 items-start">
+                    <div className="flex-shrink-0">
+                      <AnimateOnView animation="a-pop" threshold={0.2} once style={{ animationDelay: `${idx * 140}ms` }}>
+                        <div
+                          className="timeline-dot flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white z-40 shadow-lg border-2 border-yellow-300/30"
+                          data-idx={idx}
+                        >
+                          <span className="text-lg">{evt.icon}</span>
                         </div>
                       </AnimateOnView>
-                    )}
-                  </div>
-
-                  {/* center icon (bee dot) */}
-                  <div className="relative flex justify-center md:contents">
-                    <AnimateOnView animation="a-pop" threshold={0.2} once style={{ animationDelay: `${idx * 140}ms` }}>
-                      <div
-                        className="timeline-dot mx-auto flex items-center justify-center w-12 h-12 rounded-full bg-blue-500 text-white z-40 shadow-md"
-                        aria-hidden
-                        data-idx={idx}
-                      >
-                        {evt.icon}
-                      </div>
-                    </AnimateOnView>
-                  </div>
-
-                  {/* right column */}
-                  <div className={`${isLeft ? 'md:order-2 md:pl-8' : 'md:pr-8 md:text-left'}`}>
-                    {!isLeft && (
+                    </div>
+                    <div className="flex-1 pt-1">
                       <AnimateOnView animation="a-fade-up" threshold={0.2} once style={{ animationDelay: `${idx * 100}ms` }}>
-                        <div className="inline-block bg-black/50 border border-yellow-300/20 p-6 rounded-lg shadow-md aura-card">
-                          <h4 className="text-lg font-bold text-yellow-300 mb-2">{evt.title}</h4>
-                    <p className="text-aura">{evt.body}</p>
+                        <div className="bg-black/50 border border-yellow-300/20 p-4 sm:p-5 rounded-lg shadow-md aura-card">
+                          <h4 className="text-base sm:text-lg font-bold text-yellow-300 mb-2">{evt.title}</h4>
+                          <p className="text-sm sm:text-base text-aura">{evt.body}</p>
                         </div>
                       </AnimateOnView>
-                    )}
+                    </div>
+                  </div>
+
+                  {/* Desktop Layout */}
+                  <div className="hidden md:grid md:grid-cols-5 items-center gap-6">
+                    {/* Left content */}
+                    <div className={`col-span-2 ${isLeft ? 'text-right' : 'order-4 text-left'}`}>
+                      {isLeft && (
+                        <AnimateOnView animation="a-fade-up" threshold={0.2} once style={{ animationDelay: `${idx * 100}ms` }}>
+                          <div className="inline-block bg-black/50 border border-yellow-300/20 p-5 rounded-lg shadow-md aura-card">
+                            <h4 className="text-lg font-bold text-yellow-300 mb-2">{evt.title}</h4>
+                            <p className="text-aura">{evt.body}</p>
+                          </div>
+                        </AnimateOnView>
+                      )}
+                    </div>
+
+                    {/* Center timeline dot */}
+                    <div className="col-span-1 flex justify-center order-2">
+                      <AnimateOnView animation="a-pop" threshold={0.2} once style={{ animationDelay: `${idx * 140}ms` }}>
+                        <div
+                          className="timeline-dot flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white z-40 shadow-lg border-2 border-yellow-300/30"
+                          data-idx={idx}
+                        >
+                          <span className="text-xl">{evt.icon}</span>
+                        </div>
+                      </AnimateOnView>
+                    </div>
+
+                    {/* Right content */}
+                    <div className={`col-span-2 ${isLeft ? 'order-3 text-left' : 'text-left'}`}>
+                      {!isLeft && (
+                        <AnimateOnView animation="a-fade-up" threshold={0.2} once style={{ animationDelay: `${idx * 100}ms` }}>
+                          <div className="inline-block bg-black/50 border border-yellow-300/20 p-5 rounded-lg shadow-md aura-card">
+                            <h4 className="text-lg font-bold text-yellow-300 mb-2">{evt.title}</h4>
+                            <p className="text-aura">{evt.body}</p>
+                          </div>
+                        </AnimateOnView>
+                      )}
+                    </div>
                   </div>
                 </div>
               )
