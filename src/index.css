@@ -478,15 +478,15 @@ footer {
 }
 
 /* Mobile menu button hover effect */
-.mobile-menu-container button {
+.mobile-menu-button {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.mobile-menu-container button:hover {
+.mobile-menu-button:hover {
   transform: scale(1.1);
 }
 
-.mobile-menu-container button:active {
+.mobile-menu-button:active {
   transform: scale(0.95);
 }
 
@@ -506,9 +506,9 @@ footer {
 .bee-wrap-mobile { pointer-events: none; }
 
 @media (max-width: 640px) {
-  /* Ensure body content has bottom padding for mobile footer */
+  /* Remove excessive bottom padding - footer is at natural position now */
   body { 
-    padding-bottom: 100px; 
+    padding-bottom: 0; 
   }
   
   /* Adjust main content area */

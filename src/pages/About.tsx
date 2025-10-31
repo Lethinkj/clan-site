@@ -89,8 +89,8 @@ export default function About() {
   }, [])
 
   return (
-    <div className="space-y-8 pb-8">
-      <div className="text-center space-y-6">
+    <div className="space-y-6 sm:space-y-8 pb-4 sm:pb-8">
+      <div className="text-center space-y-4 sm:space-y-6">
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-yellow-300 a-pop px-4">Aura-7F</h2>
 
         {/* Desktop Layout */}
@@ -139,15 +139,15 @@ export default function About() {
         </div>
       </div>
 
-      <div className="mt-6">
-    <h3 className="text-2xl sm:text-3xl font-bold text-yellow-300 mb-4 text-center a-fade-up">Our Philosophy</h3>
-  <p className="text-aura max-w-4xl mx-auto text-center a-fade-up px-4 sm:px-0">Like a star that burns brightest in the vast cosmos, Aura-7F represents the pinnacle of positive energy in the digital universe. We believe that true innovation happens when brilliant minds unite under a shared constellation of values.
-    Our name embodies our commitment to reaching the highest levels of excellence (7F in hexadecimal) while maintaining the radiant, inspiring presence of a guiding star (Aura) for others in the tech community.</p>
+      <div className="mt-4 sm:mt-6">
+        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-300 mb-3 sm:mb-4 text-center a-fade-up px-4">Our Philosophy</h3>
+        <p className="text-sm sm:text-base text-aura max-w-4xl mx-auto text-center a-fade-up px-4">Like a star that burns brightest in the vast cosmos, Aura-7F represents the pinnacle of positive energy in the digital universe. We believe that true innovation happens when brilliant minds unite under a shared constellation of values.
+          Our name embodies our commitment to reaching the highest levels of excellence (7F in hexadecimal) while maintaining the radiant, inspiring presence of a guiding star (Aura) for others in the tech community.</p>
       </div>
 
-      <div className="space-y-6 px-4">
-        <h3 className="text-2xl sm:text-3xl font-bold text-yellow-300 mb-4 a-fade-up text-center">Seven Fundamental Values</h3>
-        <p className="text-base sm:text-lg text-aura mb-6 text-center">The 7F that defines our highest positive energy</p>
+      <div className="space-y-4 sm:space-y-6 px-4">
+        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-300 mb-3 sm:mb-4 a-fade-up text-center">Seven Fundamental Values</h3>
+        <p className="text-sm sm:text-base md:text-lg text-aura mb-4 sm:mb-6 text-center">The 7F that defines our highest positive energy</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 a-stagger max-w-4xl mx-auto">
           {values.map((value, i) => (
@@ -162,8 +162,8 @@ export default function About() {
         </div>
       </div>
 
-      <div className="mt-12 px-4">
-        <h3 className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-8 a-fade-up text-center">Our Stellar Journey</h3>
+      <div className="mt-6 sm:mt-12 px-4">
+        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-400 mb-6 sm:mb-8 a-fade-up text-center">Our Stellar Journey</h3>
 
         <div className="relative max-w-4xl mx-auto" ref={timelineRef}>
           {/* Desktop: central vertical line */}

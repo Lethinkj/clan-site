@@ -2,8 +2,8 @@ import React from 'react'
 
 export default function Home() {
   return (
-    <div className="space-y-12 pb-8">
-      <div className="text-center space-y-6 px-4">
+    <div className="space-y-8 sm:space-y-12 pb-4 sm:pb-8">
+      <div className="text-center space-y-4 sm:space-y-6 px-4">
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-yellow-300 mb-4 a-fade-up">
           Together We Build Tomorrow's Solutions
         </h2>
@@ -12,8 +12,8 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="mt-12 px-4">
-        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-300 mb-8 text-center a-fade-up">Our Core Principles</h3>
+      <div className="mt-6 sm:mt-12 px-4">
+        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-300 mb-6 sm:mb-8 text-center a-fade-up">Our Core Principles</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 a-stagger max-w-6xl mx-auto">
           <div className="bg-black/50 border border-yellow-300/20 p-5 sm:p-6 rounded-lg shadow-md aura-card a-fade-up">
             <div className="text-3xl sm:text-4xl mb-4">🤝</div>
@@ -36,8 +36,8 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mt-12 px-4">
-        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-300 mb-8 text-center a-fade-up">Team Aura</h3>
+      <div className="mt-6 sm:mt-12 px-4">
+        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-300 mb-6 sm:mb-8 text-center a-fade-up">Team Aura</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 a-stagger max-w-5xl mx-auto">
           <div className="bg-black/50 border border-yellow-300/20 p-4 sm:p-6 rounded-lg shadow-md aura-card text-center a-pop">
             <div className="text-2xl sm:text-3xl font-bold text-yellow-300 mb-2">99.9%</div>
