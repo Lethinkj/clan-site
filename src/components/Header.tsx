@@ -71,13 +71,15 @@ export default function Header() {
     }
   }, [mobileMenuOpen])
 
+
+
   return (
-    <header className="sticky top-0 z-50 bg-transparent">
-      <div className="container mx-auto px-4 py-3 flex items-center">
-        <div className={`flex items-center gap-3 transition-all duration-300 ${hideLogo ? 'opacity-0 -translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
-          {/* logo - clickable to home; title next to logo is clickable on all sizes */}
-          <Link to="/" aria-label="Home" className="flex flex-col items-center">
-            <div className="w-12 h-12 rounded-full overflow-hidden bg-yellow-800/10 flex items-center justify-center">
+    <header className="sticky top-0 z-[100] bg-transparent">
+      <div className="container mx-auto px-4 py-2 sm:py-3 relative z-[102]">
+        {/* Logo - Top Left Corner (hides on scroll) */}
+        <div className={`transition-all duration-300 ${hideLogo ? 'opacity-0 -translate-y-8 pointer-events-none h-0' : 'opacity-100 translate-y-0'}`}>
+          <Link to="/" aria-label="Home" className="flex flex-col items-start">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-yellow-800/10 flex items-center justify-center">
               <img
                 src="/Aura-7f.jpeg"
                 alt="Aura-7F logo"
@@ -90,13 +92,13 @@ export default function Header() {
                 }}
               />
             </div>
-            <span className="text-sm font-extrabold text-yellow-300 neon-text leading-tight mt-1">AURA-7F</span>
+            <span className="text-xs sm:text-sm font-extrabold text-yellow-300 neon-text mt-1">AURA-7F</span>
           </Link>
         </div>
 
-        {/* center pill-style nav (desktop) */}
-        <div className="flex-1 flex justify-center">
-          <nav className="hidden sm:flex items-center bg-[#061a28]/90 text-aura rounded-full px-3 py-1 shadow-lg gap-1 nav-pill">
+        {/* Desktop center pill-style nav (shows when logo is hidden) */}
+        <div className={`hidden sm:flex justify-center transition-all duration-300 ${hideLogo ? 'mt-0' : 'mt-4'}`}>
+          <nav className="flex items-center bg-[#061a28]/90 text-aura rounded-full px-3 py-1 shadow-lg gap-1 nav-pill">
             {navItems.map(({ to, icon: Icon, label }) => (
               <NavLink
                 key={to}
@@ -109,42 +111,52 @@ export default function Header() {
             ))}
           </nav>
         </div>
+      </div>
 
-        {/* Mobile menu toggle button */}
-        <div className="sm:hidden">
-          <button 
-            onClick={(e) => {
-              e.stopPropagation()
-              setMobileMenuOpen(!mobileMenuOpen)
-            }}
-            className="mobile-menu-button p-2 text-yellow-300 hover:text-yellow-400 transition-colors relative z-50"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+      {/* Mobile menu toggle button - Fixed to Top Right Corner */}
+      <div className="sm:hidden fixed top-4 right-4 z-[103]">
+        <button 
+          onClick={(e) => {
+            e.stopPropagation()
+            setMobileMenuOpen(!mobileMenuOpen)
+          }}
+          className="mobile-menu-button p-2.5 text-yellow-300 hover:text-yellow-400 transition-colors bg-black/30 backdrop-blur-md rounded-lg border border-yellow-300/20"
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+        </button>
+
+        {/* Mobile dropdown menu - positioned below toggle button */}
+        <div 
+          className={`mobile-menu-container absolute top-full right-0 mt-2 w-48 bg-black/30 backdrop-blur-xl rounded-lg shadow-2xl border border-yellow-300/30 overflow-hidden transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}`}
+          style={{
+            background: 'linear-gradient(135deg, rgba(6, 26, 40, 0.90), rgba(7, 25, 43, 0.95))',
+            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.5)',
+            transformOrigin: 'top right'
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <nav className="flex flex-col py-2">
+            {navItems.map(({ to, icon: Icon, label }) => (
+              <NavLink
+                key={to + '-mobile'}
+                to={to}
+                onClick={() => setMobileMenuOpen(false)}
+                className={({ isActive }) => `flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 ${isActive ? 'border-yellow-400 bg-yellow-400/10 text-yellow-300 font-semibold' : 'border-transparent text-aura/80 hover:bg-yellow-300/10 hover:text-yellow-300 hover:border-yellow-300/50'}`}
+              >
+                <Icon size={20} strokeWidth={2.5} />
+                <span className="text-base font-medium">{label}</span>
+              </NavLink>
+            ))}
+          </nav>
         </div>
-
       </div>
 
-      {/* Mobile dropdown menu */}
+      {/* Backdrop overlay for mobile menu */}
       <div 
-        className={`sm:hidden mobile-menu-container fixed top-16 right-4 bg-[#061a28]/95 backdrop-blur-md rounded-2xl shadow-2xl border border-yellow-300/20 overflow-hidden transition-all duration-300 z-50 ${mobileMenuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-4 pointer-events-none'}`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <nav className="flex flex-col p-2">
-          {navItems.map(({ to, icon: Icon, label }) => (
-            <NavLink
-              key={to + '-mobile'}
-              to={to}
-              onClick={() => setMobileMenuOpen(false)}
-              className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive ? 'bg-yellow-400 text-[#07192b] font-semibold' : 'text-aura hover:bg-yellow-300/10 hover:text-yellow-300'}`}
-            >
-              <Icon size={20} />
-              <span className="text-sm font-medium">{label}</span>
-            </NavLink>
-          ))}
-        </nav>
-      </div>
+        className={`sm:hidden fixed inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300 z-[99] ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        onClick={() => setMobileMenuOpen(false)}
+      />
     </header>
   )
 }
