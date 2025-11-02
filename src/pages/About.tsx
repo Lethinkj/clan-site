@@ -226,7 +226,7 @@ export default function About() {
                   {/* Mobile Layout */}
                   <div className="md:hidden flex gap-3 items-start">
                     <div className="flex-shrink-0">
-                      <AnimateOnView animation="a-pop" threshold={0.2} once style={{ animationDelay: `${idx * 140}ms` }}>
+                      <AnimateOnView animation="a-slide-left" threshold={0.2} once style={{ animationDelay: `${idx * 100}ms` }}>
                         <div
                           className="timeline-dot flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white z-40 shadow-lg border-2 border-yellow-300/30"
                           data-idx={idx}
@@ -236,7 +236,7 @@ export default function About() {
                       </AnimateOnView>
                     </div>
                     <div className="flex-1 pt-0">
-                      <AnimateOnView animation="a-fade-up" threshold={0.2} once style={{ animationDelay: `${idx * 100}ms` }}>
+                      <AnimateOnView animation="a-slide-right" threshold={0.2} once style={{ animationDelay: `${idx * 150}ms` }}>
                         <div className="bg-black/50 border border-yellow-300/20 p-3 rounded-lg shadow-md aura-card">
                           <h4 className="text-sm font-bold text-yellow-300 mb-1">{evt.title}</h4>
                           <p className="text-xs text-aura">{evt.body}</p>

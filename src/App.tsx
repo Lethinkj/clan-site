@@ -41,7 +41,10 @@ export default function App() {
     // and also clear document/body scroll positions for broader compatibility.
     const scrollToTop = () => {
       try {
-        window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+        // Force scroll to top for both window and document
+        window.scrollTo(0, 0)
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
       } catch (e) {
         // fallback for older browsers
         document.documentElement.scrollTop = 0
@@ -53,10 +56,12 @@ export default function App() {
     scrollToTop()
     // after next paint
     requestAnimationFrame(() => scrollToTop())
-    // schedule a couple delayed attempts to catch late-rendered content
+    // schedule multiple delayed attempts to catch late-rendered content
     const timers: number[] = []
+    timers.push(window.setTimeout(scrollToTop, 10))
     timers.push(window.setTimeout(scrollToTop, 60))
     timers.push(window.setTimeout(scrollToTop, 180))
+    timers.push(window.setTimeout(scrollToTop, 300))
 
     return () => {
       timers.forEach((t) => window.clearTimeout(t))
@@ -141,7 +146,7 @@ export default function App() {
         {/* Content now rendered plainly so visuals don't obscure it */}
         <div className="max-w-6xl mx-auto p-0 relative z-20">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/members" element={<Members />} />
             <Route path="/events" element={<Events />} />

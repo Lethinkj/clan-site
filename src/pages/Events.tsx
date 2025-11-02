@@ -30,7 +30,7 @@ export default function Events() {
 
       <div className="px-3 sm:px-0">
   <h3 className="text-xl sm:text-3xl font-bold text-yellow-300 mb-3 sm:mb-6 a-fade-up">Upcoming Events</h3>
-  <div className="bg-black/50 border border-yellow-300/20 p-4 sm:p-6 rounded-lg shadow-md aura-card a-fade-up">
+  <div className="bg-black/50 border border-yellow-300/20 p-4 sm:p-6 rounded-lg shadow-md aura-card md:a-fade-up a-wall-build event-card-glow upcoming-event-glow">
           <div className="flex justify-between items-start mb-2 sm:mb-3">
             <div>
               <span className="bg-yellow-300/20 text-yellow-300 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-semibold">Upcoming</span>
@@ -47,9 +47,9 @@ export default function Events() {
 
       <div className="px-3 sm:px-0">
   <h3 className="text-xl sm:text-3xl font-bold text-yellow-300 mb-3 sm:mb-6">Past Events</h3>
-        <div className="space-y-3 sm:space-y-4 a-stagger">
+        <div className="space-y-3 sm:space-y-4 event-cards-mobile md:a-stagger">
           {past.map((event, i) => (
-            <div key={i} className="bg-black/50 border border-yellow-300/20 p-3 sm:p-5 rounded-lg shadow-md aura-card a-fade-up">
+            <div key={i} className="bg-black/50 border border-yellow-300/20 p-3 sm:p-5 rounded-lg shadow-md aura-card md:a-fade-up a-wall-build event-card-glow">
               <div className="flex justify-between items-start mb-2 sm:mb-3">
                 <span className="bg-gray-500/20 text-gray-400 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-semibold">Completed</span>
                 <span className="text-gray-400 text-xs sm:text-sm">{event.tag}</span>

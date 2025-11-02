@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Home() {
   return (
-    <div className="space-y-6 sm:space-y-12 pb-2 sm:pb-8">
+    <div id="home" className="space-y-6 sm:space-y-12 pb-2 sm:pb-8">
       <div className="text-center space-y-3 sm:space-y-6 px-3 sm:px-4">
         <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-yellow-300 mb-2 sm:mb-4 a-fade-up">
           Together We Build Tomorrow's Solutions

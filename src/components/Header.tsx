@@ -4,7 +4,7 @@ import { NavLink, Link } from 'react-router-dom'
 import { Home, Users, Calendar, Info, Menu, X } from 'lucide-react'
 
 const navItems = [
-  { to: '/', icon: Home, label: 'Home' },
+  { to: '/home', icon: Home, label: 'Home' },
   { to: '/about', icon: Info, label: 'About' },
   { to: '/members', icon: Users, label: 'Members' },
   { to: '/events', icon: Calendar, label: 'Events' }
@@ -78,7 +78,21 @@ export default function Header() {
       <div className="container mx-auto px-4 py-2 sm:py-3 relative z-[102]">
         {/* Logo - Top Left Corner (hides on scroll) */}
         <div className={`transition-all duration-300 ${hideLogo ? 'opacity-0 -translate-y-8 pointer-events-none h-0' : 'opacity-100 translate-y-0'}`}>
-          <Link to="/" aria-label="Home" className="flex flex-col items-start">
+          <Link 
+            to="/home" 
+            aria-label="Home" 
+            className="flex flex-col items-start"
+            onClick={(e) => {
+              // Force immediate scroll to top
+              try {
+                window.scroll({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
+              } catch {
+                window.scrollTo(0, 0)
+              }
+              document.documentElement.scrollTop = 0
+              document.body.scrollTop = 0
+            }}
+          >
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-yellow-800/10 flex items-center justify-center">
               <img
                 src="/Aura-7f.jpeg"
@@ -103,6 +117,16 @@ export default function Header() {
               <NavLink
                 key={to}
                 to={to}
+                onClick={(e) => {
+                  // Force immediate scroll to top
+                  try {
+                    window.scroll({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
+                  } catch {
+                    window.scrollTo(0, 0)
+                  }
+                  document.documentElement.scrollTop = 0
+                  document.body.scrollTop = 0
+                }}
                 className={({ isActive }) => `inline-flex items-center gap-2 transition-all ${isActive ? 'bg-yellow-400 text-[#07192b] px-4 py-2 rounded-full font-semibold' : 'text-aura opacity-90 px-4 py-2 rounded-full hover:text-yellow-300'}`}
               >
                 <Icon size={14} className={"opacity-90"} />
@@ -114,22 +138,24 @@ export default function Header() {
       </div>
 
       {/* Mobile menu toggle button - Fixed to Top Right Corner */}
-      <div className="sm:hidden fixed top-4 right-4 z-[103]">
+      <div className="sm:hidden">
         <button 
           onClick={(e) => {
             e.stopPropagation()
             setMobileMenuOpen(!mobileMenuOpen)
           }}
-          className="mobile-menu-button p-2.5 text-yellow-300 hover:text-yellow-400 transition-colors bg-black/30 backdrop-blur-md rounded-lg border border-yellow-300/20"
+          className="mobile-menu-button fixed top-2 right-2 z-[103] p-2 text-yellow-300 hover:text-yellow-400 transition-colors bg-black/30 backdrop-blur-md rounded-md border border-yellow-300/20"
           aria-label="Toggle menu"
+          style={{ position: 'fixed' }}
         >
-          {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+          {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
 
         {/* Mobile dropdown menu - positioned below toggle button */}
         <div 
-          className={`mobile-menu-container absolute top-full right-0 mt-2 w-48 bg-black/30 backdrop-blur-xl rounded-lg shadow-2xl border border-yellow-300/30 overflow-hidden transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}`}
+          className={`fixed top-14 right-2 z-[101] w-48 bg-black/30 backdrop-blur-xl rounded-lg shadow-2xl border border-yellow-300/30 overflow-hidden transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}`}
           style={{
+            position: 'fixed',
             background: 'linear-gradient(135deg, rgba(6, 26, 40, 0.90), rgba(7, 25, 43, 0.95))',
             boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.5)',
             transformOrigin: 'top right'
@@ -141,7 +167,17 @@ export default function Header() {
               <NavLink
                 key={to + '-mobile'}
                 to={to}
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={(e) => {
+                  // Force immediate scroll to top
+                  try {
+                    window.scroll({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
+                  } catch {
+                    window.scrollTo(0, 0)
+                  }
+                  document.documentElement.scrollTop = 0
+                  document.body.scrollTop = 0
+                  setMobileMenuOpen(false)
+                }}
                 className={({ isActive }) => `flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 ${isActive ? 'border-yellow-400 bg-yellow-400/10 text-yellow-300 font-semibold' : 'border-transparent text-aura/80 hover:bg-yellow-300/10 hover:text-yellow-300 hover:border-yellow-300/50'}`}
               >
                 <Icon size={20} strokeWidth={2.5} />
