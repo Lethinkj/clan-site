@@ -8,6 +8,15 @@ html, body, #root {
   /* Prevent animated overlays or wide elements from triggering horizontal scrollbars */
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  /* Prevent scroll position from being saved */
+  overscroll-behavior: none;
+  /* Force manual scroll behavior - no smooth scrolling during navigation */
+  scroll-behavior: auto !important;
+}
+
+/* Prevent scroll anchoring which can cause unwanted scroll jumps */
+* {
+  overflow-anchor: none;
 }
 
 :root {
@@ -699,13 +708,13 @@ footer {
 
 @media (max-width: 640px) {
   /* Remove excessive bottom padding - footer is at natural position now */
-  body { 
-    padding-bottom: 0; 
+  body {
+    padding-bottom: 0;
   }
-  
-  /* Adjust main content area */
+
+  /* Remove problematic min-height that causes scroll issues */
   #root {
-    min-height: 100vh;
+    min-height: auto;
   }
 }
 

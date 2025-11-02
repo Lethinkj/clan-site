@@ -82,16 +82,6 @@ export default function Header() {
             to="/home" 
             aria-label="Home" 
             className="flex flex-col items-start"
-            onClick={(e) => {
-              // Force immediate scroll to top
-              try {
-                window.scroll({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
-              } catch {
-                window.scrollTo(0, 0)
-              }
-              document.documentElement.scrollTop = 0
-              document.body.scrollTop = 0
-            }}
           >
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-yellow-800/10 flex items-center justify-center">
               <img
@@ -117,16 +107,6 @@ export default function Header() {
               <NavLink
                 key={to}
                 to={to}
-                onClick={(e) => {
-                  // Force immediate scroll to top
-                  try {
-                    window.scroll({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
-                  } catch {
-                    window.scrollTo(0, 0)
-                  }
-                  document.documentElement.scrollTop = 0
-                  document.body.scrollTop = 0
-                }}
                 className={({ isActive }) => `inline-flex items-center gap-2 transition-all ${isActive ? 'bg-yellow-400 text-[#07192b] px-4 py-2 rounded-full font-semibold' : 'text-aura opacity-90 px-4 py-2 rounded-full hover:text-yellow-300'}`}
               >
                 <Icon size={14} className={"opacity-90"} />
@@ -167,15 +147,7 @@ export default function Header() {
               <NavLink
                 key={to + '-mobile'}
                 to={to}
-                onClick={(e) => {
-                  // Force immediate scroll to top
-                  try {
-                    window.scroll({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
-                  } catch {
-                    window.scrollTo(0, 0)
-                  }
-                  document.documentElement.scrollTop = 0
-                  document.body.scrollTop = 0
+                onClick={() => {
                   setMobileMenuOpen(false)
                 }}
                 className={({ isActive }) => `flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 ${isActive ? 'border-yellow-400 bg-yellow-400/10 text-yellow-300 font-semibold' : 'border-transparent text-aura/80 hover:bg-yellow-300/10 hover:text-yellow-300 hover:border-yellow-300/50'}`}
