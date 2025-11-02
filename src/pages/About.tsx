@@ -89,93 +89,93 @@ export default function About() {
   }, [])
 
   return (
-    <div className="space-y-8 pb-8">
-      <div className="text-center space-y-6">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-yellow-300 a-pop px-4">Aura-7F</h2>
+    <div className="space-y-4 sm:space-y-8 pb-2 sm:pb-8">
+      <div className="text-center space-y-3 sm:space-y-6">
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-yellow-300 a-pop px-3 sm:px-4">Aura-7F</h2>
 
         {/* Desktop Layout */}
-        <div className="hidden md:flex items-center justify-center gap-4 lg:gap-6 max-w-4xl mx-auto px-4">
-          <div className="inline-block aura-card bg-black/60 border border-yellow-300/20 p-6 lg:p-8 rounded-lg shadow-md text-center">
-            <h3 className="text-xl lg:text-2xl font-bold text-yellow-300 mb-2">Aura</h3>
-            <p className="text-sm lg:text-base text-aura">Resembles a Star<br />A radiant energy that illuminates</p>
+        <div className="hidden md:flex items-center justify-center gap-3 lg:gap-6 max-w-4xl mx-auto px-4">
+          <div className="inline-block aura-card bg-black/60 border border-yellow-300/20 p-5 lg:p-8 rounded-lg shadow-md text-center">
+            <h3 className="text-lg lg:text-2xl font-bold text-yellow-300 mb-2">Aura</h3>
+            <p className="text-xs lg:text-base text-aura">Resembles a Star<br />A radiant energy that illuminates</p>
           </div>
 
-          <div className="text-3xl lg:text-4xl font-extrabold text-yellow-300">+</div>
+          <div className="text-2xl lg:text-4xl font-extrabold text-yellow-300">+</div>
 
-          <div className="inline-block aura-card bg-black/60 border border-yellow-300/20 p-6 lg:p-8 rounded-lg shadow-md text-center">
-            <h3 className="text-xl lg:text-2xl font-bold text-yellow-300 mb-2">7F</h3>
-            <p className="text-sm lg:text-base text-aura">Hexadecimal's highest positive number<br />Maximum positive energy</p>
+          <div className="inline-block aura-card bg-black/60 border border-yellow-300/20 p-5 lg:p-8 rounded-lg shadow-md text-center">
+            <h3 className="text-lg lg:text-2xl font-bold text-yellow-300 mb-2">7F</h3>
+            <p className="text-xs lg:text-base text-aura">Hexadecimal's highest positive number<br />Maximum positive energy</p>
           </div>
 
-          <div className="text-3xl lg:text-4xl font-extrabold text-yellow-300">=</div>
+          <div className="text-2xl lg:text-4xl font-extrabold text-yellow-300">=</div>
 
-          <div className="text-3xl lg:text-4xl text-yellow-300">∞</div>
+          <div className="text-2xl lg:text-4xl text-yellow-300">∞</div>
         </div>
 
         {/* Mobile Layout */}
-        <div className="md:hidden flex flex-col items-center gap-4 px-4">
-          <div className="w-full aura-card bg-black/60 border border-yellow-300/20 p-5 rounded-lg shadow-md text-center">
-            <h3 className="text-lg font-bold text-yellow-300 mb-2">Aura</h3>
-            <p className="text-sm text-aura">Resembles a Star<br />A radiant energy that illuminates</p>
+        <div className="md:hidden flex flex-col items-center gap-2 px-3">
+          <div className="w-full aura-card bg-black/60 border border-yellow-300/20 p-3 rounded-lg shadow-md text-center">
+            <h3 className="text-base font-bold text-yellow-300 mb-1">Aura</h3>
+            <p className="text-xs text-aura">Resembles a Star<br />A radiant energy that illuminates</p>
           </div>
 
-          <div className="text-2xl font-extrabold text-yellow-300">+</div>
+          <div className="text-lg font-extrabold text-yellow-300">+</div>
 
-          <div className="w-full aura-card bg-black/60 border border-yellow-300/20 p-5 rounded-lg shadow-md text-center">
-            <h3 className="text-lg font-bold text-yellow-300 mb-2">7F</h3>
-            <p className="text-sm text-aura">Hexadecimal's highest positive number<br />Maximum positive energy</p>
+          <div className="w-full aura-card bg-black/60 border border-yellow-300/20 p-3 rounded-lg shadow-md text-center">
+            <h3 className="text-base font-bold text-yellow-300 mb-1">7F</h3>
+            <p className="text-xs text-aura">Hexadecimal's highest positive number<br />Maximum positive energy</p>
           </div>
 
-          <div className="text-2xl font-extrabold text-yellow-300">=</div>
+          <div className="text-lg font-extrabold text-yellow-300">=</div>
 
-          <div className="text-2xl text-yellow-300">∞</div>
+          <div className="text-lg text-yellow-300">∞</div>
         </div>
 
         <div
-          className="mx-auto max-w-4xl mt-6 p-6 sm:p-8 rounded-xl border border-yellow-300/20 aura-card text-center px-4"
+          className="mx-auto max-w-4xl mt-3 sm:mt-6 p-3 sm:p-8 rounded-xl border border-yellow-300/20 aura-card text-center px-3 sm:px-4"
         >
-          <h3 className="text-3xl font-bold text-yellow-300 mb-4">"A Star Shines in a High Place with Full of Positive Energy"</h3>
-            <p className="text-aura">This is the essence of our clan — reaching the highest potential while spreading positivity and illumination to all we touch.</p>
+          <h3 className="text-base sm:text-2xl md:text-3xl font-bold text-yellow-300 mb-2 sm:mb-4">"A Star Shines in a High Place with Full of Positive Energy"</h3>
+            <p className="text-xs sm:text-base text-aura">This is the essence of our clan — reaching the highest potential while spreading positivity and illumination to all we touch.</p>
         </div>
       </div>
 
-      <div className="mt-6">
-    <h3 className="text-2xl sm:text-3xl font-bold text-yellow-300 mb-4 text-center a-fade-up">Our Philosophy</h3>
-  <p className="text-aura max-w-4xl mx-auto text-center a-fade-up px-4 sm:px-0">Like a star that burns brightest in the vast cosmos, Aura-7F represents the pinnacle of positive energy in the digital universe. We believe that true innovation happens when brilliant minds unite under a shared constellation of values.
-    Our name embodies our commitment to reaching the highest levels of excellence (7F in hexadecimal) while maintaining the radiant, inspiring presence of a guiding star (Aura) for others in the tech community.</p>
+      <div className="mt-3 sm:mt-6">
+        <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-yellow-300 mb-2 sm:mb-4 text-center a-fade-up px-3 sm:px-4">Our Philosophy</h3>
+        <p className="text-xs sm:text-base text-aura max-w-4xl mx-auto text-center a-fade-up px-3 sm:px-4">Like a star that burns brightest in the vast cosmos, Aura-7F represents the pinnacle of positive energy in the digital universe. We believe that true innovation happens when brilliant minds unite under a shared constellation of values.
+          Our name embodies our commitment to reaching the highest levels of excellence (7F in hexadecimal) while maintaining the radiant, inspiring presence of a guiding star (Aura) for others in the tech community.</p>
       </div>
 
-      <div className="space-y-6 px-4">
-        <h3 className="text-2xl sm:text-3xl font-bold text-yellow-300 mb-4 a-fade-up text-center">Seven Fundamental Values</h3>
-        <p className="text-base sm:text-lg text-aura mb-6 text-center">The 7F that defines our highest positive energy</p>
+      <div className="space-y-3 sm:space-y-6 px-3 sm:px-4">
+        <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-yellow-300 mb-2 sm:mb-4 a-fade-up text-center">Seven Fundamental Values</h3>
+        <p className="text-xs sm:text-base md:text-lg text-aura mb-3 sm:mb-6 text-center">The 7F that defines our highest positive energy</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 a-stagger max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 a-stagger max-w-4xl mx-auto">
           {values.map((value, i) => (
             <div
               key={i}
-              className="bg-black/50 border border-yellow-300/20 p-4 sm:p-5 rounded-lg shadow-md a-fade-up aura-card"
+              className="bg-black/50 border border-yellow-300/20 p-3 sm:p-5 rounded-lg shadow-md a-fade-up aura-card"
             >
-              <h4 className="text-lg sm:text-xl font-bold text-yellow-300 mb-2">{value.title}</h4>
-              <p className="text-sm sm:text-base text-aura">{value.desc}</p>
+              <h4 className="text-base sm:text-xl font-bold text-yellow-300 mb-1 sm:mb-2">{value.title}</h4>
+              <p className="text-xs sm:text-base text-aura">{value.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="mt-12 px-4">
-        <h3 className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-8 a-fade-up text-center">Our Stellar Journey</h3>
+      <div className="mt-4 sm:mt-12 px-3 sm:px-4">
+        <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-yellow-400 mb-4 sm:mb-8 a-fade-up text-center">Our Stellar Journey</h3>
 
         <div className="relative max-w-4xl mx-auto" ref={timelineRef}>
           {/* Desktop: central vertical line */}
           <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-1 bg-yellow-800/30 z-0" />
           
           {/* Mobile: left vertical line */}
-          <div className="md:hidden absolute left-6 top-0 bottom-0 w-1 bg-yellow-800/30 z-0" />
+          <div className="md:hidden absolute left-5 top-0 bottom-0 w-1 bg-yellow-800/30 z-0" />
 
-          {/* Animated bee that follows scroll */}
+          {/* Animated bee that follows scroll - Desktop only */}
           {beeVisible && (
             <div
-              className="timeline-bee absolute z-50 pointer-events-none"
+              className="timeline-bee absolute z-50 pointer-events-none hidden md:block"
               style={{ 
                 top: beeTop ? `${beeTop}px` : '0px', 
                 left: beeLeft != null ? `${beeLeft}px` : '50%',
@@ -197,7 +197,7 @@ export default function About() {
             </div>
           )}
 
-          <div className="space-y-8 sm:space-y-12 pt-4">
+          <div className="space-y-6 sm:space-y-12 pt-2 sm:pt-4">
             {[
               {
                 title: 'Genesis - 2024',
@@ -224,22 +224,22 @@ export default function About() {
               return (
                 <div key={idx} className="relative">
                   {/* Mobile Layout */}
-                  <div className="md:hidden flex gap-4 items-start">
+                  <div className="md:hidden flex gap-3 items-start">
                     <div className="flex-shrink-0">
-                      <AnimateOnView animation="a-pop" threshold={0.2} once style={{ animationDelay: `${idx * 140}ms` }}>
+                      <AnimateOnView animation="a-slide-left" threshold={0.2} once style={{ animationDelay: `${idx * 100}ms` }}>
                         <div
-                          className="timeline-dot flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white z-40 shadow-lg border-2 border-yellow-300/30"
+                          className="timeline-dot flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white z-40 shadow-lg border-2 border-yellow-300/30"
                           data-idx={idx}
                         >
-                          <span className="text-lg">{evt.icon}</span>
+                          <span className="text-base">{evt.icon}</span>
                         </div>
                       </AnimateOnView>
                     </div>
-                    <div className="flex-1 pt-1">
-                      <AnimateOnView animation="a-fade-up" threshold={0.2} once style={{ animationDelay: `${idx * 100}ms` }}>
-                        <div className="bg-black/50 border border-yellow-300/20 p-4 sm:p-5 rounded-lg shadow-md aura-card">
-                          <h4 className="text-base sm:text-lg font-bold text-yellow-300 mb-2">{evt.title}</h4>
-                          <p className="text-sm sm:text-base text-aura">{evt.body}</p>
+                    <div className="flex-1 pt-0">
+                      <AnimateOnView animation="a-slide-right" threshold={0.2} once style={{ animationDelay: `${idx * 150}ms` }}>
+                        <div className="bg-black/50 border border-yellow-300/20 p-3 rounded-lg shadow-md aura-card">
+                          <h4 className="text-sm font-bold text-yellow-300 mb-1">{evt.title}</h4>
+                          <p className="text-xs text-aura">{evt.body}</p>
                         </div>
                       </AnimateOnView>
                     </div>

@@ -8,6 +8,15 @@ html, body, #root {
   /* Prevent animated overlays or wide elements from triggering horizontal scrollbars */
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  /* Prevent scroll position from being saved */
+  overscroll-behavior: none;
+  /* Force manual scroll behavior - no smooth scrolling during navigation */
+  scroll-behavior: auto !important;
+}
+
+/* Prevent scroll anchoring which can cause unwanted scroll jumps */
+* {
+  overflow-anchor: none;
 }
 
 :root {
@@ -268,11 +277,17 @@ body::before {
 
 /* Generic entrance animations (aura theme) */
 .invisible { opacity: 0; transform-origin: center; }
-.animated { opacity: 1 !important; }
 
 .a-fade-up { animation: a-fade-up 700ms cubic-bezier(.2,.9,.3,1) both; }
 .a-fade-right { animation: a-fade-right 700ms cubic-bezier(.2,.9,.3,1) both; }
 .a-pop { animation: a-pop 540ms cubic-bezier(.2,.9,.3,1) both; }
+.a-slide-left { animation: a-slide-left 800ms cubic-bezier(.2,.9,.3,1) both; }
+.a-slide-right { animation: a-slide-right 800ms cubic-bezier(.2,.9,.3,1) both; }
+.animated.a-fade-up,
+.animated.a-fade-right,
+.animated.a-pop,
+.animated.a-slide-left,
+.animated.a-slide-right { opacity: 1; }
 .a-stagger > * { opacity: 0; transform: translateY(8px); }
 .a-stagger.animated > * { animation: a-stagger-item 520ms cubic-bezier(.2,.9,.3,1) both; }
 
@@ -282,6 +297,14 @@ body::before {
 }
 @keyframes a-fade-right {
   from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes a-slide-left {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes a-slide-right {
+  from { opacity: 0; transform: translateX(-60px); }
   to { opacity: 1; transform: translateX(0); }
 }
 @keyframes a-pop {
@@ -299,6 +322,9 @@ body::before {
 .no-entry .a-fade-up,
 .no-entry .a-fade-right,
 .no-entry .a-pop,
+.no-entry .a-slide-left,
+.no-entry .a-slide-right,
+.no-entry .a-wall-build,
 .no-entry .a-stagger > * {
   animation: none !important;
   opacity: 1 !important;
@@ -441,12 +467,187 @@ footer {
   animation: timeline-pulse 2s ease-in-out infinite;
 }
 
+/* Mobile: add blinking animation to all timeline dots */
+@media (max-width: 768px) {
+  .timeline-dot {
+    animation: timeline-blink 2.5s ease-in-out infinite;
+  }
+}
+
 @keyframes timeline-pulse {
   0%, 100% { 
     box-shadow: 0 8px 30px rgba(241,176,17,0.4), 0 0 20px rgba(59,130,246,0.3);
   }
   50% { 
     box-shadow: 0 10px 35px rgba(241,176,17,0.6), 0 0 25px rgba(59,130,246,0.4);
+  }
+}
+
+@keyframes timeline-blink {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(241,176,17,0.3), 0 0 12px rgba(59,130,246,0.2);
+    opacity: 0.9;
+  }
+  50% { 
+    transform: scale(1.08);
+    box-shadow: 0 6px 25px rgba(241,176,17,0.6), 0 0 20px rgba(59,130,246,0.4);
+    opacity: 1;
+  }
+}
+
+/* Clash of Clans wall-style animations for events */
+.a-wall-build {
+  animation: wall-build 600ms cubic-bezier(.2,.9,.2,1) both;
+}
+
+@keyframes wall-build {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%) scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(5%) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+
+
+
+
+/* Mobile-specific sequential wall animation with staggered delays */
+@media (max-width: 768px) {
+  .event-cards-mobile > *:nth-child(1) { 
+    animation-delay: 0ms;
+  }
+  .event-cards-mobile > *:nth-child(1)::before {
+    animation-delay: 600ms;
+  }
+  .event-cards-mobile > *:nth-child(2) { 
+    animation-delay: 150ms;
+  }
+  .event-cards-mobile > *:nth-child(2)::before {
+    animation-delay: 750ms;
+  }
+  .event-cards-mobile > *:nth-child(3) { 
+    animation-delay: 300ms;
+  }
+  .event-cards-mobile > *:nth-child(3)::before {
+    animation-delay: 900ms;
+  }
+  .event-cards-mobile > *:nth-child(4) { 
+    animation-delay: 450ms;
+  }
+  .event-cards-mobile > *:nth-child(4)::before {
+    animation-delay: 1050ms;
+  }
+  .event-cards-mobile > *:nth-child(5) { 
+    animation-delay: 600ms;
+  }
+  .event-cards-mobile > *:nth-child(5)::before {
+    animation-delay: 1200ms;
+  }
+  .event-cards-mobile > *:nth-child(6) { 
+    animation-delay: 750ms;
+  }
+  .event-cards-mobile > *:nth-child(6)::before {
+    animation-delay: 1350ms;
+  }
+  
+  /* Apply glow to upcoming event card too */
+  .upcoming-event-glow::before {
+    animation-delay: 600ms;
+  }
+
+  /* Mobile card border snake animation */
+  .event-card-glow {
+    position: relative;
+    overflow: visible;
+  }
+
+  /* Top snake: travels left to right */
+  .event-card-glow::before {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, 
+      rgba(241,176,17,0) 0%,
+      rgba(241,176,17,0.6) 20%,
+      rgba(255,215,0,0.9) 40%,
+      rgba(241,176,17,1) 50%, 
+      rgba(255,215,0,0.9) 60%,
+      rgba(241,176,17,0.6) 80%,
+      rgba(241,176,17,0) 100%
+    );
+    box-shadow: 0 0 12px rgba(241,176,17,0.9), 0 0 20px rgba(241,176,17,0.5);
+    pointer-events: none;
+    z-index: 10;
+    border-radius: 1.5px;
+    animation: top-snake-glow 3s linear infinite;
+  }
+
+  /* Bottom snake: travels right to left */
+  .event-card-glow::after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, 
+      rgba(241,176,17,0) 0%,
+      rgba(241,176,17,0.6) 20%,
+      rgba(255,215,0,0.9) 40%,
+      rgba(241,176,17,1) 50%, 
+      rgba(255,215,0,0.9) 60%,
+      rgba(241,176,17,0.6) 80%,
+      rgba(241,176,17,0) 100%
+    );
+    box-shadow: 0 0 12px rgba(241,176,17,0.9), 0 0 20px rgba(241,176,17,0.5);
+    pointer-events: none;
+    z-index: 10;
+    border-radius: 1.5px;
+    animation: bottom-snake-glow 3s linear infinite;
+  }
+
+  /* All cards animate simultaneously - no staggered delays */
+  .event-cards-mobile > *.event-card-glow::before,
+  .event-cards-mobile > *.event-card-glow::after { 
+    animation-delay: 0s;
+  }
+}
+
+/* Top snake animation: travels from left to right along top edge */
+@keyframes top-snake-glow {
+  0% {
+    top: -1.5px;
+    left: 0;
+    opacity: 1;
+  }
+  
+  100% {
+    top: -1.5px;
+    left: calc(100% - 50px);
+    opacity: 1;
+  }
+}
+
+/* Bottom snake animation: travels from right to left along bottom edge */
+@keyframes bottom-snake-glow {
+  0% {
+    bottom: -1.5px;
+    right: 0;
+    opacity: 1;
+  }
+  
+  100% {
+    bottom: -1.5px;
+    right: calc(100% - 50px);
+    opacity: 1;
   }
 }
 
@@ -478,15 +679,15 @@ footer {
 }
 
 /* Mobile menu button hover effect */
-.mobile-menu-container button {
+.mobile-menu-button {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.mobile-menu-container button:hover {
+.mobile-menu-button:hover {
   transform: scale(1.1);
 }
 
-.mobile-menu-container button:active {
+.mobile-menu-button:active {
   transform: scale(0.95);
 }
 
@@ -506,14 +707,14 @@ footer {
 .bee-wrap-mobile { pointer-events: none; }
 
 @media (max-width: 640px) {
-  /* Ensure body content has bottom padding for mobile footer */
-  body { 
-    padding-bottom: 100px; 
+  /* Remove excessive bottom padding - footer is at natural position now */
+  body {
+    padding-bottom: 0;
   }
-  
-  /* Adjust main content area */
+
+  /* Remove problematic min-height that causes scroll issues */
   #root {
-    min-height: 100vh;
+    min-height: auto;
   }
 }
 
