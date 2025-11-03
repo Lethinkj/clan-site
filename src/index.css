@@ -43,21 +43,24 @@ body {
 }
 
 /* Hide the native cursor for a fully custom cursor experience across the site.
+   Only on desktop (768px+). Mobile keeps native cursor.
    Exceptions: form fields and contenteditable areas will keep native cursor for accessibility. */
-html, body, #root {
-  cursor: none;
-}
+@media (min-width: 768px) {
+  html, body, #root {
+    cursor: none;
+  }
 
-/* Keep native cursor for real form controls and editable regions only. Remove `button` here so our custom cursor remains active over buttons/links. 
-   If any element should show the native cursor, add the `.no-custom-cursor` class to it. */
-input, textarea, select, [contenteditable], .no-custom-cursor {
-  cursor: auto !important;
-}
+  /* Keep native cursor for real form controls and editable regions only. Remove `button` here so our custom cursor remains active over buttons/links. 
+     If any element should show the native cursor, add the `.no-custom-cursor` class to it. */
+  input, textarea, select, [contenteditable], .no-custom-cursor {
+    cursor: auto !important;
+  }
 
-/* Force native cursor to be hidden for links and nav items so our custom cursor shows consistently.
-   Use `.no-custom-cursor` on any link/button you want to show the system cursor instead. */
-a, button, [role="button"], .nav-link {
-  cursor: none;
+  /* Force native cursor to be hidden for links and nav items so our custom cursor shows consistently.
+     Use `.no-custom-cursor` on any link/button you want to show the system cursor instead. */
+  a, button, [role="button"], .nav-link {
+    cursor: none;
+  }
 }
 
 /* Override Tailwind's text-white so 'white' text renders as our blue for better theme consistency */
@@ -71,28 +74,7 @@ a, button, [role="button"], .nav-link {
 .text-aura { color: var(--aura-text) !important; }
 .text-aura-weak { color: color-mix(in srgb, var(--aura-text) 70%, black 30%) !important; }
 
-/* Custom cursor components */
-.custom-cursor { position: fixed; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 99999; }
-.custom-cursor .cursor-dot {
-  width: 10px; height: 10px; border-radius: 9999px; background: #f1b011; box-shadow: 0 0 8px rgba(241,176,17,0.9); transform: translate(-50%, -50%) scale(1); transition: transform 120ms ease, box-shadow 180ms ease, opacity 180ms ease;
-}
-.custom-cursor .cursor-ring {
-  position: absolute; left: 0; top: 0; width: 36px; height: 36px; border-radius: 9999px; transform: translate(-50%, -50%) scale(1); border: 2px solid rgba(241,176,17,0.18); box-shadow: 0 0 18px rgba(241,176,17,0.06); transition: transform 160ms cubic-bezier(.2,.9,.2,1), opacity 160ms ease, border-color 160ms ease;
-}
-.custom-cursor .cursor-ripple {
-  position: absolute; left: 0; top: 0; width: 8px; height: 8px; border-radius: 9999px; background: rgba(241,176,17,0.28); transform: translate(-50%, -50%) scale(0.6); opacity: 0; pointer-events: none; transition: transform 320ms ease, opacity 320ms ease;
-}
-.custom-cursor .cursor-spinner {
-  position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; border: 3px solid rgba(241,176,17,0.12); border-top-color: rgba(241,176,17,0.98); transform: translate(-50%, -50%) rotate(0deg); opacity: 0; transition: opacity 160ms ease; animation: spin 900ms linear infinite;
-}
 
-.custom-cursor.state-hover .cursor-dot { transform: translate(-50%, -50%) scale(1.25); box-shadow: 0 0 20px rgba(241,176,17,0.95); }
-.custom-cursor.state-hover .cursor-ring { transform: translate(-50%, -50%) scale(1.12); border-color: rgba(241,176,17,0.35); }
-.custom-cursor.state-active .cursor-dot { transform: translate(-50%, -50%) scale(0.85); }
-.custom-cursor.state-active .cursor-ripple { transform: translate(-50%, -50%) scale(2.4); opacity: 0.9; }
-.custom-cursor.state-loading .cursor-spinner { opacity: 1; }
-
-@keyframes spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
 /* particle animation */
 @keyframes pulse {
@@ -765,6 +747,357 @@ footer {
   /* Remove problematic min-height that causes scroll issues */
   #root {
     min-height: auto;
+  }
+}
+
+/* Custom Cursor Styles */
+.cursor-dot {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10002;
+  transition: transform 0.1s cubic-bezier(0.2, 0.9, 0.3, 1);
+  background: linear-gradient(135deg, #fcd34d, #f59e0b);
+  box-shadow: 
+    0 0 8px rgba(250, 204, 21, 0.9),
+    0 0 15px rgba(250, 204, 21, 0.5),
+    inset 0 0 4px rgba(255, 255, 255, 0.7);
+  animation: cursor-pulse-dot 2s ease-in-out infinite;
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+}
+
+.cursor-orbit-particle {
+  position: fixed;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  background: radial-gradient(circle, rgba(250, 204, 21, 1), rgba(250, 204, 21, 0.5));
+  box-shadow: 0 0 6px rgba(250, 204, 21, 0.8);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.cursor-orbit-1 {
+  animation: orbit-particle 3s linear infinite;
+  animation-play-state: running !important;
+}
+
+.cursor-orbit-2 {
+  animation: orbit-particle 3s linear infinite;
+  animation-delay: -1s;
+  animation-play-state: running !important;
+}
+
+.cursor-orbit-3 {
+  animation: orbit-particle 3s linear infinite;
+  animation-delay: -2s;
+  animation-play-state: running !important;
+}
+
+@keyframes cursor-pulse-dot {
+  0%, 100% {
+    box-shadow: 
+      0 0 8px rgba(250, 204, 21, 0.9),
+      0 0 15px rgba(250, 204, 21, 0.5),
+      inset 0 0 4px rgba(255, 255, 255, 0.7);
+  }
+  50% {
+    box-shadow: 
+      0 0 12px rgba(250, 204, 21, 1),
+      0 0 20px rgba(250, 204, 21, 0.7),
+      0 0 30px rgba(250, 204, 21, 0.3),
+      inset 0 0 6px rgba(255, 255, 255, 0.9);
+  }
+}
+
+@keyframes orbit-particle {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(18px) rotate(0deg) scale(1);
+    opacity: 0.7;
+  }
+  25% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(180deg) translateX(18px) rotate(-180deg) scale(1.1);
+  }
+  75% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) translateX(18px) rotate(-360deg) scale(1);
+    opacity: 0.7;
+  }
+}
+
+.cursor-hexagon {
+  position: fixed;
+  pointer-events: none;
+  z-index: 10001;
+  transition: transform 0.12s cubic-bezier(0.2, 0.9, 0.3, 1);
+  filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.5)) 
+          drop-shadow(0 0 15px rgba(250, 204, 21, 0.3));
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.hex-main {
+  transition: all 0.2s ease;
+  animation: hex-breathe 3s ease-in-out infinite;
+}
+
+.hex-accent {
+  opacity: 0.6;
+  transition: all 0.15s cubic-bezier(0.2, 0.9, 0.3, 1);
+  transform-origin: center;
+  animation: accent-shimmer 2.5s ease-in-out infinite;
+}
+
+@keyframes hex-breathe {
+  0%, 100% {
+    stroke-width: 2;
+    opacity: 0.9;
+  }
+  50% {
+    stroke-width: 2.3;
+    opacity: 1;
+  }
+}
+
+@keyframes accent-shimmer {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Click animation - corners push outward */
+.cursor-hexagon.clicking .hex-accent-1 {
+  animation: push-corner-tl 0.3s ease-out;
+}
+
+.cursor-hexagon.clicking .hex-accent-2 {
+  animation: push-corner-tr 0.3s ease-out;
+}
+
+.cursor-hexagon.clicking .hex-accent-3 {
+  animation: push-corner-bl 0.3s ease-out;
+}
+
+.cursor-hexagon.clicking .hex-accent-4 {
+  animation: push-corner-br 0.3s ease-out;
+}
+
+.cursor-hexagon.clicking .hex-main {
+  stroke-width: 2.5;
+  opacity: 1;
+}
+
+/* Corner push animations - each corner moves outward on click */
+@keyframes push-corner-tl {
+  0% {
+    opacity: 0.6;
+    transform: translate(0, 0) scale(1);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-4px, -4px) scale(1.2);
+  }
+  70% {
+    opacity: 0.8;
+    transform: translate(-2px, -2px) scale(1.05);
+  }
+  100% {
+    opacity: 0.6;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes push-corner-tr {
+  0% {
+    opacity: 0.6;
+    transform: translate(0, 0) scale(1);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(4px, -4px) scale(1.2);
+  }
+  70% {
+    opacity: 0.8;
+    transform: translate(2px, -2px) scale(1.05);
+  }
+  100% {
+    opacity: 0.6;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes push-corner-bl {
+  0% {
+    opacity: 0.6;
+    transform: translate(0, 0) scale(1);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-4px, 4px) scale(1.2);
+  }
+  70% {
+    opacity: 0.8;
+    transform: translate(-2px, 2px) scale(1.05);
+  }
+  100% {
+    opacity: 0.6;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes push-corner-br {
+  0% {
+    opacity: 0.6;
+    transform: translate(0, 0) scale(1);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(4px, 4px) scale(1.2);
+  }
+  70% {
+    opacity: 0.8;
+    transform: translate(2px, 2px) scale(1.05);
+  }
+  100% {
+    opacity: 0.6;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+.cursor-glow {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  background: radial-gradient(circle, rgba(250, 204, 21, 0.3), rgba(250, 204, 21, 0.1), transparent);
+  animation: cursor-pulse 2s ease-in-out infinite;
+  opacity: 0.6;
+  transition: transform 0.15s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+@keyframes cursor-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.sparkle {
+  position: fixed;
+  background: radial-gradient(circle, 
+    rgba(255, 215, 0, 1) 0%, 
+    rgba(250, 204, 21, 0.9) 20%,
+    rgba(250, 204, 21, 0.6) 40%,
+    rgba(250, 204, 21, 0.3) 60%,
+    transparent 80%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  animation: sparkle-fade 0.8s ease-out forwards;
+  box-shadow: 0 0 6px rgba(250, 204, 21, 0.7);
+}
+
+.click-ripple-hex {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9996;
+  transform: translate(-50%, -50%) scale(0.3);
+  animation: hex-ripple-expand 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.7)) drop-shadow(0 0 25px rgba(250, 204, 21, 0.4));
+}
+
+.click-burst {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  background: radial-gradient(circle, rgba(255, 215, 0, 1), rgba(250, 204, 21, 0.8));
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9996;
+  animation: burst-particle 0.6s ease-out forwards;
+  box-shadow: 0 0 8px rgba(250, 204, 21, 0.9);
+}
+
+@keyframes sparkle-fade {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.8) rotate(0deg);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.3) translateY(-5px) rotate(45deg);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1.1) translateY(-20px) rotate(120deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3) translateY(-50px) rotate(200deg);
+  }
+}
+
+@keyframes hex-ripple-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0.2);
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+  60% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes burst-particle {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.8);
+  }
+  60% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+}
+
+/* Hide default cursor only on desktop */
+@media (min-width: 768px) {
+  * {
+    cursor: none !important;
   }
 }
 

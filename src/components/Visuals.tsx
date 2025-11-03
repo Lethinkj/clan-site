@@ -7,14 +7,7 @@ const Visuals: React.FC = () => {
   const [beePos, setBeePos] = useState({ x: 0, y: 0 })
   const [beeRotation, setBeeRotation] = useState(0)
   const [beePosMobile, setBeePosMobile] = useState({ x: 60, y: 160 })
-  const cursorRef = useRef<HTMLDivElement | null>(null)
-  const hexGlowRef = useRef<HTMLDivElement | null>(null)
-  const cursorStateRef = useRef<HTMLDivElement | null>(null)
-  const ringRef = useRef<HTMLDivElement | null>(null)
-  const rippleRef = useRef<HTMLDivElement | null>(null)
-  const spinnerRef = useRef<HTMLDivElement | null>(null)
   const sweepRef = useRef<HTMLDivElement | null>(null)
-  const [cursorMode, setCursorMode] = useState<'idle' | 'hover' | 'active' | 'loading'>('idle')
   const [particleCount, setParticleCount] = useState(20)
   const [particles, setParticles] = useState(() => []) as any
   const [prefersReduced, setPrefersReduced] = useState(false)
@@ -50,155 +43,23 @@ const Visuals: React.FC = () => {
     return () => media.removeEventListener?.('change', onChange)
   }, [])
 
+  // Track mouse position for bee following on desktop
   useEffect(() => {
     if (prefersReduced) return
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY })
     }
-
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [prefersReduced])
 
-  // Keep the cursor DOM synced and avoid tearing by writing styles directly
+  // Initialize bee position to center on mount
   useEffect(() => {
-    if (!cursorRef.current) return
-    const el = cursorRef.current
-    el.style.left = `${mousePos.x}px`
-    el.style.top = `${mousePos.y}px`
-    if (ringRef.current) {
-      ringRef.current.style.left = `${mousePos.x}px`
-      ringRef.current.style.top = `${mousePos.y}px`
-    }
-    if (rippleRef.current) {
-      rippleRef.current.style.left = `${mousePos.x}px`
-      rippleRef.current.style.top = `${mousePos.y}px`
-    }
-    if (spinnerRef.current) {
-      spinnerRef.current.style.left = `${mousePos.x}px`
-      spinnerRef.current.style.top = `${mousePos.y}px`
-    }
-    if (hexGlowRef.current) {
-      // offset the glow slightly downward so it appears 'below' the cursor
-      hexGlowRef.current.style.left = `${mousePos.x}px`
-      hexGlowRef.current.style.top = `${mousePos.y + 18}px`
-    }
-  }, [mousePos])
-
-  // Utility: set cursor state class on the root cursor wrapper
-  useEffect(() => {
-    const el = cursorStateRef.current
-    if (!el) return
-    el.classList.remove('state-hover', 'state-active', 'state-loading')
-    if (cursorMode === 'hover') el.classList.add('state-hover')
-    if (cursorMode === 'active') el.classList.add('state-active')
-    if (cursorMode === 'loading') el.classList.add('state-loading')
-  }, [cursorMode])
-
-  // Pointer listeners to change cursor states depending on hovered element
-  useEffect(() => {
-    if (prefersReduced) return
-    const onPointerOver = (e: PointerEvent) => {
-      const target = e.target as HTMLElement | null
-      if (!target) return
-      // Only activate hover for interactive elements or our aura cards
-      const isInteractive = !!target.closest && (
-        target.closest('.aura-card') ||
-        target.closest('a') ||
-        target.closest('button') ||
-        target.closest('.nav-link') ||
-        target.closest('[role="button"]')
-      )
-      setCursorMode(isInteractive ? 'hover' : 'idle')
-    }
-    const onPointerOut = (e: PointerEvent) => {
-      setCursorMode('idle')
-    }
-    const onPointerDown = (e: PointerEvent) => {
-      setCursorMode('active')
-      // animate ripple
-      if (rippleRef.current) {
-        const r = rippleRef.current
-        r.style.transition = 'none'
-        r.style.opacity = '0.9'
-        r.style.transform = 'translate(-50%, -50%) scale(0.6)'
-        // force reflow
-        void r.offsetWidth
-        r.style.transition = 'transform 320ms ease, opacity 320ms ease'
-        r.style.transform = 'translate(-50%, -50%) scale(2.4)'
-        r.style.opacity = '0'
-      }
-    }
-    const onPointerUp = () => {
-      setCursorMode('hover')
-    }
-
-    window.addEventListener('pointerover', onPointerOver)
-    window.addEventListener('pointerout', onPointerOut)
-    window.addEventListener('pointerdown', onPointerDown)
-    window.addEventListener('pointerup', onPointerUp)
-
-    return () => {
-      window.removeEventListener('pointerover', onPointerOver)
-      window.removeEventListener('pointerout', onPointerOut)
-      window.removeEventListener('pointerdown', onPointerDown)
-      window.removeEventListener('pointerup', onPointerUp)
-    }
-  }, [prefersReduced])
-
-  // Detect SPA navigation: show loading cursor while route changes
-  useEffect(() => {
-    if (prefersReduced) return
-    // dispatch locationchange on push/replace
-    const patchHistory = () => {
-      const _wr = (type: 'pushState' | 'replaceState') => {
-        const orig = (history as any)[type]
-        return function (this: any, ...args: any[]) {
-          const res = orig.apply(this, args)
-          window.dispatchEvent(new Event('locationchange'))
-          return res
-        }
-      }
-      ;(history as any).pushState = _wr('pushState')
-      ;(history as any).replaceState = _wr('replaceState')
-    }
-    patchHistory()
-
-    const onNavStart = (e: Event) => {
-      // If a user clicked an internal link, enter loading
-      setCursorMode('loading')
-    }
-    const clearLoading = () => {
-      setCursorMode('idle')
-    }
-    window.addEventListener('click', (ev) => {
-      const t = ev.target as HTMLElement | null
-      if (!t) return
-      const a = t.closest('a') as HTMLAnchorElement | null
-      if (a && a.getAttribute('href') && a.getAttribute('href')!.startsWith('/') && !a.getAttribute('target')) {
-        // internal link clicked
-        onNavStart(ev as unknown as Event)
-      }
-    })
-    window.addEventListener('locationchange', clearLoading)
-    window.addEventListener('popstate', clearLoading)
-
-    return () => {
-      // no restore of original history methods — acceptable in SPA dev environment
-      window.removeEventListener('locationchange', clearLoading)
-      window.removeEventListener('popstate', clearLoading)
-    }
-  }, [prefersReduced])
-
-  // Restore bee follow behaviour: bee eases toward the cursor using requestAnimationFrame.
-  // Also initialize bee position to the center of the viewport on mount so it doesn't start at 0,0.
-  useEffect(() => {
-    // center bee on first render
     setBeePos({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
-    // initial mobile bee position
     setBeePosMobile({ x: Math.max(40, window.innerWidth * 0.2), y: Math.max(120, window.innerHeight * 0.25) })
   }, [])
 
+  // Desktop bee: smoothly follows cursor with easing
   useEffect(() => {
     if (prefersReduced) return
     let raf = 0
@@ -221,31 +82,23 @@ const Visuals: React.FC = () => {
     return () => cancelAnimationFrame(raf)
   }, [mousePos, prefersReduced])
 
-  // Mobile-only: make a gentle randomly-moving bee so small screens have motion
+  // Mobile bee: gentle random movement
   useEffect(() => {
     if (prefersReduced) return
-    let iv: number | undefined
-    const run = () => {
-      // choose a random target within viewport padding
+    
+    const moveBee = () => {
       const w = window.innerWidth
       const h = window.innerHeight
       const targetX = Math.floor(24 + Math.random() * (w - 48))
       const targetY = Math.floor(80 + Math.random() * (h - 160))
       setBeePosMobile({ x: targetX, y: targetY })
     }
-    // run initially and then every 2.2-3.8s
-    run()
-    iv = window.setInterval(run, 2600 + Math.random() * 1600)
-    return () => {
-      if (iv) window.clearInterval(iv)
-    }
+    
+    // Initialize and run every 2.6-4.2s
+    moveBee()
+    const interval = setInterval(moveBee, 2600 + Math.random() * 1600)
+    return () => clearInterval(interval)
   }, [prefersReduced])
-
-  useEffect(() => {
-    if (!cursorRef.current) return
-    cursorRef.current.style.left = `${mousePos.x}px`
-    cursorRef.current.style.top = `${mousePos.y}px`
-  }, [mousePos])
 
   // Parallax offset for hexagon pattern — disabled (no mouse tracking)
   const hexRef = useRef<SVGRectElement | null>(null)
@@ -358,38 +211,6 @@ const Visuals: React.FC = () => {
       )}
 
   
-
-      {/* Custom Cursor - Honey Drop (hide on small screens) */}
-      {!prefersReduced && (
-        <div className="custom-cursor" ref={cursorStateRef}>
-          <div
-            ref={cursorRef}
-            className="cursor-dot hidden md:block"
-            style={{ position: 'absolute', transform: 'translate(-50%, -50%)' }}
-            aria-hidden
-          />
-              {/* hex glow under cursor */}
-              <div ref={hexGlowRef} className="cursor-hex-glow hidden md:block" aria-hidden />
-          <div
-            ref={ringRef}
-            className="cursor-ring hidden md:block"
-            style={{ position: 'absolute', transform: 'translate(-50%, -50%)' }}
-            aria-hidden
-          />
-          <div
-            ref={rippleRef}
-            className="cursor-ripple hidden md:block"
-            style={{ position: 'absolute', transform: 'translate(-50%, -50%)' }}
-            aria-hidden
-          />
-          <div
-            ref={spinnerRef}
-            className="cursor-spinner hidden md:block"
-            style={{ position: 'absolute', transform: 'translate(-50%, -50%)' }}
-            aria-hidden
-          />
-        </div>
-      )}
 
       {/* Flying Bee (desktop) */}
       {!prefersReduced && (

@@ -33,11 +33,32 @@ const AnimateOnView: React.FC<Props> = ({ children, className = '', animation = 
           }
         })
       },
-      { threshold }
+      { 
+        threshold,
+        rootMargin: '50px' // Trigger slightly before element enters viewport
+      }
     )
     obs.observe(el)
-    return () => obs.disconnect()
-  }, [threshold, once, mounted])
+    
+    // Force initial check
+    const checkVisibility = () => {
+      const rect = el.getBoundingClientRect()
+      const isInView = rect.top < window.innerHeight && rect.bottom > 0
+      if (isInView && !visible) {
+        setVisible(true)
+        if (once && obs) obs.disconnect()
+      }
+    }
+    
+    // Check on mount and scroll
+    checkVisibility()
+    window.addEventListener('scroll', checkVisibility, { passive: true })
+    
+    return () => {
+      obs.disconnect()
+      window.removeEventListener('scroll', checkVisibility)
+    }
+  }, [threshold, once, mounted, visible])
 
   // When an element becomes visible, ensure any inner .aura-card elements
   // animate in as well (they have their own .aura-card styles that start hidden).

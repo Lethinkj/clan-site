@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import { Footer, Visuals } from './components/index'
+import CustomCursor from './components/CustomCursor'
 import { Home, About, Members, Events } from './pages/index'
 import { Analytics } from "@vercel/analytics/react"
 
@@ -79,7 +80,8 @@ export default function App() {
   }, [location.pathname])
 
   return (
-    <div className="min-h-screen bg-black text-aura" style={{ cursor: 'none' }}>
+    <div className="min-h-screen bg-black text-aura">
+      <CustomCursor />
       <Visuals />
       <Header />
       <main className="container mx-auto px-3 sm:px-6 pt-20 pb-3 sm:pb-12 min-h-screen">
