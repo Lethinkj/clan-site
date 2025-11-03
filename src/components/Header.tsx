@@ -188,8 +188,9 @@ export default function Header() {
 
       {/* Backdrop overlay for mobile menu */}
       <div 
-        className={`sm:hidden fixed inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300 z-[99] ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`sm:hidden fixed inset-0 bg-black/40 backdrop-blur-md transition-opacity duration-300 z-[99] ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setMobileMenuOpen(false)}
+        style={{ top: 0, left: 0, right: 0, bottom: 0 }}
       />
     </header>
   )
