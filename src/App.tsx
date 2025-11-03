@@ -1,80 +1,12 @@
-import React, { useEffect, useLayoutEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import { Footer, Visuals } from './components/index'
 import { Home, About, Members, Events } from './pages/index'
 import { Analytics } from "@vercel/analytics/react"
 
-// Wrapper to ensure each route scrolls to top on mount
-const ScrollToTop: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  React.useLayoutEffect(() => {
-    window.scrollTo(0, 0)
-    document.documentElement.scrollTop = 0
-    document.body.scrollTop = 0
-  }, [])
-  return <>{children}</>
-}
-
 export default function App() {
   const location = useLocation()
-  const [isTransitioning, setIsTransitioning] = React.useState(false)
-
-  // Single source of truth: Disable browser's automatic scroll restoration permanently
-  useEffect(() => {
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual'
-    }
-  }, [])
-
-  // Block scroll during transition and force to top
-  useLayoutEffect(() => {
-    setIsTransitioning(true)
-    
-    // Prevent any scroll events during transition
-    const preventScroll = (e: Event) => {
-      e.preventDefault()
-      window.scrollTo(0, 0)
-    }
-    
-    // Lock scroll position
-    window.addEventListener('scroll', preventScroll, { passive: false })
-    
-    // Aggressive immediate scroll
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
-    document.documentElement.scrollTop = 0
-    document.body.scrollTop = 0
-    document.documentElement.style.scrollBehavior = 'auto'
-    
-    // Force scroll with multiple methods
-    const forceScroll = () => {
-      window.scrollTo(0, 0)
-      window.pageYOffset = 0
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
-    }
-    
-    forceScroll()
-    requestAnimationFrame(forceScroll)
-    requestAnimationFrame(() => requestAnimationFrame(forceScroll))
-    
-    const timers = [
-      setTimeout(forceScroll, 0),
-      setTimeout(forceScroll, 1),
-      setTimeout(forceScroll, 10),
-      setTimeout(forceScroll, 50),
-      setTimeout(() => {
-        forceScroll()
-        window.removeEventListener('scroll', preventScroll)
-        setIsTransitioning(false)
-      }, 100),
-    ]
-
-    return () => {
-      timers.forEach(t => clearTimeout(t))
-      window.removeEventListener('scroll', preventScroll)
-      document.documentElement.style.scrollBehavior = ''
-    }
-  }, [location.pathname])
 
   // Add page-load and scroll-based animations for text and cards.
   useEffect(() => {
@@ -150,15 +82,14 @@ export default function App() {
     <div className="min-h-screen bg-black text-aura" style={{ cursor: 'none' }}>
       <Visuals />
       <Header />
-      <main className="container mx-auto px-3 sm:px-6 py-3 sm:py-12 min-h-screen sm:min-h-[calc(100vh-180px)]">
-        {/* Content now rendered plainly so visuals don't obscure it */}
-        <div key={location.pathname} className="max-w-6xl mx-auto p-0 relative z-20">
+      <main className="container mx-auto px-3 sm:px-6 pt-20 pb-3 sm:pb-12 min-h-screen">
+        <div className="max-w-6xl mx-auto p-0 relative z-20">
           <Routes>
             <Route path="/" element={<Navigate to="/home" replace />} />
-            <Route path="/home" element={<ScrollToTop><Home /></ScrollToTop>} />
-            <Route path="/about" element={<ScrollToTop><About /></ScrollToTop>} />
-            <Route path="/members" element={<ScrollToTop><Members /></ScrollToTop>} />
-            <Route path="/events" element={<ScrollToTop><Events /></ScrollToTop>} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/members" element={<Members />} />
+            <Route path="/events" element={<Events />} />
           </Routes>
         </div>
       </main>

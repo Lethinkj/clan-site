@@ -10,18 +10,18 @@ export default function Events() {
   return (
     <div className="space-y-4 sm:space-y-8">
       <div className="text-center px-3 sm:px-0">
-        <h2 className="text-2xl sm:text-4xl font-bold text-yellow-300 mb-2 sm:mb-4 a-fade-up">Events</h2>
+        <h2 id="events-title" className="text-2xl sm:text-4xl font-bold text-yellow-300 mb-2 sm:mb-4 a-fade-up scroll-mt-24">Events</h2>
   <p className="text-xs sm:text-base md:text-xl text-aura mb-4 sm:mb-8 a-fade-up">Join our community events to expand your knowledge and network</p>
-        <div className="grid grid-cols-3 gap-2 sm:gap-4 max-w-2xl mx-auto mb-6 sm:mb-12 a-stagger">
-          <div className="bg-black/50 border border-yellow-300/20 p-2 sm:p-4 rounded-lg shadow-md aura-card a-fade-up">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 max-w-2xl mx-auto mb-6 sm:mb-12 md:a-stagger">
+          <div className="bg-black/50 border border-yellow-300/20 p-2 sm:p-4 rounded-lg shadow-md aura-card md:a-fade-up a-wall-build">
             <div className="text-xl sm:text-3xl font-bold text-yellow-300 mb-0 sm:mb-1">3+</div>
             <p className="text-aura text-[10px] sm:text-sm">Events Hosted</p>
           </div>
-          <div className="bg-black/50 border border-yellow-300/20 p-2 sm:p-4 rounded-lg shadow-md aura-card a-fade-up">
+          <div className="bg-black/50 border border-yellow-300/20 p-2 sm:p-4 rounded-lg shadow-md aura-card md:a-fade-up a-wall-build">
             <div className="text-xl sm:text-3xl font-bold text-yellow-300 mb-0 sm:mb-1">25+</div>
             <p className="text-aura text-[10px] sm:text-sm">Total Attendees</p>
           </div>
-          <div className="bg-black/50 border border-yellow-300/20 p-2 sm:p-4 rounded-lg shadow-md aura-card a-fade-up">
+          <div className="bg-black/50 border border-yellow-300/20 p-2 sm:p-4 rounded-lg shadow-md aura-card md:a-fade-up a-wall-build">
             <div className="text-xl sm:text-3xl font-bold text-yellow-300 mb-0 sm:mb-1">4.8</div>
             <p className="text-aura text-[10px] sm:text-sm">Average Rating</p>
           </div>

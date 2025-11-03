@@ -1,55 +1,77 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { NavLink, Link } from 'react-router-dom'
 import { Home, Users, Calendar, Info, Menu, X } from 'lucide-react'
 
 const navItems = [
-  { to: '/home', icon: Home, label: 'Home' },
-  { to: '/about', icon: Info, label: 'About' },
-  { to: '/members', icon: Users, label: 'Members' },
-  { to: '/events', icon: Calendar, label: 'Events' }
+  { to: '/home', icon: Home, label: 'Home', scrollId: 'home-title' },
+  { to: '/about', icon: Info, label: 'About', scrollId: 'about-title' },
+  { to: '/members', icon: Users, label: 'Members', scrollId: 'members-title' },
+  { to: '/events', icon: Calendar, label: 'Events', scrollId: 'events-title' }
 ]
 
 export default function Header() {
   const location = useLocation()
+  const navigate = useNavigate()
   const [logoLoaded, setLogoLoaded] = useState(false)
-  const [hideLogo, setHideLogo] = useState(false)
+  const [hideHeader, setHideHeader] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const lastY = useRef<number>(0)
-  const ticking = useRef(false)
+  const lastScrollY = useRef(0)
+
+  const handleNavClick = (e: React.MouseEvent, to: string, scrollId: string) => {
+    e.preventDefault()
+    
+    // If already on the page, just scroll
+    if (location.pathname === to) {
+      const element = document.getElementById(scrollId)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    } else {
+      // Navigate to the page first, then scroll
+      navigate(to)
+      setTimeout(() => {
+        const element = document.getElementById(scrollId)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100)
+    }
+  }
 
   useEffect(() => {
-    // Hide logo when scrolling down, show when scrolling up or near top
+    // Hide entire header when scrolling down, show when scrolling up or near top
     function onScroll() {
-      if (ticking.current) return
-      ticking.current = true
-      window.requestAnimationFrame(() => {
-        const currentY = window.scrollY || window.pageYOffset
-        const delta = currentY - lastY.current
-        // if scrolled down and past threshold, hide
-        if (delta > 10 && currentY > 80) {
-          setHideLogo(true)
-        } else if (delta < -10 || currentY <= 20) {
-          // scrolled up or near top -> show
-          setHideLogo(false)
-        }
-        lastY.current = currentY
-        ticking.current = false
-      })
+      const currentScrollY = window.scrollY || window.pageYOffset
+      
+      // Near the top - always show
+      if (currentScrollY < 50) {
+        setHideHeader(false)
+      } 
+      // Scrolling down - hide
+      else if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        setHideHeader(true)
+      } 
+      // Scrolling up - show
+      else if (currentScrollY < lastScrollY.current) {
+        setHideHeader(false)
+      }
+      
+      lastScrollY.current = currentScrollY
     }
 
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Reset header visibility when the route changes so the logo doesn't animate in from bottom
+  // Reset header visibility when the route changes
   useEffect(() => {
-    setHideLogo(false)
-    setMobileMenuOpen(false)
-    lastY.current = 0
+    setHideHeader(false)
+    lastScrollY.current = 0
+    window.scrollTo(0, 0)
   }, [location.pathname])
 
-  // Close menu when clicking outside
+  // Close mobile menu when clicking outside
   useEffect(() => {
     if (!mobileMenuOpen) return
 
@@ -60,7 +82,6 @@ export default function Header() {
       }
     }
     
-    // Small delay to prevent immediate closing when opening
     const timer = setTimeout(() => {
       document.addEventListener('click', handleClickOutside)
     }, 100)
@@ -71,19 +92,21 @@ export default function Header() {
     }
   }, [mobileMenuOpen])
 
-
-
   return (
-    <header className="sticky top-0 z-[100] bg-transparent">
-      <div className="container mx-auto px-4 py-2 sm:py-3 relative z-[102]">
-        {/* Logo - Top Left Corner (hides on scroll) */}
-        <div className={`transition-all duration-300 ${hideLogo ? 'opacity-0 -translate-y-8 pointer-events-none h-0' : 'opacity-100 translate-y-0'}`}>
-          <Link 
-            to="/home" 
-            aria-label="Home" 
-            className="flex flex-col items-start"
-          >
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-yellow-800/10 flex items-center justify-center">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${hideHeader ? '-translate-y-full' : 'translate-y-0'}`}
+      style={{
+        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9))',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderBottom: '1px solid rgba(250, 204, 21, 0.2)',
+        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)'
+      }}
+    >
+      <div className="container mx-auto px-4 py-3">
+        <div className="flex items-center justify-between relative">
+          {/* Logo - Left */}
+          <Link to="/home" aria-label="Home" className="flex items-center gap-2 z-10">
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-yellow-800/10 flex items-center justify-center">
               <img
                 src="/Aura-7f.jpeg"
                 alt="Aura-7F logo"
@@ -96,24 +119,26 @@ export default function Header() {
                 }}
               />
             </div>
-            <span className="text-xs sm:text-sm font-extrabold text-yellow-300 neon-text mt-1">AURA-7F</span>
+            <span className="text-sm font-extrabold text-yellow-300 neon-text leading-tight">AURA-7F</span>
           </Link>
-        </div>
 
-        {/* Desktop center pill-style nav (shows when logo is hidden) */}
-        <div className={`hidden sm:flex justify-center transition-all duration-300 ${hideLogo ? 'mt-0' : 'mt-4'}`}>
-          <nav className="flex items-center bg-[#061a28]/90 text-aura rounded-full px-3 py-1 shadow-lg gap-1 nav-pill">
-            {navItems.map(({ to, icon: Icon, label }) => (
+          {/* Desktop Navigation - Center (absolute positioning) */}
+          <nav className="hidden sm:flex items-center bg-[#061a28]/90 text-aura rounded-full px-3 py-1 shadow-lg gap-1 absolute left-1/2 transform -translate-x-1/2">
+            {navItems.map(({ to, icon: Icon, label, scrollId }) => (
               <NavLink
                 key={to}
                 to={to}
+                onClick={(e) => handleNavClick(e, to, scrollId)}
                 className={({ isActive }) => `inline-flex items-center gap-2 transition-all ${isActive ? 'bg-yellow-400 text-[#07192b] px-4 py-2 rounded-full font-semibold' : 'text-aura opacity-90 px-4 py-2 rounded-full hover:text-yellow-300'}`}
               >
-                <Icon size={14} className={"opacity-90"} />
+                <Icon size={14} className="opacity-90" />
                 <span className="text-sm">{label}</span>
               </NavLink>
             ))}
           </nav>
+
+          {/* Empty right spacer for balance */}
+          <div className="w-10 hidden sm:block"></div>
         </div>
       </div>
 
@@ -143,11 +168,12 @@ export default function Header() {
           onClick={(e) => e.stopPropagation()}
         >
           <nav className="flex flex-col py-2">
-            {navItems.map(({ to, icon: Icon, label }) => (
+            {navItems.map(({ to, icon: Icon, label, scrollId }) => (
               <NavLink
                 key={to + '-mobile'}
                 to={to}
-                onClick={() => {
+                onClick={(e) => {
+                  handleNavClick(e, to, scrollId)
                   setMobileMenuOpen(false)
                 }}
                 className={({ isActive }) => `flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 ${isActive ? 'border-yellow-400 bg-yellow-400/10 text-yellow-300 font-semibold' : 'border-transparent text-aura/80 hover:bg-yellow-300/10 hover:text-yellow-300 hover:border-yellow-300/50'}`}

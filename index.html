@@ -11,11 +11,33 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="manifest" href="/site.webmanifest">
     <meta name="theme-color" content="#0f172a" />
-    <!-- Disable browser scroll restoration -->
+    <!-- Aggressively disable browser scroll restoration and force scroll to top -->
     <script>
+      // Disable scroll restoration
       if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
       }
+      
+      // Force scroll to top on every page load
+      window.scrollTo(0, 0);
+      
+      // Listen for popstate (browser back/forward) and force scroll
+      window.addEventListener('popstate', function() {
+        setTimeout(function() {
+          window.scrollTo(0, 0);
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+        }, 0);
+      });
+      
+      // Prevent scroll restoration on page show (back/forward cache)
+      window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+          window.scrollTo(0, 0);
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+        }
+      });
     </script>
   </head>
   <body>

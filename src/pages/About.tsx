@@ -91,7 +91,7 @@ export default function About() {
   return (
     <div className="space-y-4 sm:space-y-8 pb-2 sm:pb-8">
       <div className="text-center space-y-3 sm:space-y-6">
-        <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-yellow-300 a-pop px-3 sm:px-4">Aura-7F</h2>
+        <h2 id="about-title" className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-yellow-300 a-pop px-3 sm:px-4 scroll-mt-24">Aura-7F</h2>
 
         {/* Desktop Layout */}
         <div className="hidden md:flex items-center justify-center gap-3 lg:gap-6 max-w-4xl mx-auto px-4">
@@ -149,11 +149,11 @@ export default function About() {
         <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-yellow-300 mb-2 sm:mb-4 a-fade-up text-center">Seven Fundamental Values</h3>
         <p className="text-xs sm:text-base md:text-lg text-aura mb-3 sm:mb-6 text-center">The 7F that defines our highest positive energy</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 a-stagger max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:a-stagger max-w-4xl mx-auto">
           {values.map((value, i) => (
             <div
               key={i}
-              className="bg-black/50 border border-yellow-300/20 p-3 sm:p-5 rounded-lg shadow-md a-fade-up aura-card"
+              className="bg-black/50 border border-yellow-300/20 p-3 sm:p-5 rounded-lg shadow-md md:a-fade-up a-wall-build aura-card"
             >
               <h4 className="text-base sm:text-xl font-bold text-yellow-300 mb-1 sm:mb-2">{value.title}</h4>
               <p className="text-xs sm:text-base text-aura">{value.desc}</p>
