@@ -93,13 +93,13 @@ export default function Header() {
   }, [mobileMenuOpen])
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${hideHeader ? '-translate-y-full' : 'translate-y-0'}`}
+    <>
+    <header className={`fixed top-0 left-0 right-0 transition-transform duration-300 ${hideHeader ? '-translate-y-full' : 'translate-y-0'}`}
       style={{
         background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9))',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
         borderBottom: '1px solid rgba(250, 204, 21, 0.2)',
-        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)'
+        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)',
+        zIndex: 100
       }}
     >
       <div className="container mx-auto px-4 py-3">
@@ -149,21 +149,27 @@ export default function Header() {
             e.stopPropagation()
             setMobileMenuOpen(!mobileMenuOpen)
           }}
-          className="mobile-menu-button fixed top-2 right-2 z-[103] p-2 text-yellow-300 hover:text-yellow-400 transition-colors bg-black/30 backdrop-blur-md rounded-md border border-yellow-300/20"
+          className="mobile-menu-button fixed top-2 right-2 p-2 text-yellow-300 hover:text-yellow-400 transition-colors rounded-md border border-yellow-300/20"
           aria-label="Toggle menu"
-          style={{ position: 'fixed' }}
+          style={{ 
+            position: 'fixed',
+            background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9))',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
+            zIndex: 110
+          }}
         >
           {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
 
         {/* Mobile dropdown menu - positioned below toggle button */}
         <div 
-          className={`fixed top-14 right-2 z-[101] w-48 bg-black/30 backdrop-blur-xl rounded-lg shadow-2xl border border-yellow-300/30 overflow-hidden transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}`}
+          className={`mobile-menu-container fixed top-14 right-2 w-48 rounded-lg shadow-2xl border border-yellow-300/30 overflow-hidden transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}`}
           style={{
             position: 'fixed',
-            background: 'linear-gradient(135deg, rgba(6, 26, 40, 0.90), rgba(7, 25, 43, 0.95))',
+            background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9))',
             boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.5)',
-            transformOrigin: 'top right'
+            transformOrigin: 'top right',
+            zIndex: 105
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -186,12 +192,24 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Backdrop overlay for mobile menu */}
-      <div 
-        className={`sm:hidden fixed inset-0 bg-black/40 backdrop-blur-md transition-opacity duration-300 z-[99] ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-        onClick={() => setMobileMenuOpen(false)}
-        style={{ top: 0, left: 0, right: 0, bottom: 0 }}
-      />
+      {/* Backdrop overlay for mobile menu - blurs ONLY page content, NOT header */}
+      {mobileMenuOpen && (
+        <div 
+          className="sm:hidden fixed bg-black/50 transition-opacity duration-300"
+          onClick={() => setMobileMenuOpen(false)}
+          style={{ 
+            top: '64px',
+            left: 0, 
+            right: 0, 
+            bottom: 0,
+            position: 'fixed',
+            zIndex: 10,
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)'
+          }}
+        />
+      )}
     </header>
+    </>
   )
 }
