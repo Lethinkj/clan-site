@@ -17,8 +17,6 @@ export default function About() {
   return (
     <div className="space-y-4 sm:space-y-8 pb-2 sm:pb-8">
       <div className="text-center space-y-3 sm:space-y-6">
-        <h2 id="about-title" className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-yellow-300 a-pop px-3 sm:px-4 scroll-mt-24">Aura-7F</h2>
-
         {/* Desktop Layout */}
         <div className="hidden md:flex items-center justify-center gap-3 lg:gap-6 max-w-4xl mx-auto px-4">
           <div className="inline-block aura-card bg-black/60 border border-yellow-300/20 p-5 lg:p-8 rounded-lg shadow-md text-center">
@@ -35,7 +33,9 @@ export default function About() {
 
           <div className="text-2xl lg:text-4xl font-extrabold text-yellow-300">=</div>
 
-          <div className="text-2xl lg:text-4xl text-yellow-300">∞</div>
+          <div className="infinity-glitch text-[120px] lg:text-[180px] font-bold text-yellow-300" data-text="∞">
+            ∞
+          </div>
         </div>
 
         {/* Mobile Layout */}
@@ -54,7 +54,9 @@ export default function About() {
 
           <div className="text-lg font-extrabold text-yellow-300">=</div>
 
-          <div className="text-lg text-yellow-300">∞</div>
+          <div className="infinity-glitch text-[80px] font-bold text-yellow-300" data-text="∞">
+            ∞
+          </div>
         </div>
 
         <div

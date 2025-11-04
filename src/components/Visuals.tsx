@@ -259,10 +259,22 @@ const Visuals: React.FC = () => {
           }}
         >
           <svg width="44" height="44" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-            <g>
-              <ellipse cx="28" cy="30" rx="8" ry="10" fill="#f1b011" />
-              <ellipse cx="18" cy="18" rx="6" ry="4" fill="#fff3cc" opacity="0.95" />
-              <ellipse cx="38" cy="18" rx="6" ry="4" fill="#fff3cc" opacity="0.95" />
+            {/* left wing */}
+            <g className="wing left-wing">
+              <ellipse cx="16" cy="18" rx="12" ry="8" fill="#fff3cc" opacity="0.7" />
+            </g>
+            {/* right wing */}
+            <g className="wing right-wing">
+              <ellipse cx="40" cy="18" rx="12" ry="8" fill="#fff3cc" opacity="0.7" />
+            </g>
+            {/* body */}
+            <g className="bee-body">
+              <ellipse cx="28" cy="30" rx="10" ry="14" fill="#f1b011" />
+              <rect x="22" y="26" width="12" height="2" fill="#000" />
+              <rect x="22" y="32" width="12" height="2" fill="#000" />
+              <circle cx="28" cy="22" r="4" fill="#000" />
+              <circle cx="26.5" cy="21" r="1" fill="#fff" />
+              <circle cx="29.5" cy="21" r="1" fill="#fff" />
             </g>
           </svg>
         </div>
