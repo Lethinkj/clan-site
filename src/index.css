@@ -270,8 +270,18 @@ body::before {
 .animated.a-pop,
 .animated.a-slide-left,
 .animated.a-slide-right { opacity: 1; }
-.a-stagger > * { opacity: 0; transform: translateY(8px); }
-.a-stagger.animated > * { animation: a-stagger-item 520ms cubic-bezier(.2,.9,.3,1) both; }
+
+/* Stagger animation - only apply initial hidden state and animation on desktop */
+@media (max-width: 767px) {
+  /* On mobile, cards are visible by default - no stagger effect */
+  .a-stagger > * { opacity: 1; }
+}
+
+@media (min-width: 768px) {
+  /* On desktop, hide initially for stagger effect */
+  .a-stagger > * { opacity: 0; transform: translateY(8px); }
+  .a-stagger.animated > * { animation: a-stagger-item 520ms cubic-bezier(.2,.9,.3,1) both; }
+}
 
 @keyframes a-fade-up {
   from { opacity: 0; transform: translateY(12px); }
@@ -569,9 +579,29 @@ footer {
   }
 }
 
-/* Clash of Clans wall-style animations for events */
+/* Clash of Clans wall-style animations for events and members */
 .a-wall-build {
   animation: wall-build 600ms cubic-bezier(.2,.9,.2,1) both;
+}
+
+/* On mobile: use wall-build animation */
+/* On desktop: cards with md:a-fade-up should use fade-up instead */
+@media (min-width: 768px) {
+  .md\:a-fade-up.a-wall-build {
+    animation: a-fade-up 700ms cubic-bezier(.2,.9,.3,1) both;
+  }
+  
+  /* Make stagger work with both wall-build and fade-up */
+  .md\:a-stagger.animated > .a-wall-build.md\:a-fade-up {
+    animation: a-fade-up 700ms cubic-bezier(.2,.9,.3,1) both;
+  }
+}
+
+/* Mobile: wall-build for all cards */
+@media (max-width: 767px) {
+  .a-wall-build {
+    animation: wall-build 600ms cubic-bezier(.2,.9,.2,1) both;
+  }
 }
 
 @keyframes wall-build {
@@ -794,6 +824,59 @@ footer {
 .aura-card:hover .card-icon, .aura-card:focus .card-icon {
   filter: drop-shadow(0 6px 12px rgba(241,176,17,0.28));
   transform: translateY(-2px);
+}
+
+/* Cursor-following glow effect for member cards */
+.aura-card-cursor {
+  position: relative;
+  overflow: hidden;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+.aura-card-cursor::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(250, 204, 21, 0.25) 0%,
+    rgba(250, 204, 21, 0.15) 25%,
+    transparent 70%
+  );
+  left: var(--mouse-x);
+  top: var(--mouse-y);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.aura-card-cursor:hover::before {
+  opacity: 1;
+}
+
+.aura-card-cursor > * {
+  position: relative;
+  z-index: 1;
+}
+
+.aura-card-cursor:hover {
+  border-color: rgba(250, 204, 21, 0.4) !important;
+  box-shadow: 0 8px 24px rgba(241,176,17,0.12), 0 0 20px rgba(241,176,17,0.04);
+  transform: translateY(-3px);
+}
+
+/* Mobile: subtle static glow */
+@media (max-width: 767px) {
+  .aura-card-cursor::before {
+    opacity: 0.3;
+    left: 50%;
+    top: 50%;
+  }
 }
 
 /* Mobile menu styling */
