@@ -64,8 +64,8 @@ const fallbackMembers: Person[] = [
   { name: 'Archana', role: 'QA Engineer', specialization: 'Test Automation', bio: 'Committed to ensuring software quality through comprehensive testing.', skills: ['DSA', 'API Testing'], github: 'https://github.com/Carchana2006' },
   { name: 'Alisha', role: 'QA Engineer', specialization: 'Test Automation', bio: 'Committed to ensuring software quality through comprehensive testing.', skills: ['Python', 'API Testing'], portfolio: 'https://my-portfolio-as.lovable.app', github: 'https://github.com/alisha1806', linkedin: 'https://www.linkedin.com/in/alisha-as-58aa7b33a' },
   { name: 'Shailu Mirsha', role: 'QA Engineer', specialization: 'Test Automation', bio: 'Committed to ensuring software quality through comprehensive testing.', skills: ['Python', 'C#', 'API Testing'], github: 'https://github.com/Shailu-Mirsha', linkedin: 'https://in.linkedin.com/in/shailu-mirsha-b83ba0360' },
-  { name: 'Arthi', role: 'QA Engineer', specialization: 'Test Automation', bio: 'Committed to ensuring software quality through comprehensive testing.', skills: ['Machine Learning', 'API Testing'], github: 'https://github.com/Arthi-as', linkedin: 'https://www.linkedin.com/in/arthi-a-s-17500835b' },
-  { name: 'Beule Sujarsa', role: 'QA Engineer', specialization: 'Test Automation', bio: 'Committed to ensuring software quality through comprehensive testing.', skills: ['Python', 'C#', 'API Testing'], github: 'https://github.com/Beule-Sujarsa' }
+  { name: 'Arthi', role: 'QA Engineer', specialization: 'Test Automation', bio: 'Committed to ensuring software quality through comprehensive testing.', skills: ['Machine Learning', 'Data Analysis', 'API Testing'], github: 'https://github.com/Arthi-as', linkedin: 'https://www.linkedin.com/in/arthi-a-s-17500835b' },
+  { name: 'Beule Sujarsa', role: 'QA Engineer', specialization: 'Test Automation', bio: 'Committed to ensuring software quality through comprehensive testing.', skills: ['Python','C#', 'API Testing'], github: 'https://github.com/Beule-Sujarsa' }
 ]
 
 function SocialLink({ href, label }: { href?: string; label: string }) {
@@ -162,9 +162,9 @@ export default function Members() {
         <h2 id="members-title" className="text-2xl sm:text-4xl font-bold text-yellow-300 mb-2 a-fade-up px-3 sm:px-0 scroll-mt-24">Captain Bash</h2>
         <p className="text-sm sm:text-base text-aura mb-3 sm:mb-6 a-fade-up px-3 sm:px-0">Members ({captains.length})</p>
 
-        <div className="grid grid-cols-1 md:grid-flow-col md:auto-cols-fr gap-3 sm:gap-6 justify-items-center px-3 sm:px-0 a-stagger">
+        <div className="grid grid-cols-1 md:grid-flow-col md:auto-cols-fr gap-3 sm:gap-6 md:a-stagger justify-items-center px-3 sm:px-0">
           {captains.map((member, i) => (
-            <article key={i} className="w-full bg-black/50 border border-yellow-300/20 p-4 sm:p-6 rounded-lg shadow-md aura-card md:a-fade-up a-wall-build">
+            <article key={i} className="w-full bg-black/50 border border-yellow-300/20 p-4 sm:p-6 rounded-lg shadow-md aura-card transition-all md:a-fade-up a-wall-build">
               <h3 className="text-lg sm:text-2xl font-bold text-yellow-300 mb-1 sm:mb-2">{member.name}</h3>
               <div className="text-sm sm:text-base text-yellow-200 font-semibold mb-1">{member.role}</div>
               <div className="text-xs sm:text-sm text-yellow-200 mb-2 sm:mb-3">Specialization: {member.specialization}</div>
@@ -188,9 +188,9 @@ export default function Members() {
         <h2 className="text-2xl sm:text-4xl font-bold text-yellow-300 mb-2 a-fade-up px-3 sm:px-0">Our Amazing Team</h2>
         <p className="text-sm sm:text-base text-aura mb-3 sm:mb-6 a-fade-up px-3 sm:px-0">Members ({teamMembers.length})</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 justify-items-center px-3 sm:px-0 a-stagger">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 md:a-stagger justify-items-center px-3 sm:px-0">
           {teamMembers.map((member, i) => (
-            <article key={i} className="w-full bg-black/50 border border-yellow-300/20 p-3 sm:p-5 rounded-lg shadow-md aura-card md:a-fade-up a-wall-build">
+            <article key={i} className="w-full bg-black/50 border border-yellow-300/20 p-3 sm:p-5 rounded-lg shadow-md aura-card transition-all md:a-fade-up a-wall-build">
               <h3 className="text-base sm:text-xl font-bold text-yellow-300 mb-1 sm:mb-2">{member.name}</h3>
               <div className="text-xs sm:text-base text-yellow-200 font-semibold mb-1">{member.role}</div>
               <div className="text-xs sm:text-sm text-yellow-200 mb-2 sm:mb-3">Specialization: {member.specialization}</div>
