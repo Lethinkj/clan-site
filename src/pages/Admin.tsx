@@ -1,0 +1,234 @@
+import React, { useState, useEffect } from 'react'
+import { useAuth } from '../contexts/AuthContext'
+import { useNavigate } from 'react-router-dom'
+import { supabase, Event, User, Moderator } from '../lib/supabase'
+import EventForm from '../components/admin/EventForm'
+import MemberForm from '../components/admin/MemberForm'
+import ModeratorManagement from '../components/admin/ModeratorManagement'
+import EventList from '../components/admin/EventList'
+import PasswordChange from '../components/admin/PasswordChange'
+import RegistrationManagement from '../components/admin/RegistrationManagement'
+
+type Tab = 'events' | 'members' | 'moderators' | 'registrations' | 'settings'
+
+export default function Admin() {
+  const { user, isAdmin, isModerator, loading: authLoading, signOut } = useAuth()
+  const navigate = useNavigate()
+  const [activeTab, setActiveTab] = useState<Tab>('events')
+  const [events, setEvents] = useState<Event[]>([])
+  const [members, setMembers] = useState<User[]>([])
+  const [moderators, setModerators] = useState<Moderator[]>([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/login')
+    } else if (!authLoading && !isModerator) {
+      navigate('/')
+    }
+  }, [authLoading, user, isModerator, navigate])
+
+  useEffect(() => {
+    if (activeTab === 'events') {
+      fetchEvents()
+    } else if (activeTab === 'members') {
+      fetchMembers()
+    } else if (activeTab === 'moderators' && isAdmin) {
+      fetchModerators()
+    }
+  }, [activeTab, isAdmin])
+
+  const fetchEvents = async () => {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      .order('date', { ascending: false })
+    
+    if (error) {
+      console.error('Error fetching events:', error)
+    } else {
+      setEvents(data || [])
+    }
+    setLoading(false)
+  }
+
+  const fetchMembers = async () => {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .order('created_at', { ascending: false })
+    
+    if (error) {
+      console.error('Error fetching members:', error)
+    } else {
+      setMembers(data || [])
+    }
+    setLoading(false)
+  }
+
+  const fetchModerators = async () => {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from('moderators')
+      .select('*')
+      .order('added_at', { ascending: false })
+    
+    if (error) {
+      console.error('Error fetching moderators:', error)
+    } else {
+      setModerators(data || [])
+    }
+    setLoading(false)
+  }
+
+  const handleSignOut = () => {
+    signOut()
+    navigate('/')
+  }
+
+  if (authLoading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-yellow-300 text-xl">Loading...</div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen pb-20">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-4xl font-bold text-yellow-300 mb-2">
+              {isAdmin ? 'Admin' : 'Moderator'} Dashboard
+            </h1>
+            <p className="text-aura">Welcome back, {user.username}!</p>
+          </div>
+          <button
+            onClick={handleSignOut}
+            className="bg-red-500/20 border border-red-500/50 text-red-400 px-6 py-2 rounded-lg hover:bg-red-500/30 transition-colors"
+          >
+            Sign Out
+          </button>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-2 mb-8 border-b border-yellow-300/20 overflow-x-auto">
+          <button
+            onClick={() => setActiveTab('events')}
+            className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
+              activeTab === 'events'
+                ? 'text-yellow-300 border-b-2 border-yellow-300'
+                : 'text-aura hover:text-yellow-300/70'
+            }`}
+          >
+            Events
+          </button>
+          <button
+            onClick={() => setActiveTab('members')}
+            className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
+              activeTab === 'members'
+                ? 'text-yellow-300 border-b-2 border-yellow-300'
+                : 'text-aura hover:text-yellow-300/70'
+            }`}
+          >
+            Members
+          </button>
+          {isAdmin && (
+            <button
+              onClick={() => setActiveTab('moderators')}
+              className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
+                activeTab === 'moderators'
+                  ? 'text-yellow-300 border-b-2 border-yellow-300'
+                  : 'text-aura hover:text-yellow-300/70'
+              }`}
+            >
+              Moderators
+            </button>
+          )}
+          <button
+            onClick={() => setActiveTab('registrations')}
+            className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
+              activeTab === 'registrations'
+                ? 'text-yellow-300 border-b-2 border-yellow-300'
+                : 'text-aura hover:text-yellow-300/70'
+            }`}
+          >
+            Registrations
+          </button>
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
+              activeTab === 'settings'
+                ? 'text-yellow-300 border-b-2 border-yellow-300'
+                : 'text-aura hover:text-yellow-300/70'
+            }`}
+          >
+            Settings
+          </button>
+        </div>
+
+        {/* Tab Content */}
+        <div className="space-y-8">
+          {activeTab === 'events' && (
+            <>
+              <EventForm onEventAdded={fetchEvents} isAdmin={isAdmin} />
+              <EventList 
+                events={events} 
+                onEventUpdated={fetchEvents} 
+                onEventDeleted={fetchEvents} 
+                isAdmin={isAdmin} 
+                isModerator={isModerator}
+              />
+            </>
+          )}
+
+          {activeTab === 'members' && (
+            <>
+              {isAdmin && <MemberForm onMemberAdded={fetchMembers} />}
+              <div className="bg-black/50 border border-yellow-300/20 p-6 rounded-lg">
+                <h2 className="text-2xl font-bold text-yellow-300 mb-4">Members ({members.length})</h2>
+                {loading ? (
+                  <p className="text-aura">Loading...</p>
+                ) : (
+                  <div className="space-y-3">
+                    {members.map((member) => (
+                      <div key={member.id} className="bg-black/30 border border-yellow-300/10 p-4 rounded-lg flex justify-between items-center">
+                        <div>
+                          <p className="text-yellow-300 font-semibold">{member.display_name || member.username}</p>
+                          <p className="text-aura text-sm">Discord ID: {member.discord_user_id}</p>
+                          <p className="text-aura text-sm">
+                            {member.is_clan_member ? '✓ Clan Member' : 'Guest'}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+
+          {activeTab === 'moderators' && isAdmin && (
+            <ModeratorManagement 
+              moderators={moderators} 
+              onModeratorAdded={fetchModerators}
+              onModeratorRemoved={fetchModerators}
+            />
+          )}
+
+          {activeTab === 'registrations' && (
+            <RegistrationManagement />
+          )}
+
+          {activeTab === 'settings' && (
+            <PasswordChange />
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}

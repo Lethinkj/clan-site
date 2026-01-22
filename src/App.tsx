@@ -3,8 +3,9 @@ import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import { Footer, Visuals } from './components/index'
 import CustomCursor from './components/CustomCursor'
-import { Home, About, Members, Events } from './pages/index'
+import { Home, About, Members, Events, Login, Admin } from './pages/index'
 import { Analytics } from "@vercel/analytics/react"
+import { AuthProvider } from './contexts/AuthContext'
 
 export default function App() {
   const location = useLocation()
@@ -80,23 +81,27 @@ export default function App() {
   }, [location.pathname])
 
   return (
-    <div className="min-h-screen bg-black text-aura">
-      <CustomCursor />
-      <Visuals />
-      <Header />
-      <main className="container mx-auto px-3 sm:px-6 pt-20 pb-3 sm:pb-12 min-h-screen">
-        <div className="max-w-6xl mx-auto p-0 relative z-20">
-          <Routes>
-            <Route path="/" element={<Navigate to="/home" replace />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/members" element={<Members />} />
-            <Route path="/events" element={<Events />} />
-          </Routes>
-        </div>
-      </main>
-      <Footer />
-      <Analytics />
-    </div>
+    <AuthProvider>
+      <div className="min-h-screen bg-black text-aura">
+        <CustomCursor />
+        <Visuals />
+        <Header />
+        <main className="container mx-auto px-3 sm:px-6 pt-20 pb-3 sm:pb-12 min-h-screen">
+          <div className="max-w-6xl mx-auto p-0 relative z-20">
+            <Routes>
+              <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/members" element={<Members />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/admin" element={<Admin />} />
+            </Routes>
+          </div>
+        </main>
+        <Footer />
+        <Analytics />
+      </div>
+    </AuthProvider>
   )
 }

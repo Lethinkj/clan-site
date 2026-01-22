@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { NavLink, Link } from 'react-router-dom'
-import { Home, Users, Calendar, Info, Menu, X } from 'lucide-react'
+import { Home, Users, Calendar, Info, Menu, X, LogIn, LogOut, Settings } from 'lucide-react'
+import { useAuth } from '../contexts/AuthContext'
 
 const navItems = [
   { to: '/home', icon: Home, label: 'Home', scrollId: 'home-title' },
@@ -13,6 +14,7 @@ const navItems = [
 export default function Header() {
   const location = useLocation()
   const navigate = useNavigate()
+  const { user, isModerator, signOut } = useAuth()
   const [logoLoaded, setLogoLoaded] = useState(false)
   const [hideHeader, setHideHeader] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -137,8 +139,38 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Empty right spacer for balance */}
-          <div className="w-10 hidden sm:block"></div>
+          {/* Auth buttons - Right */}
+          <div className="hidden sm:flex items-center gap-2">
+            {user ? (
+              <>
+                <Link
+                  to="/admin"
+                  className="flex items-center gap-2 px-4 py-2 text-yellow-300 hover:text-yellow-400 transition-colors"
+                >
+                  <Settings size={16} />
+                  <span className="text-sm">Dashboard</span>
+                </Link>
+                <button
+                  onClick={() => {
+                    signOut()
+                    navigate('/home')
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-500/20 border border-red-500/50 text-red-400 rounded-full hover:bg-red-500/30 transition-colors"
+                >
+                  <LogOut size={16} />
+                  <span className="text-sm">Logout</span>
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="flex items-center gap-2 px-4 py-2 bg-yellow-300 text-black rounded-full font-semibold hover:bg-yellow-400 transition-colors"
+              >
+                <LogIn size={16} />
+                <span className="text-sm">Login</span>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 
@@ -188,6 +220,42 @@ export default function Header() {
                 <span className="text-base font-medium">{label}</span>
               </NavLink>
             ))}
+            
+            {/* Auth buttons for mobile */}
+            <div className="border-t border-yellow-300/20 mt-2 pt-2">
+              {user ? (
+                <>
+                  <Link
+                    to="/admin"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 border-transparent text-aura/80 hover:bg-yellow-300/10 hover:text-yellow-300 hover:border-yellow-300/50"
+                  >
+                    <Settings size={20} strokeWidth={2.5} />
+                    <span className="text-base font-medium">Dashboard</span>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      signOut()
+                      setMobileMenuOpen(false)
+                      navigate('/home')
+                    }}
+                    className="flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 border-transparent text-red-400 hover:bg-red-500/10 hover:border-red-500/50 w-full text-left"
+                  >
+                    <LogOut size={20} strokeWidth={2.5} />
+                    <span className="text-base font-medium">Logout</span>
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 border-transparent text-yellow-300 hover:bg-yellow-300/10 hover:border-yellow-300/50"
+                >
+                  <LogIn size={20} strokeWidth={2.5} />
+                  <span className="text-base font-medium">Login</span>
+                </Link>
+              )}
+            </div>
           </nav>
         </div>
       </div>
