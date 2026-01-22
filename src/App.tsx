@@ -2,8 +2,7 @@ import React, { useEffect } from 'react'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import { Footer, Visuals } from './components/index'
-import CustomCursor from './components/CustomCursor'
-import { Home, About, Members, Events, Login, Admin } from './pages/index'
+import { Home, About, Members, Events, Login, Admin, AddMember } from './pages/index'
 import { Analytics } from "@vercel/analytics/react"
 import { AuthProvider } from './contexts/AuthContext'
 
@@ -82,8 +81,7 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-black text-aura">
-        <CustomCursor />
+      <div className="min-h-screen bg-black text-aura relative z-10">
         <Visuals />
         <Header />
         <main className="container mx-auto px-3 sm:px-6 pt-20 pb-3 sm:pb-12 min-h-screen">
@@ -95,7 +93,9 @@ export default function App() {
               <Route path="/members" element={<Members />} />
               <Route path="/events" element={<Events />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/add-member" element={<AddMember />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="*" element={<Navigate to="/home" replace />} />
             </Routes>
           </div>
         </main>

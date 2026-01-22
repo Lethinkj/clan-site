@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
+import ProfileCard from '../components/ProfileCard'
+import Stack from '../components/Stack'
 
 type APIMember = {
   name: string
@@ -145,68 +147,122 @@ export default function Members() {
   const captains = members.filter(m => captainNames.includes(m.name))
   const teamMembers = members.filter(m => !captainNames.includes(m.name))
 
+  // Generate ProfileCard elements for Stack component with all data
+  const captainCards = useMemo(() => captains.map((member) => (
+    <ProfileCard
+      key={member.name}
+      name={member.name}
+      title={member.role}
+      handle={member.name.toLowerCase().replace(/\s+/g, '')}
+      status="Captain"
+      bio={member.bio}
+      skills={member.skills}
+      github={member.github}
+      linkedin={member.linkedin}
+      portfolio={member.portfolio}
+      showUserInfo={true}
+    />
+  )), [captains])
+
+  const teamCards = useMemo(() => teamMembers.map((member) => (
+    <ProfileCard
+      key={member.name}
+      name={member.name}
+      title={member.role}
+      handle={member.name.toLowerCase().replace(/\s+/g, '')}
+      status="Team Member"
+      bio={member.bio}
+      skills={member.skills}
+      github={member.github}
+      linkedin={member.linkedin}
+      portfolio={member.portfolio}
+      showUserInfo={true}
+    />
+  )), [teamMembers])
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="text-center">
-          <div className="text-yellow-300 text-xl mb-2">Loading members...</div>
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-300 mx-auto"></div>
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin mx-auto"></div>
+          <p className="text-slate-400 text-sm">Loading team members...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="space-y-4 sm:space-y-8">
-      <section>
-        <h2 id="members-title" className="text-2xl sm:text-4xl font-bold text-yellow-300 mb-2 a-fade-up px-3 sm:px-0 scroll-mt-24">Captain Bash</h2>
-        <p className="text-sm sm:text-base text-aura mb-3 sm:mb-6 a-fade-up px-3 sm:px-0">Members ({captains.length})</p>
-
-        <div className="grid grid-cols-1 md:grid-flow-col md:auto-cols-fr gap-3 sm:gap-6 md:a-stagger justify-items-center px-3 sm:px-0">
-          {captains.map((member, i) => (
-            <article key={i} className="w-full bg-black/50 border border-yellow-300/20 p-4 sm:p-6 rounded-lg shadow-md aura-card transition-all md:a-fade-up a-wall-build">
-              <h3 className="text-lg sm:text-2xl font-bold text-yellow-300 mb-1 sm:mb-2">{member.name}</h3>
-              <div className="text-sm sm:text-base text-yellow-200 font-semibold mb-1">{member.role}</div>
-              <div className="text-xs sm:text-sm text-yellow-200 mb-2 sm:mb-3">Specialization: {member.specialization}</div>
-              <p className="text-xs sm:text-base text-aura mb-3 sm:mb-4">{member.bio}</p>
-              <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4">
-                {(member.skills || []).map((skill, idx) => (
-                  <span key={idx} className="bg-yellow-300/20 text-yellow-300 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">{skill}</span>
-                ))}
-              </div>
-              <div className="mt-2 flex items-center justify-center gap-2 sm:gap-3">
-                <SocialLink href={member.portfolio} label="Portfolio" />
-                <SocialLink href={member.linkedin} label="LinkedIn" />
-                <SocialLink href={member.github} label="GitHub" />
-              </div>
-            </article>
-          ))}
-        </div>
+    <div className="space-y-12 sm:space-y-16 pb-8">
+      {/* Header */}
+      <section className="text-center px-4 pt-8">
+        <h1 id="members-title" className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 scroll-mt-24">
+          Meet Our <span className="text-cyan-400">Team</span>
+        </h1>
+        <p className="text-slate-400 max-w-2xl mx-auto">
+          The brilliant minds behind Aura-7F — united by passion, driven by excellence
+        </p>
       </section>
 
-      <section>
-        <h2 className="text-2xl sm:text-4xl font-bold text-yellow-300 mb-2 a-fade-up px-3 sm:px-0">Our Amazing Team</h2>
-        <p className="text-sm sm:text-base text-aura mb-3 sm:mb-6 a-fade-up px-3 sm:px-0">Members ({teamMembers.length})</p>
+      {/* Side by Side Layout: Captains (Left) & Team Members (Right) */}
+      <section className="px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            
+            {/* Captains - Left Side */}
+            <div className="flex flex-col items-center">
+              <div className="flex items-center gap-3 mb-6 justify-center">
+                <div className="w-1 h-8 bg-cyan-500 rounded-full"></div>
+                <div className="text-center">
+                  <h2 className="text-xl sm:text-2xl font-bold text-white">Captain Bash</h2>
+                  <p className="text-sm text-slate-400">Leadership Team ({captains.length})</p>
+                </div>
+              </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 md:a-stagger justify-items-center px-3 sm:px-0">
-          {teamMembers.map((member, i) => (
-            <article key={i} className="w-full bg-black/50 border border-yellow-300/20 p-3 sm:p-5 rounded-lg shadow-md aura-card transition-all md:a-fade-up a-wall-build">
-              <h3 className="text-base sm:text-xl font-bold text-yellow-300 mb-1 sm:mb-2">{member.name}</h3>
-              <div className="text-xs sm:text-base text-yellow-200 font-semibold mb-1">{member.role}</div>
-              <div className="text-xs sm:text-sm text-yellow-200 mb-2 sm:mb-3">Specialization: {member.specialization}</div>
-              <p className="text-xs sm:text-sm text-aura mb-2 sm:mb-3">{member.bio}</p>
-              <div className="flex flex-wrap gap-1 sm:gap-2 mb-2 sm:mb-3">
-                {(member.skills || []).map((skill, idx) => (
-                  <span key={idx} className="bg-yellow-300/20 text-yellow-300 px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs">{skill}</span>
-                ))}
+              <div className="relative w-72 h-[480px] sm:w-80 sm:h-[520px]">
+                <Stack
+                  cards={captainCards}
+                  randomRotation={true}
+                  sensitivity={150}
+                  sendToBackOnClick={true}
+                  autoplay={true}
+                  autoplayDelay={5000}
+                  pauseOnHover={true}
+                  mobileClickOnly={true}
+                  animationConfig={{ stiffness: 260, damping: 20 }}
+                />
               </div>
-              <div className="flex gap-2 mt-2 flex-wrap">
-                <SocialLink href={member.portfolio} label="Portfolio" />
-                <SocialLink href={member.linkedin} label="LinkedIn" />
-                <SocialLink href={member.github} label="GitHub" />
+            </div>
+
+            {/* Team Members - Right Side */}
+            <div className="flex flex-col items-center">
+              <div className="flex items-center gap-3 mb-6 justify-center">
+                <div className="w-1 h-8 bg-purple-500 rounded-full"></div>
+                <div className="text-center">
+                  <h2 className="text-xl sm:text-2xl font-bold text-white">Team Members</h2>
+                  <p className="text-sm text-slate-400">Core Contributors ({teamMembers.length})</p>
+                </div>
               </div>
-            </article>
-          ))}
+
+              <div className="relative w-72 h-[480px] sm:w-80 sm:h-[520px]">
+                <Stack
+                  cards={teamCards}
+                  randomRotation={true}
+                  sensitivity={150}
+                  sendToBackOnClick={true}
+                  autoplay={true}
+                  autoplayDelay={4000}
+                  pauseOnHover={true}
+                  mobileClickOnly={true}
+                  animationConfig={{ stiffness: 260, damping: 20 }}
+                />
+              </div>
+            </div>
+            
+          </div>
+          
+          <p className="text-center text-sm text-slate-500 mt-12">
+            Drag or click cards to browse through team members
+          </p>
         </div>
       </section>
     </div>

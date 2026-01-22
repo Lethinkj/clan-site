@@ -101,8 +101,8 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
   }
 
   return (
-    <div className="bg-black/50 border border-yellow-300/20 p-6 rounded-lg">
-      <h2 className="text-2xl font-bold text-yellow-300 mb-4">
+    <div className="bg-slate-900/80 border border-cyan-400/20 p-6 rounded-lg shadow-lg shadow-cyan-500/5">
+      <h2 className="text-2xl font-bold text-cyan-400 mb-4">
         {editingEvent ? 'Edit Event' : 'Add New Event'}
       </h2>
 
@@ -128,7 +128,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
               value={formData.title}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
               placeholder="Weekly Bash 18"
             />
           </div>
@@ -140,7 +140,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
               value={formData.tag}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
             >
               <option value="Weekly Bash">Weekly Bash</option>
               <option value="Project Showcase">Project Showcase</option>
@@ -160,7 +160,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
                 value={formData.custom_category}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+                className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
                 placeholder="Enter category name"
               />
             </div>
@@ -174,7 +174,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
               value={formData.date}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
               placeholder="April 5, 2025"
             />
           </div>
@@ -187,7 +187,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
               value={formData.time}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
               placeholder="10:00 AM"
             />
           </div>
@@ -199,7 +199,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
               name="end_time"
               value={formData.end_time}
               onChange={handleChange}
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
               placeholder="3:00 PM"
             />
           </div>
@@ -212,7 +212,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
               value={formData.location}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
               placeholder="Big Data Lab"
             />
           </div>
@@ -225,7 +225,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
               value={formData.attendees}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
               placeholder="20+"
             />
           </div>
@@ -237,7 +237,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
               name="rating"
               value={formData.rating}
               onChange={handleChange}
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
               placeholder="4.9/5"
             />
           </div>
@@ -249,7 +249,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
               value={formData.status}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
             >
               <option value="upcoming">Upcoming (Scheduled)</option>
               <option value="live">Live (Happening Now)</option>
@@ -266,7 +266,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
               value={formData.max_registrations}
               onChange={handleChange}
               min="0"
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
               placeholder="50"
             />
           </div>
@@ -278,7 +278,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
               name="image_url"
               value={formData.image_url}
               onChange={handleChange}
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
               placeholder="https://example.com/image.jpg"
             />
           </div>
@@ -292,7 +292,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
             onChange={handleChange}
             required
             rows={4}
-            className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+            className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
             placeholder="Join us for a day of learning..."
           />
         </div>
@@ -301,7 +301,7 @@ export default function EventForm({ onEventAdded, isAdmin, editingEvent, onCance
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 bg-yellow-300 text-black font-bold py-3 px-6 rounded-lg hover:bg-yellow-400 transition-colors disabled:opacity-50"
+            className="flex-1 bg-cyan-400 text-slate-900 font-bold py-3 px-6 rounded-lg hover:bg-cyan-500 transition-colors disabled:opacity-50 shadow-lg shadow-cyan-500/20"
           >
             {loading ? 'Saving...' : editingEvent ? 'Update Event' : 'Add Event'}
           </button>

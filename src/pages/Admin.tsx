@@ -8,6 +8,7 @@ import ModeratorManagement from '../components/admin/ModeratorManagement'
 import EventList from '../components/admin/EventList'
 import PasswordChange from '../components/admin/PasswordChange'
 import RegistrationManagement from '../components/admin/RegistrationManagement'
+import { Modal, ConfirmDialog } from '../components/ui/Modal'
 
 type Tab = 'events' | 'members' | 'moderators' | 'registrations' | 'settings'
 
@@ -19,6 +20,8 @@ export default function Admin() {
   const [members, setMembers] = useState<User[]>([])
   const [moderators, setModerators] = useState<Moderator[]>([])
   const [loading, setLoading] = useState(false)
+  const [editingMember, setEditingMember] = useState<User | null>(null)
+  const [memberToDelete, setMemberToDelete] = useState<User | null>(null)
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -58,7 +61,7 @@ export default function Admin() {
     const { data, error } = await supabase
       .from('users')
       .select('*')
-      .order('created_at', { ascending: false })
+      .order('joined_at', { ascending: false })
     
     if (error) {
       console.error('Error fetching members:', error)
@@ -83,6 +86,28 @@ export default function Admin() {
     setLoading(false)
   }
 
+  const handleDeleteMember = async () => {
+    if (!memberToDelete) return
+    
+    setLoading(true)
+    try {
+      const { error } = await supabase
+        .from('users')
+        .delete()
+        .eq('id', memberToDelete.id)
+
+      if (error) throw error
+
+      setMemberToDelete(null)
+      fetchMembers()
+    } catch (err) {
+      console.error('Error deleting member:', err)
+      alert('Failed to delete member')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleSignOut = () => {
     signOut()
     navigate('/')
@@ -91,7 +116,7 @@ export default function Admin() {
   if (authLoading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-yellow-300 text-xl">Loading...</div>
+        <div className="text-cyan-400 text-xl">Loading...</div>
       </div>
     )
   }
@@ -102,7 +127,7 @@ export default function Admin() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-yellow-300 mb-2">
+            <h1 className="text-4xl font-bold text-cyan-400 mb-2">
               {isAdmin ? 'Admin' : 'Moderator'} Dashboard
             </h1>
             <p className="text-aura">Welcome back, {user.username}!</p>
@@ -116,13 +141,13 @@ export default function Admin() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-8 border-b border-yellow-300/20 overflow-x-auto">
+        <div className="flex gap-2 mb-8 border-b border-cyan-400/20 overflow-x-auto">
           <button
             onClick={() => setActiveTab('events')}
             className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
               activeTab === 'events'
-                ? 'text-yellow-300 border-b-2 border-yellow-300'
-                : 'text-aura hover:text-yellow-300/70'
+                ? 'text-cyan-400 border-b-2 border-cyan-400'
+                : 'text-aura hover:text-cyan-400/70'
             }`}
           >
             Events
@@ -131,8 +156,8 @@ export default function Admin() {
             onClick={() => setActiveTab('members')}
             className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
               activeTab === 'members'
-                ? 'text-yellow-300 border-b-2 border-yellow-300'
-                : 'text-aura hover:text-yellow-300/70'
+                ? 'text-cyan-400 border-b-2 border-cyan-400'
+                : 'text-aura hover:text-cyan-400/70'
             }`}
           >
             Members
@@ -142,8 +167,8 @@ export default function Admin() {
               onClick={() => setActiveTab('moderators')}
               className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
                 activeTab === 'moderators'
-                  ? 'text-yellow-300 border-b-2 border-yellow-300'
-                  : 'text-aura hover:text-yellow-300/70'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
+                  : 'text-aura hover:text-cyan-400/70'
               }`}
             >
               Moderators
@@ -153,8 +178,8 @@ export default function Admin() {
             onClick={() => setActiveTab('registrations')}
             className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
               activeTab === 'registrations'
-                ? 'text-yellow-300 border-b-2 border-yellow-300'
-                : 'text-aura hover:text-yellow-300/70'
+                ? 'text-cyan-400 border-b-2 border-cyan-400'
+                : 'text-aura hover:text-cyan-400/70'
             }`}
           >
             Registrations
@@ -163,8 +188,8 @@ export default function Admin() {
             onClick={() => setActiveTab('settings')}
             className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
               activeTab === 'settings'
-                ? 'text-yellow-300 border-b-2 border-yellow-300'
-                : 'text-aura hover:text-yellow-300/70'
+                ? 'text-cyan-400 border-b-2 border-cyan-400'
+                : 'text-aura hover:text-cyan-400/70'
             }`}
           >
             Settings
@@ -188,21 +213,42 @@ export default function Admin() {
 
           {activeTab === 'members' && (
             <>
-              {isAdmin && <MemberForm onMemberAdded={fetchMembers} />}
-              <div className="bg-black/50 border border-yellow-300/20 p-6 rounded-lg">
-                <h2 className="text-2xl font-bold text-yellow-300 mb-4">Members ({members.length})</h2>
+              {isAdmin && <MemberForm onMemberAdded={fetchMembers} editingMember={editingMember} onEditComplete={() => { setEditingMember(null); fetchMembers(); }} />}
+              <div className="bg-slate-900/80 border border-cyan-400/20 p-6 rounded-lg shadow-lg shadow-cyan-500/5">
+                <h2 className="text-2xl font-bold text-cyan-400 mb-4">Members ({members.length})</h2>
                 {loading ? (
                   <p className="text-aura">Loading...</p>
+                ) : members.length === 0 ? (
+                  <p className="text-aura">No members found.</p>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
                     {members.map((member) => (
-                      <div key={member.id} className="bg-black/30 border border-yellow-300/10 p-4 rounded-lg flex justify-between items-center">
-                        <div>
-                          <p className="text-yellow-300 font-semibold">{member.display_name || member.username}</p>
+                      <div key={member.id} className="bg-slate-800/50 border border-cyan-400/10 p-4 rounded-lg flex justify-between items-center">
+                        <div className="flex-1">
+                          <p className="text-cyan-400 font-semibold">{member.username}</p>
+                          <p className="text-aura text-sm">@{member.username}</p>
                           <p className="text-aura text-sm">Discord ID: {member.discord_user_id}</p>
                           <p className="text-aura text-sm">
                             {member.is_clan_member ? '✓ Clan Member' : 'Guest'}
                           </p>
+                        </div>
+                        <div className="flex gap-2">
+                          {isAdmin && (
+                            <>
+                              <button
+                                onClick={() => setEditingMember(member)}
+                                className="px-3 py-2 bg-cyan-400/10 border border-cyan-400/30 text-cyan-400 rounded-lg hover:bg-cyan-400/20 transition-colors text-sm font-medium"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => setMemberToDelete(member)}
+                                className="px-3 py-2 bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors text-sm font-medium"
+                              >
+                                Remove
+                              </button>
+                            </>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -228,6 +274,17 @@ export default function Admin() {
             <PasswordChange />
           )}
         </div>
+
+        {/* Delete Confirm Dialog */}
+        {memberToDelete && (
+          <ConfirmDialog
+            title="Remove Member"
+            message={`Are you sure you want to remove ${memberToDelete.username}? This action cannot be undone.`}
+            onConfirm={handleDeleteMember}
+            onCancel={() => setMemberToDelete(null)}
+            isDangerous
+          />
+        )}
       </div>
     </div>
   )

@@ -25,13 +25,13 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className={`bg-black/95 border border-yellow-300/30 rounded-lg w-full ${sizeClasses[size]} max-h-[90vh] overflow-hidden flex flex-col animate-fade-in`}>
+      <div className={`bg-slate-900/95 border border-cyan-400/30 rounded-lg w-full ${sizeClasses[size]} max-h-[90vh] overflow-hidden flex flex-col animate-fade-in`}>
         {title && (
-          <div className="flex items-center justify-between p-4 border-b border-yellow-300/20">
-            <h3 className="text-xl font-bold text-yellow-300">{title}</h3>
+          <div className="flex items-center justify-between p-4 border-b border-cyan-400/20">
+            <h3 className="text-xl font-bold text-cyan-400">{title}</h3>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-yellow-300 text-2xl leading-none"
+              className="text-gray-400 hover:text-cyan-400 text-2xl leading-none transition-colors"
             >
               ×
             </button>
@@ -82,8 +82,8 @@ export function ConfirmDialog({
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className="bg-black/95 border border-yellow-300/30 rounded-lg max-w-sm w-full p-6 animate-fade-in">
-        <h3 className="text-xl font-bold text-yellow-300 mb-3">{title}</h3>
+      <div className="bg-slate-900/95 border border-cyan-400/30 rounded-lg max-w-sm w-full p-6 animate-fade-in">
+        <h3 className="text-xl font-bold text-cyan-400 mb-3">{title}</h3>
         <p className="text-aura mb-6">{message}</p>
         <div className="flex gap-3">
           <button
@@ -142,7 +142,7 @@ export function Alert({ isOpen, onClose, title, message, type = 'info' }: AlertP
           <p className="text-aura mb-6">{message}</p>
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-yellow-300 text-black font-bold rounded-lg hover:bg-yellow-400 transition-colors"
+            className="px-6 py-2 bg-cyan-400 text-slate-900 font-bold rounded-lg hover:bg-cyan-500 transition-colors"
           >
             OK
           </button>

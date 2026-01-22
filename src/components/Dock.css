@@ -1,0 +1,80 @@
+.dock-outer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: auto;
+  overflow: visible;
+  transform: translateZ(0);
+  contain: layout style;
+}
+
+.dock-panel {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  width: fit-content;
+  gap: 0.5rem;
+  border-radius: 1rem;
+  background-color: rgba(15, 23, 42, 0.98);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  padding: 0.5rem 0.75rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 211, 238, 0.08);
+  will-change: auto;
+  overflow: visible;
+  contain: layout style;
+  transform: translateZ(0);
+}
+
+.dock-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background-color: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  outline: none;
+  will-change: auto;
+  transition: background-color 0.1s ease, border-color 0.1s ease;
+  transform: translateZ(0);
+  contain: layout;
+}
+
+.dock-item:hover {
+  background-color: rgba(34, 211, 238, 0.2);
+  border-color: rgba(34, 211, 238, 0.5);
+}
+
+.dock-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dock-label {
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  width: fit-content;
+  white-space: pre;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  background-color: rgba(15, 23, 42, 0.95);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #22d3ee;
+  transform: translateX(-50%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Active state for current page */
+.dock-item-active {
+  background-color: rgba(34, 211, 238, 0.2) !important;
+  border-color: rgba(34, 211, 238, 0.5) !important;
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+}

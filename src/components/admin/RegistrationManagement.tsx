@@ -131,7 +131,7 @@ export default function RegistrationManagement() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div>
-          <h3 className="text-xl font-bold text-yellow-300">Event Registrations</h3>
+          <h3 className="text-xl font-bold text-cyan-400">Event Registrations</h3>
           <p className="text-sm text-gray-400 mt-1">View and manage registrations for all events</p>
         </div>
         
@@ -146,7 +146,7 @@ export default function RegistrationManagement() {
       </div>
 
       {events.length === 0 ? (
-        <div className="bg-black/30 border border-yellow-300/20 rounded-lg p-8 text-center">
+        <div className="bg-slate-900/80 border border-cyan-400/20 rounded-lg p-8 text-center shadow-lg shadow-cyan-500/5">
           <p className="text-aura">No upcoming events with registration available.</p>
         </div>
       ) : (
@@ -156,7 +156,7 @@ export default function RegistrationManagement() {
             <select
               value={selectedEvent}
               onChange={(e) => setSelectedEvent(e.target.value)}
-              className="w-full sm:w-auto px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+              className="w-full sm:w-auto px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
             >
               {events.map(event => (
                 <option key={event.id} value={event.id}>
@@ -167,12 +167,12 @@ export default function RegistrationManagement() {
           </div>
 
           {selectedEvent && (
-            <div className="bg-black/30 border border-yellow-300/20 rounded-lg p-4">
+            <div className="bg-slate-900/80 border border-cyan-400/20 rounded-lg p-4 shadow-lg shadow-cyan-500/5">
               {(() => {
                 const event = events.find(e => e.id === selectedEvent)
                 return event ? (
-                  <div className="mb-4 pb-4 border-b border-yellow-300/10">
-                    <h4 className="text-lg font-bold text-yellow-300">{event.title}</h4>
+                  <div className="mb-4 pb-4 border-b border-cyan-400/10">
+                    <h4 className="text-lg font-bold text-cyan-400">{event.title}</h4>
                     <p className="text-sm text-aura mt-1">
                       📅 {event.date} | 🕐 {event.time} | 📍 {event.location}
                     </p>
@@ -194,11 +194,11 @@ export default function RegistrationManagement() {
                     const isWeeklyBash = eventTag.toLowerCase().includes('bash')
 
                     return (
-                      <div key={reg.id} className="bg-black/20 border border-yellow-300/10 rounded-lg p-3 hover:bg-yellow-300/5">
+                      <div key={reg.id} className="bg-slate-800/50 border border-cyan-400/10 rounded-lg p-3 hover:bg-cyan-400/5 transition-colors">
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <span className="text-yellow-300 font-semibold">{index + 1}. {reg.name}</span>
+                              <span className="text-cyan-400 font-semibold">{index + 1}. {reg.name}</span>
                               {isWeeklyBash && (
                                 <span className={`px-2 py-0.5 rounded text-xs ${reg.attending ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
                                   {reg.attending ? '✓ Attending' : '✕ Not Attending'}
@@ -207,7 +207,7 @@ export default function RegistrationManagement() {
                             </div>
                             <div className="text-sm text-aura">{reg.email}</div>
                             {isProjectShowcase && reg.project_title && (
-                              <div className="text-sm text-yellow-300/70 mt-1">📁 {reg.project_title}</div>
+                              <div className="text-sm text-cyan-400/70 mt-1">📁 {reg.project_title}</div>
                             )}
                             <div className="text-xs text-gray-500 mt-1">
                               Registered: {new Date(reg.registered_at).toLocaleString()}
@@ -282,7 +282,7 @@ export default function RegistrationManagement() {
 
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between items-center py-2 border-b border-yellow-300/10">
+    <div className="flex justify-between items-center py-2 border-b border-cyan-400/10">
       <span className="text-gray-400 text-sm">{label}:</span>
       <span className="text-aura">{value}</span>
     </div>

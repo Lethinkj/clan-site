@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { NavLink, Link } from 'react-router-dom'
 import { Home, Users, Calendar, Info, Menu, X, LogIn, LogOut, Settings } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import Dock from './Dock'
 
 const navItems = [
   { to: '/home', icon: Home, label: 'Home', scrollId: 'home-title' },
@@ -98,17 +99,19 @@ export default function Header() {
     <>
     <header className={`fixed top-0 left-0 right-0 transition-transform duration-300 ${hideHeader ? '-translate-y-full' : 'translate-y-0'}`}
       style={{
-        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9))',
-        borderBottom: '1px solid rgba(250, 204, 21, 0.2)',
-        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)',
+        background: 'rgba(3, 7, 18, 0.95)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(34, 211, 238, 0.15)',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4), 0 0 30px rgba(34, 211, 238, 0.05)',
         zIndex: 100
       }}
     >
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between relative">
           {/* Logo - Left */}
-          <Link to="/home" aria-label="Home" className="flex items-center gap-2 z-10">
-            <div className="w-10 h-10 rounded-full overflow-hidden bg-yellow-800/10 flex items-center justify-center">
+          <Link to="/home" aria-label="Home" className="flex items-center gap-2 z-10 group">
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-800 flex items-center justify-center border border-cyan-500/30 shadow-lg shadow-cyan-500/10 group-hover:border-cyan-400/50 group-hover:shadow-cyan-500/20 transition-all duration-300">
               <img
                 src="/Aura-7f.jpeg"
                 alt="Aura-7F logo"
@@ -121,22 +124,12 @@ export default function Header() {
                 }}
               />
             </div>
-            <span className="text-sm font-extrabold text-yellow-300 neon-text leading-tight">AURA-7F</span>
+            <span className="text-sm font-bold text-white tracking-wide group-hover:text-cyan-400 transition-colors duration-300\">AURA-7F</span>
           </Link>
 
-          {/* Desktop Navigation - Center (absolute positioning) */}
-          <nav className="hidden sm:flex items-center bg-[#061a28]/90 text-aura rounded-full px-3 py-1 shadow-lg gap-1 absolute left-1/2 transform -translate-x-1/2">
-            {navItems.map(({ to, icon: Icon, label, scrollId }) => (
-              <NavLink
-                key={to}
-                to={to}
-                onClick={(e) => handleNavClick(e, to, scrollId)}
-                className={({ isActive }) => `inline-flex items-center gap-2 transition-all ${isActive ? 'bg-yellow-400 text-[#07192b] px-4 py-2 rounded-full font-semibold' : 'text-aura opacity-90 px-4 py-2 rounded-full hover:text-yellow-300'}`}
-              >
-                <Icon size={14} className="opacity-90" />
-                <span className="text-sm">{label}</span>
-              </NavLink>
-            ))}
+          {/* Desktop Navigation - Hidden (Dock is now at bottom) */}
+          <nav className="hidden">
+            {/* Navigation moved to floating Dock at bottom */}
           </nav>
 
           {/* Auth buttons - Right */}
@@ -145,7 +138,7 @@ export default function Header() {
               <>
                 <Link
                   to="/admin"
-                  className="flex items-center gap-2 px-4 py-2 text-yellow-300 hover:text-yellow-400 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-slate-300 hover:text-white transition-colors"
                 >
                   <Settings size={16} />
                   <span className="text-sm">Dashboard</span>
@@ -155,7 +148,7 @@ export default function Header() {
                     signOut()
                     navigate('/home')
                   }}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-500/20 border border-red-500/50 text-red-400 rounded-full hover:bg-red-500/30 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/30 text-red-400 rounded-full hover:bg-red-500/20 transition-colors"
                 >
                   <LogOut size={16} />
                   <span className="text-sm">Logout</span>
@@ -164,7 +157,7 @@ export default function Header() {
             ) : (
               <Link
                 to="/login"
-                className="flex items-center gap-2 px-4 py-2 bg-yellow-300 text-black rounded-full font-semibold hover:bg-yellow-400 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-cyan-500 text-slate-900 rounded-full font-semibold hover:bg-cyan-400 transition-colors"
               >
                 <LogIn size={16} />
                 <span className="text-sm">Login</span>
@@ -181,7 +174,7 @@ export default function Header() {
             e.stopPropagation()
             setMobileMenuOpen(!mobileMenuOpen)
           }}
-          className="mobile-menu-button fixed top-2 right-2 p-2 text-yellow-300 hover:text-yellow-400 transition-colors rounded-md border border-yellow-300/20"
+          className="mobile-menu-button fixed top-2 right-2 p-2 text-cyan-400 hover:text-cyan-500 transition-colors rounded-md border border-cyan-400/20"
           aria-label="Toggle menu"
           style={{ 
             position: 'fixed',
@@ -195,7 +188,7 @@ export default function Header() {
 
         {/* Mobile dropdown menu - positioned below toggle button */}
         <div 
-          className={`mobile-menu-container fixed top-14 right-2 w-48 rounded-lg shadow-2xl border border-yellow-300/30 overflow-hidden transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}`}
+          className={`mobile-menu-container fixed top-14 right-2 w-48 rounded-lg shadow-2xl border border-cyan-400/30 overflow-hidden transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}`}
           style={{
             position: 'fixed',
             background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9))',
@@ -214,7 +207,7 @@ export default function Header() {
                   handleNavClick(e, to, scrollId)
                   setMobileMenuOpen(false)
                 }}
-                className={({ isActive }) => `flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 ${isActive ? 'border-yellow-400 bg-yellow-400/10 text-yellow-300 font-semibold' : 'border-transparent text-aura/80 hover:bg-yellow-300/10 hover:text-yellow-300 hover:border-yellow-300/50'}`}
+                className={({ isActive }) => `flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 ${isActive ? 'border-cyan-500 bg-cyan-500/10 text-cyan-400 font-semibold' : 'border-transparent text-aura/80 hover:bg-cyan-400/10 hover:text-cyan-400 hover:border-cyan-400/50'}`}
               >
                 <Icon size={20} strokeWidth={2.5} />
                 <span className="text-base font-medium">{label}</span>
@@ -222,13 +215,13 @@ export default function Header() {
             ))}
             
             {/* Auth buttons for mobile */}
-            <div className="border-t border-yellow-300/20 mt-2 pt-2">
+            <div className="border-t border-cyan-400/20 mt-2 pt-2">
               {user ? (
                 <>
                   <Link
                     to="/admin"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 border-transparent text-aura/80 hover:bg-yellow-300/10 hover:text-yellow-300 hover:border-yellow-300/50"
+                    className="flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 border-transparent text-aura/80 hover:bg-cyan-400/10 hover:text-cyan-400 hover:border-cyan-400/50"
                   >
                     <Settings size={20} strokeWidth={2.5} />
                     <span className="text-base font-medium">Dashboard</span>
@@ -249,7 +242,7 @@ export default function Header() {
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 border-transparent text-yellow-300 hover:bg-yellow-300/10 hover:border-yellow-300/50"
+                  className="flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 border-transparent text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400/50"
                 >
                   <LogIn size={20} strokeWidth={2.5} />
                   <span className="text-base font-medium">Login</span>
@@ -278,6 +271,33 @@ export default function Header() {
         />
       )}
     </header>
+
+    {/* Floating Dock Navigation - Desktop Only */}
+    <div className="hidden sm:block fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
+      <Dock
+        items={navItems.map(({ to, icon: Icon, label, scrollId }) => ({
+          icon: <Icon size={24} className={location.pathname === to ? 'text-cyan-400' : 'text-slate-300'} />,
+          label: label,
+          onClick: () => {
+            if (location.pathname === to) {
+              const element = document.getElementById(scrollId)
+              if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            } else {
+              navigate(to)
+              setTimeout(() => {
+                const element = document.getElementById(scrollId)
+                if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+              }, 100)
+            }
+          },
+          className: location.pathname === to ? 'dock-item-active' : ''
+        }))}
+        magnification={60}
+        distance={140}
+        panelHeight={56}
+        baseItemSize={44}
+      />
+    </div>
     </>
   )
 }

@@ -1,21 +1,40 @@
-import React, { useState } from 'react'
-import { supabase } from '../../lib/supabase'
+import React, { useState, useEffect } from 'react'
+import { supabase, User } from '../../lib/supabase'
 
 interface MemberFormProps {
   onMemberAdded: () => void
+  editingMember?: User | null
+  onEditComplete?: () => void
 }
 
-export default function MemberForm({ onMemberAdded }: MemberFormProps) {
+export default function MemberForm({ onMemberAdded, editingMember, onEditComplete }: MemberFormProps) {
   const [formData, setFormData] = useState({
     discord_user_id: '',
     username: '',
-    display_name: '',
     is_clan_member: true,
-    birthday_date: '' // DD/MM format
+    dob: '' // DD/MM format
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+
+  useEffect(() => {
+    if (editingMember) {
+      setFormData({
+        discord_user_id: editingMember.discord_user_id,
+        username: editingMember.username,
+        is_clan_member: editingMember.is_clan_member,
+        dob: ''
+      })
+    } else {
+      setFormData({
+        discord_user_id: '',
+        username: '',
+        is_clan_member: true,
+        dob: ''
+      })
+    }
+  }, [editingMember])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,55 +43,71 @@ export default function MemberForm({ onMemberAdded }: MemberFormProps) {
     setLoading(true)
 
     try {
-      // Check if user already exists
-      const { data: existingUser } = await supabase
-        .from('users')
-        .select('*')
-        .eq('discord_user_id', formData.discord_user_id)
-        .single()
+      if (editingMember) {
+        // Update existing member
+        const { error: updateError } = await supabase
+          .from('users')
+          .update({
+            discord_user_id: formData.discord_user_id,
+            username: formData.username,
+            is_clan_member: formData.is_clan_member
+          })
+          .eq('id', editingMember.id)
 
-      if (existingUser) {
-        setError('User with this Discord ID already exists!')
-        setLoading(false)
-        return
-      }
+        if (updateError) throw updateError
 
-      // Add user to users table
-      const { error: userError } = await supabase
-        .from('users')
-        .insert([{
-          discord_user_id: formData.discord_user_id,
-          username: formData.username,
-          display_name: formData.display_name || formData.username,
-          is_clan_member: formData.is_clan_member
-        }])
+        setSuccess('Member updated successfully!')
+        onEditComplete?.()
+      } else {
+        // Add new member
+        // Check if user already exists
+        const { data: existingUser } = await supabase
+          .from('users')
+          .select('*')
+          .eq('discord_user_id', formData.discord_user_id)
+          .single()
 
-      if (userError) throw userError
+        if (existingUser) {
+          setError('User with this Discord ID already exists!')
+          setLoading(false)
+          return
+        }
 
-      // Add birthday if provided
-      if (formData.birthday_date) {
-        const { error: birthdayError } = await supabase
-          .from('birthdays')
+        // Add user to users table
+        const { error: userError } = await supabase
+          .from('users')
           .insert([{
-            user_id: formData.discord_user_id,
-            name: formData.display_name || formData.username,
-            date: formData.birthday_date
+            discord_user_id: formData.discord_user_id,
+            username: formData.username,
+            is_clan_member: formData.is_clan_member
           }])
 
-        if (birthdayError) throw birthdayError
-      }
+        if (userError) throw userError
 
-      setSuccess('Member added successfully!')
-      setFormData({
-        discord_user_id: '',
-        username: '',
-        display_name: '',
-        is_clan_member: true,
-        birthday_date: ''
-      })
-      onMemberAdded()
+        // Add birthday if provided
+        if (formData.dob) {
+          const { error: birthdayError } = await supabase
+            .from('birthdays')
+            .insert([{
+              user_id: formData.discord_user_id,
+              name: formData.username,
+              date: formData.dob
+            }])
+
+          if (birthdayError) throw birthdayError
+        }
+
+        setSuccess('Member added successfully!')
+        setFormData({
+          discord_user_id: '',
+          username: '',
+          is_clan_member: true,
+          dob: ''
+        })
+        onMemberAdded()
+      }
     } catch (err) {
-      setError('Failed to add member. Please try again.')
+      setError(editingMember ? 'Failed to update member. Please try again.' : 'Failed to add member. Please try again.')
       console.error(err)
     } finally {
       setLoading(false)
@@ -88,8 +123,10 @@ export default function MemberForm({ onMemberAdded }: MemberFormProps) {
   }
 
   return (
-    <div className="bg-black/50 border border-yellow-300/20 p-6 rounded-lg mb-6">
-      <h2 className="text-2xl font-bold text-yellow-300 mb-4">Add New Member</h2>
+    <div className="bg-slate-900/80 border border-cyan-400/20 p-6 rounded-lg mb-6 shadow-lg shadow-cyan-500/5">
+      <h2 className="text-2xl font-bold text-cyan-400 mb-4">
+        {editingMember ? 'Edit Member' : 'Add New Member'}
+      </h2>
 
       {error && (
         <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded mb-4">
@@ -113,47 +150,38 @@ export default function MemberForm({ onMemberAdded }: MemberFormProps) {
               value={formData.discord_user_id}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+              disabled={!!editingMember}
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               placeholder="123456789012345678"
             />
           </div>
 
           <div>
-            <label className="block text-aura text-sm font-medium mb-2">Username *</label>
+            <label className="block text-aura text-sm font-medium mb-2">Username (Name) *</label>
             <input
               type="text"
               name="username"
               value={formData.username}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
-              placeholder="username"
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
+              placeholder="Member Name"
             />
           </div>
 
-          <div>
-            <label className="block text-aura text-sm font-medium mb-2">Display Name</label>
-            <input
-              type="text"
-              name="display_name"
-              value={formData.display_name}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
-              placeholder="Display Name"
-            />
-          </div>
-
-          <div>
-            <label className="block text-aura text-sm font-medium mb-2">Birthday (DD/MM)</label>
-            <input
-              type="text"
-              name="birthday_date"
-              value={formData.birthday_date}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
-              placeholder="15/08"
-            />
-          </div>
+          {!editingMember && (
+            <div>
+              <label className="block text-aura text-sm font-medium mb-2">Date of Birth (DD/MM)</label>
+              <input
+                type="text"
+                name="dob"
+                value={formData.dob}
+                onChange={handleChange}
+                className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
+                placeholder="15/08"
+              />
+            </div>
+          )}
         </div>
 
         <div className="flex items-center">
@@ -163,20 +191,31 @@ export default function MemberForm({ onMemberAdded }: MemberFormProps) {
             name="is_clan_member"
             checked={formData.is_clan_member}
             onChange={handleChange}
-            className="w-4 h-4 text-yellow-300 bg-black/30 border-yellow-300/20 rounded focus:ring-yellow-300"
+            className="w-4 h-4 text-cyan-400 bg-slate-900 border-slate-700 rounded focus:ring-cyan-400 focus:ring-1"
           />
           <label htmlFor="is_clan_member" className="ml-2 text-aura text-sm">
             Mark as Clan Member
           </label>
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-yellow-300 text-black font-bold py-3 px-6 rounded-lg hover:bg-yellow-400 transition-colors disabled:opacity-50"
-        >
-          {loading ? 'Adding...' : 'Add Member'}
-        </button>
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            disabled={loading}
+            className="flex-1 bg-cyan-400 text-slate-900 font-bold py-3 px-6 rounded-lg hover:bg-cyan-500 transition-colors disabled:opacity-50 shadow-lg shadow-cyan-500/20"
+          >
+            {loading ? (editingMember ? 'Updating...' : 'Adding...') : (editingMember ? 'Update Member' : 'Add Member')}
+          </button>
+          {editingMember && (
+            <button
+              type="button"
+              onClick={onEditComplete}
+              className="px-6 bg-slate-800 border border-slate-700 text-aura font-medium rounded-lg hover:bg-slate-700 transition-colors"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </form>
     </div>
   )

@@ -5,6 +5,8 @@
 
 html, body, #root {
   height: 100%;
+  min-height: 100vh;
+  width: 100%;
   /* Prevent animated overlays or wide elements from triggering horizontal scrollbars */
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
@@ -12,6 +14,22 @@ html, body, #root {
   overscroll-behavior: none;
   /* Force manual scroll behavior - no smooth scrolling during navigation */
   scroll-behavior: auto !important;
+  background: #030712;
+}
+
+/* Hide scrollbar completely - all browsers */
+html, body, #root, * {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE/Edge */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+#root::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
 }
 
 /* Prevent scroll anchoring which can cause unwanted scroll jumps */
@@ -20,16 +38,19 @@ html, body, #root {
 }
 
 :root {
-  --aura-dark: #07192b; /* primary dark-blue */
-  --aura-dark-2: #041321;
-  --aura-gold: #f1b011;
-  --aura-gold-soft: #ffd166;
-  --aura-white: #ffffff;
-  --aura-text: #60a5fa; /* medium-readable blue */
-  --aura-text-strong: #2563eb; /* stronger blue for accents */
-  /* text glow intensity (0..1) - can be overridden via body[data-text-glow] */
-  --text-glow-intensity: 0.06; /* default low */
-  --heading-glow-intensity: 0.18; /* default stronger for headings */
+  --aura-dark: #030712; /* deep navy background */
+  --aura-dark-2: #020408;
+  --aura-white: #f8fafc;
+  --aura-text: #94a3b8; /* slate gray for body text */
+  --aura-text-strong: #e2e8f0; /* light slate for emphasis */
+  --aura-accent: #22d3ee; /* cyan accent */
+  --aura-accent-soft: #67e8f9;
+  --aura-accent-glow: rgba(34, 211, 238, 0.4);
+  --aura-border: rgba(34, 211, 238, 0.2);
+  --aura-card-bg: rgba(15, 23, 42, 0.8);
+  /* text glow intensity */
+  --text-glow-intensity: 0.06;
+  --heading-glow-intensity: 0.18;
 }
 
 body {
@@ -40,32 +61,12 @@ body {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: auto;
 }
 
-/* Hide the native cursor for a fully custom cursor experience across the site.
-   Only on desktop (768px+). Mobile keeps native cursor.
-   Exceptions: form fields and contenteditable areas will keep native cursor for accessibility. */
-@media (min-width: 768px) {
-  html, body, #root {
-    cursor: none;
-  }
-
-  /* Keep native cursor for real form controls and editable regions only. Remove `button` here so our custom cursor remains active over buttons/links. 
-     If any element should show the native cursor, add the `.no-custom-cursor` class to it. */
-  input, textarea, select, [contenteditable], .no-custom-cursor {
-    cursor: auto !important;
-  }
-
-  /* Force native cursor to be hidden for links and nav items so our custom cursor shows consistently.
-     Use `.no-custom-cursor` on any link/button you want to show the system cursor instead. */
-  a, button, [role="button"], .nav-link {
-    cursor: none;
-  }
-}
-
-/* Override Tailwind's text-white so 'white' text renders as our blue for better theme consistency */
-.text-white { color: var(--aura-text) !important; }
-.text-white\/90 { color: color-mix(in srgb, var(--aura-text) 90%, black 10%) !important; }
+/* Override Tailwind's text-white for body text - use actual white for headings */
+.text-white { color: #e2e8f0 !important; }
+.text-white\/90 { color: rgba(226, 232, 240, 0.9) !important; }
 
 /* stronger blue utility for headers/important text */
 .text-aura-strong { color: var(--aura-text-strong) !important; }
@@ -73,6 +74,36 @@ body {
 /* general aura text utility to replace gray/white body text where needed */
 .text-aura { color: var(--aura-text) !important; }
 .text-aura-weak { color: color-mix(in srgb, var(--aura-text) 70%, black 30%) !important; }
+
+/* Professional card styles with cyan accents */
+.aura-card {
+  background: var(--aura-card-bg) !important;
+  border: 1px solid var(--aura-border) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(34, 211, 238, 0.05);
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+
+.aura-card:hover {
+  border-color: rgba(34, 211, 238, 0.35) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(34, 211, 238, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Glass morphism utility */
+.glass {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #22d3ee 0%, #a78bfa 50%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
 
 
@@ -225,36 +256,6 @@ body::before {
   0% { opacity: 0.04; }
   50% { opacity: 0.12; }
   100% { opacity: 0.04; }
-}
-
-/* Bee animations: wing flap and gentle bob
-   Wing will rotate around its base (we simulate by transform origin on the group) */
-.bee-wrap { will-change: transform; }
-.bee-svg { overflow: visible; }
-.wing { transform-origin: 50% 80%; }
-.left-wing { animation: wing-flap-left 0.16s ease-in-out infinite; transform-origin: 16px 26px; }
-.right-wing { animation: wing-flap-right 0.16s ease-in-out infinite; transform-origin: 40px 26px; }
-.bee-wrap { animation: bee-bob 3s ease-in-out infinite; }
-
-@keyframes wing-flap-left {
-  0% { transform: rotate(-12deg) translateY(0); }
-  50% { transform: rotate(12deg) translateY(-2px); }
-  100% { transform: rotate(-12deg) translateY(0); }
-}
-@keyframes wing-flap-right {
-  0% { transform: rotate(12deg) translateY(0); }
-  50% { transform: rotate(-12deg) translateY(-2px); }
-  100% { transform: rotate(12deg) translateY(0); }
-}
-
-@keyframes bee-bob {
-  0% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-6px) scale(0.995); }
-  100% { transform: translateY(0) scale(1); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hex-svg, .hex-overlay, .wing, .bee-wrap { animation: none !important; }
 }
 
 /* Generic entrance animations (aura theme) */
@@ -841,354 +842,73 @@ footer {
   }
 }
 
-/* Custom Cursor Styles */
-.cursor-dot {
-  position: fixed;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10002;
-  transition: transform 0.1s cubic-bezier(0.2, 0.9, 0.3, 1);
-  background: linear-gradient(135deg, #fcd34d, #f59e0b);
-  box-shadow: 
-    0 0 8px rgba(250, 204, 21, 0.9),
-    0 0 15px rgba(250, 204, 21, 0.5),
-    inset 0 0 4px rgba(255, 255, 255, 0.7);
-  animation: cursor-pulse-dot 2s ease-in-out infinite;
-  will-change: transform, box-shadow;
-  backface-visibility: hidden;
-}
-
-.cursor-orbit-particle {
-  position: fixed;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10000;
-  background: radial-gradient(circle, rgba(250, 204, 21, 1), rgba(250, 204, 21, 0.5));
-  box-shadow: 0 0 6px rgba(250, 204, 21, 0.8);
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-}
-
-.cursor-orbit-1 {
-  animation: orbit-particle 3s linear infinite;
-  animation-play-state: running !important;
-}
-
-.cursor-orbit-2 {
-  animation: orbit-particle 3s linear infinite;
-  animation-delay: -1s;
-  animation-play-state: running !important;
-}
-
-.cursor-orbit-3 {
-  animation: orbit-particle 3s linear infinite;
-  animation-delay: -2s;
-  animation-play-state: running !important;
-}
-
-@keyframes cursor-pulse-dot {
-  0%, 100% {
-    box-shadow: 
-      0 0 8px rgba(250, 204, 21, 0.9),
-      0 0 15px rgba(250, 204, 21, 0.5),
-      inset 0 0 4px rgba(255, 255, 255, 0.7);
-  }
-  50% {
-    box-shadow: 
-      0 0 12px rgba(250, 204, 21, 1),
-      0 0 20px rgba(250, 204, 21, 0.7),
-      0 0 30px rgba(250, 204, 21, 0.3),
-      inset 0 0 6px rgba(255, 255, 255, 0.9);
-  }
-}
-
-@keyframes orbit-particle {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg) translateX(18px) rotate(0deg) scale(1);
-    opacity: 0.7;
-  }
-  25% {
-    opacity: 0.9;
-  }
-  50% {
-    opacity: 1;
-    transform: translate(-50%, -50%) rotate(180deg) translateX(18px) rotate(-180deg) scale(1.1);
-  }
-  75% {
-    opacity: 0.9;
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg) translateX(18px) rotate(-360deg) scale(1);
-    opacity: 0.7;
-  }
-}
-
-.cursor-hexagon {
-  position: fixed;
-  pointer-events: none;
-  z-index: 10001;
-  transition: transform 0.12s cubic-bezier(0.2, 0.9, 0.3, 1);
-  filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.5)) 
-          drop-shadow(0 0 15px rgba(250, 204, 21, 0.3));
-  will-change: transform;
-  backface-visibility: hidden;
-}
-
-.hex-main {
-  transition: all 0.2s ease;
-  animation: hex-breathe 3s ease-in-out infinite;
-}
-
-.hex-accent {
-  opacity: 0.6;
-  transition: all 0.15s cubic-bezier(0.2, 0.9, 0.3, 1);
-  transform-origin: center;
-  animation: accent-shimmer 2.5s ease-in-out infinite;
-}
-
-@keyframes hex-breathe {
-  0%, 100% {
-    stroke-width: 2;
-    opacity: 0.9;
-  }
-  50% {
-    stroke-width: 2.3;
-    opacity: 1;
-  }
-}
-
-@keyframes accent-shimmer {
-  0%, 100% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
-/* Click animation - corners push outward */
-.cursor-hexagon.clicking .hex-accent-1 {
-  animation: push-corner-tl 0.3s ease-out;
-}
-
-.cursor-hexagon.clicking .hex-accent-2 {
-  animation: push-corner-tr 0.3s ease-out;
-}
-
-.cursor-hexagon.clicking .hex-accent-3 {
-  animation: push-corner-bl 0.3s ease-out;
-}
-
-.cursor-hexagon.clicking .hex-accent-4 {
-  animation: push-corner-br 0.3s ease-out;
-}
-
-.cursor-hexagon.clicking .hex-main {
-  stroke-width: 2.5;
-  opacity: 1;
-}
-
-/* Corner push animations - each corner moves outward on click */
-@keyframes push-corner-tl {
-  0% {
-    opacity: 0.6;
-    transform: translate(0, 0) scale(1);
-  }
-  40% {
-    opacity: 1;
-    transform: translate(-4px, -4px) scale(1.2);
-  }
-  70% {
-    opacity: 0.8;
-    transform: translate(-2px, -2px) scale(1.05);
-  }
-  100% {
-    opacity: 0.6;
-    transform: translate(0, 0) scale(1);
-  }
-}
-
-@keyframes push-corner-tr {
-  0% {
-    opacity: 0.6;
-    transform: translate(0, 0) scale(1);
-  }
-  40% {
-    opacity: 1;
-    transform: translate(4px, -4px) scale(1.2);
-  }
-  70% {
-    opacity: 0.8;
-    transform: translate(2px, -2px) scale(1.05);
-  }
-  100% {
-    opacity: 0.6;
-    transform: translate(0, 0) scale(1);
-  }
-}
-
-@keyframes push-corner-bl {
-  0% {
-    opacity: 0.6;
-    transform: translate(0, 0) scale(1);
-  }
-  40% {
-    opacity: 1;
-    transform: translate(-4px, 4px) scale(1.2);
-  }
-  70% {
-    opacity: 0.8;
-    transform: translate(-2px, 2px) scale(1.05);
-  }
-  100% {
-    opacity: 0.6;
-    transform: translate(0, 0) scale(1);
-  }
-}
-
-@keyframes push-corner-br {
-  0% {
-    opacity: 0.6;
-    transform: translate(0, 0) scale(1);
-  }
-  40% {
-    opacity: 1;
-    transform: translate(4px, 4px) scale(1.2);
-  }
-  70% {
-    opacity: 0.8;
-    transform: translate(2px, 2px) scale(1.05);
-  }
-  100% {
-    opacity: 0.6;
-    transform: translate(0, 0) scale(1);
-  }
-}
-
-.cursor-glow {
-  position: fixed;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10000;
-  background: radial-gradient(circle, rgba(250, 204, 21, 0.3), rgba(250, 204, 21, 0.1), transparent);
-  animation: cursor-pulse 2s ease-in-out infinite;
-  opacity: 0.6;
-  transition: transform 0.15s cubic-bezier(0.2, 0.9, 0.3, 1);
-}
-
-@keyframes cursor-pulse {
-  0%, 100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-.sparkle {
-  position: fixed;
-  background: radial-gradient(circle, 
-    rgba(255, 215, 0, 1) 0%, 
-    rgba(250, 204, 21, 0.9) 20%,
-    rgba(250, 204, 21, 0.6) 40%,
-    rgba(250, 204, 21, 0.3) 60%,
-    transparent 80%);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  animation: sparkle-fade 0.8s ease-out forwards;
-  box-shadow: 0 0 6px rgba(250, 204, 21, 0.7);
-}
-
-.click-ripple-hex {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9996;
-  transform: translate(-50%, -50%) scale(0.3);
-  animation: hex-ripple-expand 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.7)) drop-shadow(0 0 25px rgba(250, 204, 21, 0.4));
-}
-
-.click-burst {
-  position: fixed;
-  width: 5px;
-  height: 5px;
-  background: radial-gradient(circle, rgba(255, 215, 0, 1), rgba(250, 204, 21, 0.8));
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9996;
-  animation: burst-particle 0.6s ease-out forwards;
-  box-shadow: 0 0 8px rgba(250, 204, 21, 0.9);
-}
-
-@keyframes sparkle-fade {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(0.8) rotate(0deg);
-  }
-  20% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.3) translateY(-5px) rotate(45deg);
-  }
-  50% {
-    opacity: 0.7;
-    transform: translate(-50%, -50%) scale(1.1) translateY(-20px) rotate(120deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.3) translateY(-50px) rotate(200deg);
-  }
-}
-
-@keyframes hex-ripple-expand {
-  0% {
-    transform: translate(-50%, -50%) scale(0.2);
-    opacity: 1;
-  }
-  30% {
-    opacity: 0.8;
-    transform: translate(-50%, -50%) scale(0.6);
-  }
-  60% {
-    opacity: 0.4;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1.5);
-    opacity: 0;
-  }
-}
-
-@keyframes burst-particle {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(0.5);
-  }
-  30% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.8);
-  }
-  60% {
-    opacity: 0.6;
-    transform: translate(-50%, -50%) scale(1.2);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.2);
-  }
-}
-
 /* Hide default cursor only on desktop */
 @media (min-width: 768px) {
+  /* Cursor is now default/auto */
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
   * {
-    cursor: none !important;
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 

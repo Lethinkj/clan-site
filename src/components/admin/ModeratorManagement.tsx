@@ -96,8 +96,8 @@ export default function ModeratorManagement({ moderators, onModeratorAdded, onMo
   return (
     <div className="space-y-6">
       {/* Add Moderator Form */}
-      <div className="bg-black/50 border border-yellow-300/20 p-6 rounded-lg">
-        <h2 className="text-2xl font-bold text-yellow-300 mb-4">Add Moderator</h2>
+      <div className="bg-slate-900/80 border border-cyan-400/20 p-6 rounded-lg shadow-lg shadow-cyan-500/5">
+        <h2 className="text-2xl font-bold text-cyan-400 mb-4">Add Moderator</h2>
 
         {error && (
           <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded mb-4">
@@ -120,7 +120,7 @@ export default function ModeratorManagement({ moderators, onModeratorAdded, onMo
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
-                className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+                className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
                 placeholder="moderator@email.com"
               />
             </div>
@@ -132,7 +132,7 @@ export default function ModeratorManagement({ moderators, onModeratorAdded, onMo
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 required
-                className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+                className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
                 placeholder="username"
               />
             </div>
@@ -144,7 +144,7 @@ export default function ModeratorManagement({ moderators, onModeratorAdded, onMo
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
-                className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+                className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
                 placeholder="••••••••"
               />
             </div>
@@ -156,7 +156,7 @@ export default function ModeratorManagement({ moderators, onModeratorAdded, onMo
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 required
-                className="w-full px-4 py-2 bg-black/30 border border-yellow-300/20 rounded-lg text-aura focus:outline-none focus:border-yellow-300/50"
+                className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
                 placeholder="••••••••"
               />
             </div>
@@ -165,7 +165,7 @@ export default function ModeratorManagement({ moderators, onModeratorAdded, onMo
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-yellow-300 text-black font-bold py-3 px-6 rounded-lg hover:bg-yellow-400 transition-colors disabled:opacity-50"
+            className="w-full bg-cyan-400 text-slate-900 font-bold py-3 px-6 rounded-lg hover:bg-cyan-500 transition-colors disabled:opacity-50 shadow-lg shadow-cyan-500/20"
           >
             {loading ? 'Adding...' : 'Add Moderator'}
           </button>
@@ -173,14 +173,14 @@ export default function ModeratorManagement({ moderators, onModeratorAdded, onMo
       </div>
 
       {/* Moderator List */}
-      <div className="bg-black/50 border border-yellow-300/20 p-6 rounded-lg">
-        <h2 className="text-2xl font-bold text-yellow-300 mb-4">Current Moderators ({moderators.length})</h2>
+      <div className="bg-slate-900/80 border border-cyan-400/20 p-6 rounded-lg shadow-lg shadow-cyan-500/5">
+        <h2 className="text-2xl font-bold text-cyan-400 mb-4">Current Moderators ({moderators.length})</h2>
         
         <div className="space-y-3">
           {moderators.map((moderator) => (
-            <div key={moderator.id} className="bg-black/30 border border-yellow-300/10 p-4 rounded-lg flex justify-between items-center">
+            <div key={moderator.id} className="bg-slate-800/50 border border-cyan-400/10 p-4 rounded-lg flex justify-between items-center">
               <div>
-                <p className="text-yellow-300 font-semibold">{moderator.username}</p>
+                <p className="text-cyan-400 font-semibold">{moderator.username}</p>
                 <p className="text-aura text-sm">{moderator.email}</p>
                 <p className="text-aura text-xs">
                   Added: {new Date(moderator.added_at).toLocaleDateString()}

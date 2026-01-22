@@ -1,151 +1,164 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React from 'react'
 import AnimateOnView from '../components/AnimateOnView'
 
 export default function About() {
   const values = [
-    { title: 'Innovation', desc: "Pioneering tomorrow's solutions" },
-    { title: 'Excellence', desc: 'Pursuing perfection in every detail' },
-    { title: 'Collaboration', desc: 'United we achieve the impossible' },
-    { title: 'Growth', desc: 'Continuously evolving and learning' },
-    { title: 'Integrity', desc: 'Transparent and honest in all we do' },
-    { title: 'Quality', desc: 'Delivering beyond expectations' },
-    { title: 'Energy', desc: 'Passionate drive in everything' }
+    { title: 'Innovation', desc: "Pioneering tomorrow's solutions", icon: '💡' },
+    { title: 'Excellence', desc: 'Pursuing perfection in every detail', icon: '⭐' },
+    { title: 'Collaboration', desc: 'United we achieve the impossible', icon: '🤝' },
+    { title: 'Growth', desc: 'Continuously evolving and learning', icon: '📈' },
+    { title: 'Integrity', desc: 'Transparent and honest in all we do', icon: '🎯' },
+    { title: 'Quality', desc: 'Delivering beyond expectations', icon: '✅' },
+    { title: 'Energy', desc: 'Passionate drive in everything', icon: '⚡' }
   ]
 
-
+  const timeline = [
+    {
+      year: '2024',
+      title: 'Genesis',
+      description: 'Started as part of Byte Bash Blitz community — passionate developers united by a shared vision.',
+      icon: '✨'
+    },
+    {
+      year: '2024',
+      title: 'Identity',
+      description: 'Discovered our identity: Aura-7F — a star shining in high places with maximum positive energy.',
+      icon: '🔭'
+    },
+    {
+      year: '2025',
+      title: 'Expansion',
+      description: 'Growing our constellation with talented individuals, each bringing unique light to new possibilities.',
+      icon: '🚀'
+    },
+    {
+      year: 'Now',
+      title: 'Present',
+      description: 'Continuing as a guiding star for innovation, spreading positive energy through every project.',
+      icon: '🌟'
+    }
+  ]
 
   return (
-    <div className="space-y-4 sm:space-y-8 pb-2 sm:pb-8">
-      <div className="text-center space-y-3 sm:space-y-6">
-        {/* Desktop Layout */}
-        <div className="hidden md:flex items-center justify-center gap-3 lg:gap-6 max-w-4xl mx-auto px-4">
-          <div className="inline-block aura-card bg-black/60 border border-yellow-300/20 p-5 lg:p-8 rounded-lg shadow-md text-center">
-            <h3 className="text-lg lg:text-2xl font-bold text-yellow-300 mb-2">Aura</h3>
-            <p className="text-xs lg:text-base text-aura">Resembles a Star<br />A radiant energy that illuminates</p>
-          </div>
-
-          <div className="text-2xl lg:text-4xl font-extrabold text-yellow-300">+</div>
-
-          <div className="inline-block aura-card bg-black/60 border border-yellow-300/20 p-5 lg:p-8 rounded-lg shadow-md text-center">
-            <h3 className="text-lg lg:text-2xl font-bold text-yellow-300 mb-2">7F</h3>
-            <p className="text-xs lg:text-base text-aura">Hexadecimal's highest positive number<br />Maximum positive energy</p>
-          </div>
-
-          <div className="text-2xl lg:text-4xl font-extrabold text-yellow-300">=</div>
-
-          <div className="infinity-glitch text-[120px] lg:text-[180px] font-bold text-yellow-300" data-text="∞">
-            ∞
-          </div>
-        </div>
-
-        {/* Mobile Layout */}
-        <div className="md:hidden flex flex-col items-center gap-2 px-3">
-          <div className="w-full aura-card bg-black/60 border border-yellow-300/20 p-3 rounded-lg shadow-md text-center">
-            <h3 className="text-base font-bold text-yellow-300 mb-1">Aura</h3>
-            <p className="text-xs text-aura">Resembles a Star<br />A radiant energy that illuminates</p>
-          </div>
-
-          <div className="text-lg font-extrabold text-yellow-300">+</div>
-
-          <div className="w-full aura-card bg-black/60 border border-yellow-300/20 p-3 rounded-lg shadow-md text-center">
-            <h3 className="text-base font-bold text-yellow-300 mb-1">7F</h3>
-            <p className="text-xs text-aura">Hexadecimal's highest positive number<br />Maximum positive energy</p>
-          </div>
-
-          <div className="text-lg font-extrabold text-yellow-300">=</div>
-
-          <div className="infinity-glitch text-[80px] font-bold text-yellow-300" data-text="∞">
-            ∞
-          </div>
-        </div>
-
-        <div
-          className="mx-auto max-w-4xl mt-3 sm:mt-6 p-3 sm:p-8 rounded-xl border border-yellow-300/20 aura-card text-center px-3 sm:px-4"
-        >
-          <h3 className="text-base sm:text-2xl md:text-3xl font-bold text-yellow-300 mb-2 sm:mb-4">"A Star Shines in a High Place with Full of Positive Energy"</h3>
-            <p className="text-xs sm:text-base text-aura">This is the essence of our clan — reaching the highest potential while spreading positivity and illumination to all we touch.</p>
-        </div>
-      </div>
-
-      <div className="mt-3 sm:mt-6">
-        <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-yellow-300 mb-2 sm:mb-4 text-center a-fade-up px-3 sm:px-4">Our Philosophy</h3>
-        <p className="text-xs sm:text-base text-aura max-w-4xl mx-auto text-center a-fade-up px-3 sm:px-4">Like a star that burns brightest in the vast cosmos, Aura-7F represents the pinnacle of positive energy in the digital universe. We believe that true innovation happens when brilliant minds unite under a shared constellation of values.
-          Our name embodies our commitment to reaching the highest levels of excellence (7F in hexadecimal) while maintaining the radiant, inspiring presence of a guiding star (Aura) for others in the tech community.</p>
-      </div>
-
-      <div className="space-y-3 sm:space-y-6 px-3 sm:px-4">
-        <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-yellow-300 mb-2 sm:mb-4 a-fade-up text-center">Seven Fundamental Values</h3>
-        <p className="text-xs sm:text-base md:text-lg text-aura mb-3 sm:mb-6 text-center">The 7F that defines our highest positive energy</p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:a-stagger max-w-4xl mx-auto">
-          {values.map((value, i) => (
-            <div
-              key={i}
-              className="bg-black/50 border border-yellow-300/20 p-3 sm:p-5 rounded-lg shadow-md md:a-fade-up a-wall-build aura-card"
-            >
-              <h4 className="text-base sm:text-xl font-bold text-yellow-300 mb-1 sm:mb-2">{value.title}</h4>
-              <p className="text-xs sm:text-base text-aura">{value.desc}</p>
+    <div className="space-y-16 sm:space-y-24 pb-8">
+      {/* Hero Section */}
+      <section className="text-center px-4 pt-8">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <h1 id="about-title" className="text-3xl sm:text-4xl md:text-5xl font-bold text-white a-fade-up scroll-mt-24">
+            About <span className="text-cyan-400">Aura-7F</span>
+          </h1>
+          
+          {/* Name Meaning Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+            <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-700/50 hover:border-cyan-400/40 transition-all duration-300 text-center backdrop-blur-sm hover:shadow-xl hover:shadow-cyan-500/10">
+              <h3 className="text-2xl font-bold text-cyan-400 mb-2">Aura</h3>
+              <p className="text-sm text-slate-400">Resembles a Star — A radiant energy that illuminates</p>
             </div>
-          ))}
+            
+            <div className="hidden md:flex items-center justify-center">
+              <div className="text-5xl font-bold text-cyan-400">+</div>
+            </div>
+            
+            <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-700/50 hover:border-cyan-400/40 transition-all duration-300 text-center backdrop-blur-sm hover:shadow-xl hover:shadow-cyan-500/10">
+              <h3 className="text-2xl font-bold text-cyan-400 mb-2">7F</h3>
+              <p className="text-sm text-slate-400">Hexadecimal's highest positive — Maximum energy</p>
+            </div>
+          </div>
+
+          {/* Tagline */}
+          <div className="p-6 sm:p-8 rounded-2xl bg-slate-900/80 border border-cyan-500/30 backdrop-blur-sm shadow-[0_0_15px_rgba(34,211,238,0.15)] hover:shadow-[0_0_25px_rgba(34,211,238,0.25)] transition-all">
+            <blockquote className="text-lg sm:text-xl md:text-2xl font-medium text-white italic">
+              "A Star Shines in a High Place with Full of Positive Energy"
+            </blockquote>
+            <p className="mt-4 text-slate-400 text-sm sm:text-base">
+              This is the essence of our clan — reaching the highest potential while spreading positivity.
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="mt-4 sm:mt-12 px-3 sm:px-4">
-        <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-yellow-400 mb-4 sm:mb-8 a-fade-up text-center">Our Stellar Journey</h3>
+      {/* Philosophy Section */}
+      <section className="px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+              Our <span className="text-cyan-400">Philosophy</span>
+            </h2>
+          </div>
+          <div className="p-6 sm:p-8 rounded-2xl bg-slate-900/80 border border-slate-700/50 backdrop-blur-sm hover:border-cyan-400/40 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/10">
+            <p className="text-slate-300 leading-relaxed text-center">
+              Like a star that burns brightest in the vast cosmos, Aura-7F represents the pinnacle of positive 
+              energy in the digital universe. We believe that true innovation happens when brilliant minds 
+              unite under a shared constellation of values. Our name embodies our commitment to reaching 
+              the highest levels of excellence (7F in hexadecimal) while maintaining the radiant, inspiring 
+              presence of a guiding star (Aura) for others in the tech community.
+            </p>
+          </div>
+        </div>
+      </section>
 
-        <div className="relative max-w-4xl mx-auto">
-          {/* Vertical line on left side for all screens */}
-          <div className="absolute left-5 md:left-5 top-0 bottom-0 w-1 bg-yellow-800/30 z-0" />
+      {/* Values Section */}
+      <section className="px-4">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+              Seven Fundamental <span className="text-cyan-400">Values</span>
+            </h2>
+            <p className="text-slate-400">The 7F that defines our highest positive energy</p>
+          </div>
 
-          <div className="space-y-6 sm:space-y-12 pt-2 sm:pt-4">
-            {[
-              {
-                title: 'Genesis - 2024',
-                body: 'We began as part of the Byte Bash Blitz community — a group of passionate developers united by a shared vision of reaching the highest potential in software development.',
-                icon: '✨'
-              },
-              {
-                title: 'The Aura-7F Name',
-                body: 'Our clan (CB Shaniya) discovered an identity that captures both aspiration and energy — a star shining in high places with maximum positive energy, committed to excellence.',
-                icon: '🔭'
-              },
-              {
-                title: 'Expanding Horizons',
-                body: "We're expanding our constellation with talented individuals — second-year bashers and rising contributors — each bringing unique light to illuminate new possibilities.",
-                icon: '🚀'
-              },
-              {
-                title: 'Shining Bright — Present',
-                body: 'Today, Aura-7F continues to be a guiding star for innovation, spreading positive energy through every project we touch.',
-                icon: '🌟'
-              }
-            ].map((evt, idx) => {
-              const isLeft = idx % 2 === 0
-              return (
-                <div key={idx} className="relative flex gap-3 items-start">
-                  <div className="flex-shrink-0">
-                    <AnimateOnView animation="a-slide-left" threshold={0.2} once style={{ animationDelay: `${idx * 100}ms` }}>
-                      <div
-                        className="flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white z-40 shadow-lg border-2 border-yellow-300/30"
-                      >
-                        <span className="text-base md:text-xl">{evt.icon}</span>
-                      </div>
-                    </AnimateOnView>
-                  </div>
-                  <div className="flex-1 pt-0">
-                    <AnimateOnView animation={isLeft ? "a-slide-left" : "a-slide-right"} threshold={0.2} once style={{ animationDelay: `${idx * 150}ms` }}>
-                      <div className="bg-black/50 border border-yellow-300/20 p-3 md:p-5 rounded-lg shadow-md aura-card">
-                        <h4 className="text-sm md:text-lg font-bold text-yellow-300 mb-1 md:mb-2">{evt.title}</h4>
-                        <p className="text-xs md:text-base text-aura">{evt.body}</p>
-                      </div>
-                    </AnimateOnView>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {values.map((value, i) => (
+              <div
+                key={i}
+                className="group p-5 rounded-2xl bg-slate-900/80 border border-slate-700/50 hover:border-cyan-400/40 transition-all duration-300 backdrop-blur-sm hover:shadow-xl hover:shadow-cyan-500/10 hover:-translate-y-1"
+              >
+                <div className="flex items-start gap-4">
+                  <span className="text-2xl p-2 rounded-lg bg-slate-800 border border-slate-700 group-hover:border-cyan-500/30 transition-colors">{value.icon}</span>
+                  <div>
+                    <h4 className="font-semibold text-white mb-1 group-hover:text-cyan-400 transition-colors">{value.title}</h4>
+                    <p className="text-sm text-slate-400">{value.desc}</p>
                   </div>
                 </div>
-              )
-            })}
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Timeline Section */}
+      <section className="px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+              Our <span className="text-cyan-400">Journey</span>
+            </h2>
+            <p className="text-slate-400">From genesis to the stars</p>
+          </div>
+
+          <div className="relative">
+            {/* Timeline line */}
+            <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500/50 via-cyan-500/20 to-transparent"></div>
+
+            <div className="space-y-8">
+              {timeline.map((item, idx) => (
+                <AnimateOnView key={idx} animation="a-slide-left" threshold={0.2} once>
+                  <div className="relative flex gap-6 items-start pl-2">
+                    <div className="relative z-10 flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-slate-900 border-2 border-cyan-500/50 text-lg">
+                      {item.icon}
+                    </div>
+                    <div className="flex-1 p-5 rounded-2xl bg-slate-900/80 border border-slate-700/50 hover:border-cyan-400/40 transition-all duration-300 backdrop-blur-sm hover:shadow-xl hover:shadow-cyan-500/10">
+                      <span className="text-xs font-semibold text-cyan-400 uppercase tracking-wider">{item.year}</span>
+                      <h4 className="font-semibold text-white mt-1 mb-2">{item.title}</h4>
+                      <p className="text-sm text-slate-400">{item.description}</p>
+                    </div>
+                  </div>
+                </AnimateOnView>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }

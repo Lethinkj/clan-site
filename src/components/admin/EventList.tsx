@@ -102,15 +102,15 @@ export default function EventList({ events, onEventUpdated, onEventDeleted, isAd
   }
 
   return (
-    <div className="bg-black/50 border border-yellow-300/20 p-6 rounded-lg">
-      <h2 className="text-2xl font-bold text-yellow-300 mb-4">All Events ({events.length})</h2>
+    <div className="bg-slate-900/80 border border-cyan-400/20 p-6 rounded-lg shadow-lg shadow-cyan-500/5">
+      <h2 className="text-2xl font-bold text-cyan-400 mb-4">All Events ({events.length})</h2>
       
       <div className="space-y-4">
         {events.map((event) => (
-          <div key={event.id} className="bg-black/30 border border-yellow-300/10 p-4 rounded-lg">
+          <div key={event.id} className="bg-slate-800/50 border border-cyan-400/10 p-4 rounded-lg">
             <div className="flex justify-between items-start mb-3">
               <div>
-                <h3 className="text-xl font-bold text-yellow-300">{event.title}</h3>
+                <h3 className="text-xl font-bold text-cyan-400">{event.title}</h3>
                 <p className="text-aura text-sm">
                   {event.tag === 'Other' && event.custom_category ? event.custom_category : event.tag}
                 </p>
@@ -123,7 +123,7 @@ export default function EventList({ events, onEventUpdated, onEventDeleted, isAd
               <p>📍 {event.location} | 👥 {event.attendees} attendees</p>
               {event.rating && <p>⭐ {event.rating}</p>}
               {event.max_registrations && <p>📋 Max registrations: {event.max_registrations}</p>}
-              <p className="text-yellow-300/70">
+              <p className="text-cyan-400/70">
                 📋 {registrationCounts[event.id] || 0} registered
                 {registrationCounts[event.id] > 0 && (
                   <button
@@ -138,8 +138,8 @@ export default function EventList({ events, onEventUpdated, onEventDeleted, isAd
 
             {/* Expanded registrations list */}
             {expandedEvent === event.id && eventRegistrations.length > 0 && (
-              <div className="mb-4 p-3 bg-black/20 rounded-lg border border-yellow-300/10">
-                <p className="text-yellow-300 text-sm font-semibold mb-2">Registered Members:</p>
+              <div className="mb-4 p-3 bg-slate-900/50 rounded-lg border border-cyan-400/10">
+                <p className="text-cyan-400 text-sm font-semibold mb-2">Registered Members:</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {eventRegistrations.map((reg, idx) => (
                     <div key={reg.id} className="text-aura text-xs bg-black/30 px-2 py-1 rounded">
@@ -168,7 +168,7 @@ export default function EventList({ events, onEventUpdated, onEventDeleted, isAd
             <div className="flex gap-2">
               <button
                 onClick={() => setEditingEvent(event)}
-                className="flex-1 bg-yellow-300/20 border border-yellow-300/50 text-yellow-300 px-4 py-2 rounded-lg hover:bg-yellow-300/30 transition-colors"
+                className="flex-1 bg-cyan-400/20 border border-cyan-400/50 text-cyan-400 px-4 py-2 rounded-lg hover:bg-cyan-400/30 transition-colors"
               >
                 Edit
               </button>

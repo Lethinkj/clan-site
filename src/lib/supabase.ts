@@ -53,11 +53,9 @@ export interface User {
   id: string
   discord_user_id: string
   username: string
-  display_name: string
   is_clan_member: boolean
   joined_at: string
-  last_active: string
-  created_at: string
+  last_active?: string
 }
 
 export interface Birthday {
