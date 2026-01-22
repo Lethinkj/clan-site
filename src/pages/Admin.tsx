@@ -8,7 +8,7 @@ import ModeratorManagement from '../components/admin/ModeratorManagement'
 import EventList from '../components/admin/EventList'
 import PasswordChange from '../components/admin/PasswordChange'
 import RegistrationManagement from '../components/admin/RegistrationManagement'
-import { Modal, ConfirmDialog } from '../components/ui/Modal'
+import { ConfirmDialog } from '../components/ui/Modal'
 
 type Tab = 'events' | 'members' | 'moderators' | 'registrations' | 'settings'
 
@@ -276,15 +276,14 @@ export default function Admin() {
         </div>
 
         {/* Delete Confirm Dialog */}
-        {memberToDelete && (
-          <ConfirmDialog
-            title="Remove Member"
-            message={`Are you sure you want to remove ${memberToDelete.username}? This action cannot be undone.`}
-            onConfirm={handleDeleteMember}
-            onCancel={() => setMemberToDelete(null)}
-            isDangerous
-          />
-        )}
+        <ConfirmDialog
+          isOpen={!!memberToDelete}
+          title="Remove Member"
+          message={memberToDelete ? `Are you sure you want to remove ${memberToDelete.username}? This action cannot be undone.` : ''}
+          onConfirm={handleDeleteMember}
+          onClose={() => setMemberToDelete(null)}
+          type="danger"
+        />
       </div>
     </div>
   )
