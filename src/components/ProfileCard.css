@@ -7,7 +7,11 @@
   overflow: hidden;
   background: rgba(15, 23, 42, 0.95);
   border: 1px solid rgba(34, 211, 238, 0.2);
+  /* lighter shadow on mobile, promote to its own layer to avoid repaints */
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 211, 238, 0.05);
+  transform: translateZ(0);
+  will-change: transform;
+  contain: paint;
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -47,6 +51,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* promote avatar to its own layer to prevent jank when cards animate */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .profile-card-info {
@@ -136,13 +143,38 @@
   font-size: 0.75rem;
   font-weight: 500;
   text-decoration: none;
-  transition: all 0.2s ease;
+  /* avoid 'all' to prevent expensive layout/paint transitions */
+  transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease;
+  will-change: transform, background-color, border-color;
 }
 
 .profile-card-link:hover {
   background: rgba(34, 211, 238, 0.2);
   border-color: rgba(34, 211, 238, 0.5);
   transform: translateY(-2px);
+}
+
+/* Mobile optimizations: reduce shadow and height to improve rendering performance */
+@media (max-width: 640px) {
+  .profile-card {
+    min-height: 320px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  .profile-card-bg {
+    /* simplify background gradient on small screens to reduce paint cost */
+    background: linear-gradient(180deg, rgba(34,211,238,0.04) 0%, transparent 50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-card-link,
+  .profile-card {
+    transition: none !important;
+    will-change: auto !important;
+  }
 }
 
 .profile-card-link svg {

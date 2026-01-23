@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import { Footer, Visuals } from './components/index'
+import Hyperspeed from './components/Hyperspeed'
 import { Home, About, Members, Events, Login, Admin, AddMember } from './pages/index'
 import { Analytics } from "@vercel/analytics/react"
 import { AuthProvider } from './contexts/AuthContext'
@@ -82,7 +83,16 @@ export default function App() {
   return (
     <AuthProvider>
       <div className="min-h-screen bg-black text-aura relative z-10">
-        <Visuals />
+        {/* Fixed full-viewport background (Hyperspeed on home, Visuals elsewhere) */}
+        {location.pathname === '/home' ? (
+          <div className="fixed inset-0 -z-10 pointer-events-none">
+            <Hyperspeed />
+          </div>
+        ) : (
+          <div className="fixed inset-0 -z-10 pointer-events-none">
+            <Visuals />
+          </div>
+        )}
         <Header />
         <main className="container mx-auto px-3 sm:px-6 pt-20 pb-3 sm:pb-12 min-h-screen">
           <div className="max-w-6xl mx-auto p-0 relative z-20">
