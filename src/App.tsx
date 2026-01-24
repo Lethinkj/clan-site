@@ -6,9 +6,11 @@ import Hyperspeed from './components/Hyperspeed'
 import { Home, About, Members, Events, Login, Admin, AddMember } from './pages/index'
 import { Analytics } from "@vercel/analytics/react"
 import { AuthProvider } from './contexts/AuthContext'
+import { ThemeProvider, useTheme } from './contexts/ThemeContext'
 
-export default function App() {
+function AppContent() {
   const location = useLocation()
+  const { theme } = useTheme()
 
   // Add page-load and scroll-based animations for text and cards.
   useEffect(() => {
@@ -82,11 +84,11 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-black text-aura relative z-10">
+      <div className="min-h-screen text-aura relative z-10" style={{ background: 'var(--aura-dark)', color: 'var(--aura-text)' }}>
         {/* Fixed full-viewport background (Hyperspeed on home, Visuals elsewhere) */}
         {location.pathname === '/home' ? (
           <div className="fixed inset-0 -z-10 pointer-events-none">
-            <Hyperspeed />
+            <Hyperspeed theme={theme} />
           </div>
         ) : (
           <div className="fixed inset-0 -z-10 pointer-events-none">
@@ -94,7 +96,7 @@ export default function App() {
           </div>
         )}
         <Header />
-        <main className="container mx-auto px-3 sm:px-6 pt-20 pb-3 sm:pb-12 min-h-screen">
+        <main className="container mx-auto px-3 sm:px-6 pt-20 pb-1 md:pb-2 lg:pb-2 min-h-screen">
           <div className="max-w-6xl mx-auto p-0 relative z-20">
             <Routes>
               <Route path="/" element={<Navigate to="/home" replace />} />
@@ -115,3 +117,13 @@ export default function App() {
     </AuthProvider>
   )
 }
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
+  )
+}
+
+export default App

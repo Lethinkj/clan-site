@@ -1,6 +1,10 @@
 declare module './components/Hyperspeed' {
   import * as React from 'react'
-  const Hyperspeed: React.FC<any>
+  interface HyperspeedProps {
+    theme?: 'light' | 'dark';
+    effectOptions?: any;
+  }
+  const Hyperspeed: React.FC<HyperspeedProps>
   export default Hyperspeed
 }
 

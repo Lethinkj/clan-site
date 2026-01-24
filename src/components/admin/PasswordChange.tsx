@@ -43,7 +43,7 @@ export default function PasswordChange() {
 
   if (user?.isAdmin) {
     return (
-      <div className="bg-slate-900/80 border border-cyan-400/20 p-6 rounded-lg shadow-lg shadow-cyan-500/5">
+      <div className="aura-card p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-cyan-400 mb-4">Change Password</h2>
         <p className="text-aura">Admin password is configured in the system and cannot be changed through the dashboard.</p>
       </div>
@@ -51,7 +51,7 @@ export default function PasswordChange() {
   }
 
   return (
-    <div className="bg-slate-900/80 border border-cyan-400/20 p-6 rounded-lg shadow-lg shadow-cyan-500/5">
+    <div className="aura-card p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold text-cyan-400 mb-4">Change Password</h2>
 
       {error && (
