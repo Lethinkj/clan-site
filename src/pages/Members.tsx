@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import ProfileCard from '../components/ProfileCard'
 import Stack from '../components/Stack'
+import { useTheme } from '../contexts/ThemeContext'
 
 type APIMember = {
   name: string
@@ -80,6 +81,7 @@ function SocialLink({ href, label }: { href?: string; label: string }) {
 }
 
 export default function Members() {
+  const { theme } = useTheme()
   const [members, setMembers] = useState<Person[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -184,8 +186,9 @@ export default function Members() {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
         <div className="text-center space-y-4">
-          <div className="w-12 h-12 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin mx-auto"></div>
-          <p className="text-slate-400 text-sm">Loading team members...</p>
+          <div className={`w-12 h-12 border-4 rounded-full animate-spin mx-auto
+            ${theme === 'dark' ? 'border-cyan-500/30 border-t-cyan-500' : 'border-cyan-600/30 border-t-cyan-600'}`}></div>
+          <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>Loading team members...</p>
         </div>
       </div>
     )
@@ -195,10 +198,10 @@ export default function Members() {
     <div className="space-y-12 sm:space-y-16 pb-8">
       {/* Header */}
       <section className="text-center px-4 pt-8">
-        <h1 id="members-title" className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 scroll-mt-24">
-          Meet Our <span className="text-cyan-400">Team</span>
+        <h1 id="members-title" className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-4 scroll-mt-24 ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>
+          Meet Our <span className={theme === 'dark' ? 'text-cyan-400' : 'text-cyan-600'}>Team</span>
         </h1>
-        <p className="text-slate-400 max-w-2xl mx-auto">
+        <p className={`max-w-2xl mx-auto ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
           The brilliant minds behind Aura-7F — united by passion, driven by excellence
         </p>
       </section>
@@ -211,10 +214,10 @@ export default function Members() {
             {/* Captains - Left Side */}
             <div className="flex flex-col items-center">
               <div className="flex items-center gap-3 mb-6 justify-center">
-                <div className="w-1 h-8 bg-cyan-500 rounded-full"></div>
+                <div className={`w-1 h-8 rounded-full ${theme === 'dark' ? 'bg-cyan-500' : 'bg-cyan-600'}`}></div>
                 <div className="text-center">
-                  <h2 className="text-xl sm:text-2xl font-bold text-white">Captain Bash</h2>
-                  <p className="text-sm text-slate-400">Leadership Team ({captains.length})</p>
+                  <h2 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>Captain Bash</h2>
+                  <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>Leadership Team ({captains.length})</p>
                 </div>
               </div>
 
@@ -236,10 +239,10 @@ export default function Members() {
             {/* Team Members - Right Side */}
             <div className="flex flex-col items-center">
               <div className="flex items-center gap-3 mb-6 justify-center">
-                <div className="w-1 h-8 bg-purple-500 rounded-full"></div>
+                <div className={`w-1 h-8 rounded-full ${theme === 'dark' ? 'bg-purple-500' : 'bg-purple-600'}`}></div>
                 <div className="text-center">
-                  <h2 className="text-xl sm:text-2xl font-bold text-white">Team Members</h2>
-                  <p className="text-sm text-slate-400">Core Contributors ({teamMembers.length})</p>
+                  <h2 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>Team Members</h2>
+                  <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>Core Contributors ({teamMembers.length})</p>
                 </div>
               </div>
 
@@ -260,7 +263,7 @@ export default function Members() {
             
           </div>
           
-          <p className="text-center text-sm text-slate-500 mt-12">
+          <p className={`text-center text-sm mt-12 ${theme === 'dark' ? 'text-slate-500' : 'text-slate-500'}`}>
             Drag or click cards to browse through team members
           </p>
         </div>

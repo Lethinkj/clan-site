@@ -1,5 +1,10 @@
 import * as React from 'react'
 
-declare const Hyperspeed: React.FC<any>
+interface HyperspeedProps {
+  theme?: 'light' | 'dark';
+  effectOptions?: any;
+}
+
+declare const Hyperspeed: React.FC<HyperspeedProps>
 
 export default Hyperspeed

@@ -4,8 +4,39 @@ import { BloomEffect, EffectComposer, EffectPass, RenderPass, SMAAEffect, SMAAPr
 
 import './Hyperspeed.css';
 
+// Dark theme colors (original)
+const darkThemeColors = {
+  roadColor: 0x080808,
+  islandColor: 0x0a0a0a,
+  background: 0x000000,
+  shoulderLines: 0xffffff,
+  brokenLines: 0xffffff,
+  leftCars: [0xd856bf, 0x6750a2, 0xc247ac],
+  rightCars: [0x03b3c3, 0x0e5ea5, 0x324555],
+  sticks: 0x03b3c3
+};
+
+// Light theme colors - softer, warmer tones
+const lightThemeColors = {
+  roadColor: 0xd8d8e0,
+  islandColor: 0xe0e0e8,
+  background: 0xf8fafc,
+  shoulderLines: 0x6366f1,
+  brokenLines: 0x8b5cf6,
+  leftCars: [0xf472b6, 0xa855f7, 0xc084fc],
+  rightCars: [0x06b6d4, 0x3b82f6, 0x6366f1],
+  sticks: 0x06b6d4
+};
+
 const Hyperspeed = ({
-  effectOptions = {
+  theme = 'dark',
+  effectOptions = null
+}) => {
+  // Get colors based on theme
+  const themeColors = theme === 'light' ? lightThemeColors : darkThemeColors;
+  
+  // Default effect options with theme-aware colors
+  const defaultEffectOptions = {
     onSpeedUp: () => {},
     onSlowDown: () => {},
     distortion: 'turbulentDistortion',
@@ -31,18 +62,13 @@ const Hyperspeed = ({
     carWidthPercentage: [0.3, 0.5],
     carShiftX: [-0.8, 0.8],
     carFloorSeparation: [0, 5],
-    colors: {
-      roadColor: 0x080808,
-      islandColor: 0x0a0a0a,
-      background: 0x000000,
-      shoulderLines: 0xffffff,
-      brokenLines: 0xffffff,
-      leftCars: [0xd856bf, 0x6750a2, 0xc247ac],
-      rightCars: [0x03b3c3, 0x0e5ea5, 0x324555],
-      sticks: 0x03b3c3
-    }
-  }
-}) => {
+    colors: themeColors
+  };
+  
+  // Merge provided effectOptions with defaults
+  const mergedEffectOptions = effectOptions 
+    ? { ...defaultEffectOptions, ...effectOptions, colors: { ...themeColors, ...(effectOptions.colors || {}) } }
+    : defaultEffectOptions;
   const hyperspeed = useRef(null);
   const appRef = useRef(null);
 
@@ -1102,7 +1128,7 @@ const Hyperspeed = ({
 
     (function () {
       const container = document.getElementById('lights');
-      const options = { ...effectOptions };
+      const options = { ...mergedEffectOptions };
       options.distortion = distortions[options.distortion];
 
       const myApp = new App(container, options);
@@ -1115,7 +1141,7 @@ const Hyperspeed = ({
         appRef.current.dispose();
       }
     };
-  }, [effectOptions]);
+  }, [theme, mergedEffectOptions]);
 
   return <div id="lights" ref={hyperspeed}></div>;
 };

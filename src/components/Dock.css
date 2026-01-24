@@ -25,6 +25,15 @@
   overflow: visible;
   contain: layout style;
   transform: translateZ(0);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Light mode dock panel */
+:root.light .dock-panel,
+.light .dock-panel {
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(8, 145, 178, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), 0 0 20px rgba(8, 145, 178, 0.05);
 }
 
 .dock-item {
@@ -44,9 +53,23 @@
   contain: layout;
 }
 
+/* Light mode dock item */
+:root.light .dock-item,
+.light .dock-item {
+  background-color: rgba(241, 245, 249, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 .dock-item:hover {
   background-color: rgba(34, 211, 238, 0.2);
   border-color: rgba(34, 211, 238, 0.5);
+}
+
+:root.light .dock-item:hover,
+.light .dock-item:hover {
+  background-color: rgba(8, 145, 178, 0.15);
+  border-color: rgba(8, 145, 178, 0.5);
 }
 
 .dock-icon {
@@ -72,9 +95,25 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Light mode dock label */
+:root.light .dock-label,
+.light .dock-label {
+  border: 1px solid rgba(8, 145, 178, 0.25);
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #0891b2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
 /* Active state for current page */
 .dock-item-active {
   background-color: rgba(34, 211, 238, 0.2) !important;
   border-color: rgba(34, 211, 238, 0.5) !important;
   box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+}
+
+:root.light .dock-item-active,
+.light .dock-item-active {
+  background-color: rgba(8, 145, 178, 0.15) !important;
+  border-color: rgba(8, 145, 178, 0.5) !important;
+  box-shadow: 0 0 15px rgba(8, 145, 178, 0.2);
 }

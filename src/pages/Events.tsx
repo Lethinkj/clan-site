@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { supabase, Event, EventRegistration } from '../lib/supabase'
 import Modal, { Alert } from '../components/ui/Modal'
+import { useTheme } from '../contexts/ThemeContext'
 
 // --- Backend Helpers (Unchanged) ---
 const parseEventDateTime = (dateStr: string, timeStr: string): Date => {
@@ -38,6 +39,7 @@ const checkEventStatuses = async () => {
 // --- Components ---
 
 export default function Events() {
+  const { theme } = useTheme()
   const [liveEvents, setLiveEvents] = useState<Event[]>([])
   const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([])
   const [endedEvents, setEndedEvents] = useState<Event[]>([])
@@ -152,21 +154,29 @@ export default function Events() {
     const hasImage = !!event.image_url;
 
     return (
-      <div className={`group relative bg-slate-900/90 border-2 ${isLive ? 'border-red-500/50 shadow-[0_0_20px_rgba(239,68,68,0.15)]' : 'border-cyan-500/40 shadow-[0_0_20px_rgba(34,211,238,0.12)]'} rounded-2xl overflow-hidden hover:border-cyan-400/70 transition-all duration-300 hover:shadow-[0_0_30px_rgba(34,211,238,0.25)] hover:-translate-y-2 flex flex-col h-full backdrop-blur-sm`}>
+      <div className={`group relative border-2 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 flex flex-col h-full backdrop-blur-sm
+        ${theme === 'dark'
+          ? `bg-slate-900/90 ${isLive ? 'border-red-500/50 shadow-[0_0_20px_rgba(239,68,68,0.15)]' : 'border-cyan-500/40 shadow-[0_0_20px_rgba(34,211,238,0.12)]'} hover:border-cyan-400/70 hover:shadow-[0_0_30px_rgba(34,211,238,0.25)]`
+          : `bg-white/90 ${isLive ? 'border-red-500/40 shadow-[0_0_20px_rgba(239,68,68,0.1)]' : 'border-cyan-600/30 shadow-lg'} hover:border-cyan-500/60 hover:shadow-xl`
+        }`}>
         {/* Image Section */}
-        <div className={`relative w-full ${hasImage ? 'aspect-video' : 'h-32 bg-gradient-to-br from-slate-800 to-slate-900'}`}>
+        <div className={`relative w-full ${hasImage ? 'aspect-video' : 'h-32'} ${!hasImage && (theme === 'dark' ? 'bg-gradient-to-br from-slate-800 to-slate-900' : 'bg-gradient-to-br from-slate-100 to-slate-200')}`}>
           {hasImage ? (
             <img src={event.image_url} alt={event.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           ) : (
-             <div className="flex items-center justify-center h-full text-slate-600">
+             <div className={`flex items-center justify-center h-full ${theme === 'dark' ? 'text-slate-600' : 'text-slate-400'}`}>
                <span className="text-4xl">📅</span>
              </div>
           )}
           <div className="absolute top-3 right-3 z-10">
             <StatusBadge status={event.status} />
           </div>
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900/95 to-transparent p-4 pt-12">
-            <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 bg-slate-900/70 px-2 py-0.5 rounded border border-cyan-400/30 backdrop-blur-md">
+          <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t p-4 pt-12 ${theme === 'dark' ? 'from-slate-900/95' : 'from-white/95'}`}>
+            <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded border backdrop-blur-md
+              ${theme === 'dark'
+                ? 'text-cyan-400 bg-slate-900/70 border-cyan-400/30'
+                : 'text-cyan-600 bg-white/70 border-cyan-600/30'
+              }`}>
               {event.tag === 'Other' && event.custom_category ? event.custom_category : event.tag}
             </span>
           </div>
@@ -174,36 +184,40 @@ export default function Events() {
 
         {/* Content Section */}
         <div className="p-5 flex flex-col flex-grow">
-          <h4 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors line-clamp-2 leading-tight">
+          <h4 className={`text-xl font-bold mb-3 transition-colors line-clamp-2 leading-tight
+            ${theme === 'dark' 
+              ? 'text-white group-hover:text-cyan-400' 
+              : 'text-slate-800 group-hover:text-cyan-600'
+            }`}>
             {event.title}
           </h4>
 
           <div className="space-y-2 mb-4">
-            <div className="flex items-center text-sm text-slate-400 gap-2">
-              <span className="text-cyan-400/70">📅</span>
+            <div className={`flex items-center text-sm gap-2 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+              <span className={theme === 'dark' ? 'text-cyan-400/70' : 'text-cyan-600/70'}>📅</span>
               <span>{event.date}</span>
-              <span className="text-slate-600">•</span>
-              <span className="text-slate-300">{event.time}{event.end_time && ` - ${event.end_time}`}</span>
+              <span className={theme === 'dark' ? 'text-slate-600' : 'text-slate-400'}>•</span>
+              <span className={theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}>{event.time}{event.end_time && ` - ${event.end_time}`}</span>
             </div>
-            <div className="flex items-center text-sm text-slate-400 gap-2">
-              <span className="text-cyan-400/70">📍</span>
+            <div className={`flex items-center text-sm gap-2 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+              <span className={theme === 'dark' ? 'text-cyan-400/70' : 'text-cyan-600/70'}>📍</span>
               <span className="truncate">{event.location}</span>
             </div>
-            <div className="flex items-center text-sm text-slate-400 gap-2">
-              <span className="text-cyan-400/70">👥</span>
+            <div className={`flex items-center text-sm gap-2 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+              <span className={theme === 'dark' ? 'text-cyan-400/70' : 'text-cyan-600/70'}>👥</span>
               <span>
                 {event.attendees} {event.status === 'upcoming' ? 'expected' : 'joined'}
-                {event.max_registrations && <span className="text-slate-500 ml-1">({registrations[event.id] || 0}/{event.max_registrations} slots filled)</span>}
+                {event.max_registrations && <span className={theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}> ({registrations[event.id] || 0}/{event.max_registrations} slots filled)</span>}
               </span>
             </div>
             {event.rating && (
-              <div className="flex items-center text-sm text-cyan-400 gap-2">
+              <div className={`flex items-center text-sm gap-2 ${theme === 'dark' ? 'text-cyan-400' : 'text-cyan-600'}`}>
                 <span>⭐</span> <span>{event.rating} rating</span>
               </div>
             )}
           </div>
 
-          <p className="text-sm text-slate-400 leading-relaxed mb-6 line-clamp-3">
+          <p className={`text-sm leading-relaxed mb-6 line-clamp-3 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
             {event.description}
           </p>
 
@@ -211,20 +225,28 @@ export default function Events() {
             {/* Registered Members Chips */}
             {registeredMembers[event.id] && registeredMembers[event.id].length > 0 && (
               <div className="mb-4">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">
+                <p className={`text-xs font-semibold uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-slate-500' : 'text-slate-500'}`}>
                   Registered ({registeredMembers[event.id].length})
                 </p>
                 <div className="flex -space-x-2 overflow-hidden py-1">
                   {registeredMembers[event.id].slice(0, 5).map((reg, idx) => (
-                    <div key={reg.id} className="relative inline-flex items-center justify-center w-8 h-8 rounded-full border-2 border-slate-900 bg-slate-800 text-[10px] text-white font-medium" title={reg.name}>
+                    <div key={reg.id} className={`relative inline-flex items-center justify-center w-8 h-8 rounded-full border-2 text-[10px] font-medium
+                      ${theme === 'dark' 
+                        ? 'border-slate-900 bg-slate-800 text-white' 
+                        : 'border-white bg-slate-200 text-slate-700'
+                      }`} title={reg.name}>
                       {reg.name.charAt(0).toUpperCase()}
                       {reg.attending !== null && (
-                         <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border border-slate-900 ${reg.attending ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                         <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border ${theme === 'dark' ? 'border-slate-900' : 'border-white'} ${reg.attending ? 'bg-green-500' : 'bg-red-500'}`}></span>
                       )}
                     </div>
                   ))}
                   {registeredMembers[event.id].length > 5 && (
-                    <div className="inline-flex items-center justify-center w-8 h-8 rounded-full border-2 border-slate-900 bg-slate-800 text-[10px] text-white font-medium">
+                    <div className={`inline-flex items-center justify-center w-8 h-8 rounded-full border-2 text-[10px] font-medium
+                      ${theme === 'dark' 
+                        ? 'border-slate-900 bg-slate-800 text-white' 
+                        : 'border-white bg-slate-200 text-slate-700'
+                      }`}>
                       +{registeredMembers[event.id].length - 5}
                     </div>
                   )}
@@ -238,7 +260,9 @@ export default function Events() {
                 className={`w-full py-3 px-4 rounded-xl font-bold text-sm uppercase tracking-wide transition-all duration-200 shadow-lg ${
                   isLive 
                     ? 'bg-red-500 hover:bg-red-600 text-white shadow-red-500/20' 
-                    : 'bg-cyan-400 hover:bg-cyan-500 text-slate-900 shadow-cyan-400/20'
+                    : theme === 'dark'
+                      ? 'bg-cyan-400 hover:bg-cyan-500 text-slate-900 shadow-cyan-400/20'
+                      : 'bg-cyan-600 hover:bg-cyan-700 text-white shadow-cyan-600/20'
                 }`}
               >
                 {isLive ? 'Join Live Event' : 'Reserve Spot'}
@@ -254,8 +278,9 @@ export default function Events() {
   if (loading) {
     return (
       <div className="min-h-[50vh] flex flex-col items-center justify-center space-y-4">
-        <div className="w-12 h-12 border-4 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin"></div>
-        <p className="text-slate-400 text-sm animate-pulse">Syncing events...</p>
+        <div className={`w-12 h-12 border-4 rounded-full animate-spin
+          ${theme === 'dark' ? 'border-cyan-400/30 border-t-cyan-400' : 'border-cyan-600/30 border-t-cyan-600'}`}></div>
+        <p className={`text-sm animate-pulse ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>Syncing events...</p>
       </div>
     )
   }
@@ -266,10 +291,10 @@ export default function Events() {
       {/* Header & Stats */}
       <div className="space-y-8">
         <div className="text-center space-y-4">
-          <h2 id="events-title" className="text-4xl md:text-5xl font-extrabold text-white tracking-tight a-fade-up scroll-mt-24">
-            Upcoming <span className="text-cyan-400">Events</span>
+          <h2 id="events-title" className={`text-4xl md:text-5xl font-extrabold tracking-tight a-fade-up scroll-mt-24 ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>
+            Upcoming <span className={theme === 'dark' ? 'text-cyan-400' : 'text-cyan-600'}>Events</span>
           </h2>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto a-fade-up">
+          <p className={`text-lg max-w-2xl mx-auto a-fade-up ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
             Connect with the community, showcase your projects, and learn from the best.
           </p>
         </div>
@@ -281,12 +306,16 @@ export default function Events() {
             { label: 'Total Attendees', value: stats.totalAttendees + '+', icon: '👥' },
             { label: 'Average Rating', value: stats.avgRating, icon: '⭐' }
           ].map((stat, i) => (
-            <div key={i} className="group bg-slate-900/80 border border-cyan-500/30 p-6 rounded-2xl flex items-center justify-between hover:border-cyan-400/60 transition-all duration-300 backdrop-blur-sm shadow-lg shadow-cyan-500/10 hover:shadow-xl hover:shadow-cyan-500/20 hover:-translate-y-1">
+            <div key={i} className={`group p-6 rounded-2xl flex items-center justify-between transition-all duration-300 backdrop-blur-sm shadow-lg hover:shadow-xl hover:-translate-y-1
+              ${theme === 'dark'
+                ? 'bg-slate-900/80 border border-cyan-500/30 hover:border-cyan-400/60 shadow-cyan-500/10 hover:shadow-cyan-500/20'
+                : 'bg-white/80 border border-cyan-600/20 hover:border-cyan-500/50 shadow-cyan-600/5 hover:shadow-cyan-600/15'
+              }`}>
               <div>
-                <div className="text-3xl font-bold text-cyan-300 mb-1">{stat.value}</div>
-                <div className="text-sm text-slate-400 font-medium uppercase tracking-wider">{stat.label}</div>
+                <div className={`text-3xl font-bold mb-1 ${theme === 'dark' ? 'text-cyan-300' : 'text-cyan-600'}`}>{stat.value}</div>
+                <div className={`text-sm font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>{stat.label}</div>
               </div>
-              <div className="text-3xl text-cyan-500/60">{stat.icon}</div>
+              <div className={`text-3xl ${theme === 'dark' ? 'text-cyan-500/60' : 'text-cyan-600/60'}`}>{stat.icon}</div>
             </div>
           ))}
         </div>
@@ -302,7 +331,7 @@ export default function Events() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
               </span>
-              <h3 className="text-2xl font-bold text-white">Happening Now</h3>
+              <h3 className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>Happening Now</h3>
              </div>
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {liveEvents.map((event) => <EventCard key={event.id} event={event} showRegister={true} />)}
@@ -311,10 +340,18 @@ export default function Events() {
         )}
 
         <section>
-          <h3 className="text-2xl font-bold text-white mb-8 border-l-4 border-cyan-400 pl-4">Upcoming Events</h3>
+          <h3 className={`text-2xl font-bold mb-8 border-l-4 pl-4
+            ${theme === 'dark' 
+              ? 'text-white border-cyan-400' 
+              : 'text-slate-800 border-cyan-600'
+            }`}>Upcoming Events</h3>
           {upcomingEvents.length === 0 ? (
-            <div className="bg-slate-900/60 border border-dashed border-slate-700 rounded-3xl p-12 text-center backdrop-blur-sm">
-              <p className="text-slate-500 text-lg">No upcoming events scheduled. Check back soon!</p>
+            <div className={`border border-dashed rounded-3xl p-12 text-center backdrop-blur-sm
+              ${theme === 'dark' 
+                ? 'bg-slate-900/60 border-slate-700' 
+                : 'bg-white/60 border-slate-300'
+              }`}>
+              <p className={`text-lg ${theme === 'dark' ? 'text-slate-500' : 'text-slate-500'}`}>No upcoming events scheduled. Check back soon!</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:a-stagger">
@@ -325,7 +362,11 @@ export default function Events() {
 
         {endedEvents.length > 0 && (
           <section>
-             <h3 className="text-2xl font-bold text-slate-300 mb-8 pl-4 border-l-4 border-cyan-500/50">Recently Ended</h3>
+             <h3 className={`text-2xl font-bold mb-8 pl-4 border-l-4
+               ${theme === 'dark' 
+                 ? 'text-slate-300 border-cyan-500/50' 
+                 : 'text-slate-700 border-cyan-600/50'
+               }`}>Recently Ended</h3>
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {endedEvents.map((event) => <EventCard key={event.id} event={event} />)}
             </div>
@@ -334,7 +375,8 @@ export default function Events() {
 
         {pastEvents.length > 0 && (
           <section className="opacity-90">
-             <h3 className="text-2xl font-bold text-slate-400 mb-8 pl-4 border-l-4 border-slate-600">Archive</h3>
+             <h3 className={`text-2xl font-bold mb-8 pl-4 border-l-4
+               ${theme === 'dark' ? 'text-slate-400 border-slate-600' : 'text-slate-500 border-slate-400'}`}>Archive</h3>
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pastEvents.map((event) => <EventCard key={event.id} event={event} />)}
             </div>

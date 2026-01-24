@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { NavLink, Link } from 'react-router-dom'
 import { Home, Users, Calendar, Info, Menu, X, LogIn, LogOut, Settings } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
+import ThemeToggle from './ui/ThemeToggle'
 import Dock from './Dock'
 
 const navItems = [
@@ -16,6 +18,7 @@ export default function Header() {
   const location = useLocation()
   const navigate = useNavigate()
   const { user, isModerator, signOut } = useAuth()
+  const { theme } = useTheme()
   const [logoLoaded, setLogoLoaded] = useState(false)
   const [hideHeader, setHideHeader] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -99,11 +102,13 @@ export default function Header() {
     <>
     <header className={`fixed top-0 left-0 right-0 transition-transform duration-300 ${hideHeader ? '-translate-y-full' : 'translate-y-0'}`}
       style={{
-        background: 'rgba(3, 7, 18, 0.95)',
+        background: theme === 'dark' ? 'rgba(3, 7, 18, 0.95)' : 'rgba(248, 250, 252, 0.95)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(34, 211, 238, 0.15)',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4), 0 0 30px rgba(34, 211, 238, 0.05)',
+        borderBottom: theme === 'dark' ? '1px solid rgba(34, 211, 238, 0.15)' : '1px solid rgba(8, 145, 178, 0.2)',
+        boxShadow: theme === 'dark' 
+          ? '0 4px 20px rgba(0, 0, 0, 0.4), 0 0 30px rgba(34, 211, 238, 0.05)'
+          : '0 4px 20px rgba(0, 0, 0, 0.08), 0 0 30px rgba(8, 145, 178, 0.05)',
         zIndex: 100
       }}
     >
@@ -111,7 +116,11 @@ export default function Header() {
         <div className="flex items-center justify-between relative">
           {/* Logo - Left */}
           <Link to="/home" aria-label="Home" className="flex items-center gap-2 z-10 group">
-            <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-800 flex items-center justify-center border border-cyan-500/30 shadow-lg shadow-cyan-500/10 group-hover:border-cyan-400/50 group-hover:shadow-cyan-500/20 transition-all duration-300">
+            <div className={`w-10 h-10 rounded-full overflow-hidden flex items-center justify-center shadow-lg transition-all duration-300
+              ${theme === 'dark' 
+                ? 'bg-slate-800 border border-cyan-500/30 shadow-cyan-500/10 group-hover:border-cyan-400/50 group-hover:shadow-cyan-500/20' 
+                : 'bg-white border border-cyan-600/30 shadow-cyan-600/10 group-hover:border-cyan-500/50 group-hover:shadow-cyan-600/20'
+              }`}>
               <img
                 src="/Aura-7f.jpeg"
                 alt="Aura-7F logo"
@@ -124,7 +133,11 @@ export default function Header() {
                 }}
               />
             </div>
-            <span className="text-sm font-bold text-white tracking-wide group-hover:text-cyan-400 transition-colors duration-300\">AURA-7F</span>
+            <span className={`text-sm font-bold tracking-wide transition-colors duration-300
+              ${theme === 'dark' 
+                ? 'text-white group-hover:text-cyan-400' 
+                : 'text-slate-800 group-hover:text-cyan-600'
+              }`}>AURA-7F</span>
           </Link>
 
           {/* Desktop Navigation - Hidden (Dock is now at bottom) */}
@@ -134,6 +147,7 @@ export default function Header() {
 
           {/* Auth buttons - Right */}
           <div className="hidden sm:flex items-center gap-2">
+            <ThemeToggle />
             {user ? (
               <>
                 <Link
@@ -174,12 +188,18 @@ export default function Header() {
             e.stopPropagation()
             setMobileMenuOpen(!mobileMenuOpen)
           }}
-          className="mobile-menu-button fixed top-2 right-2 p-2 text-cyan-400 hover:text-cyan-500 transition-colors rounded-md border border-cyan-400/20"
+          className={`mobile-menu-button fixed top-2 right-2 p-2 transition-colors rounded-md border
+            ${theme === 'dark'
+              ? 'text-cyan-400 hover:text-cyan-500 border-cyan-400/20'
+              : 'text-cyan-600 hover:text-cyan-700 border-cyan-600/20'
+            }`}
           aria-label="Toggle menu"
           style={{ 
             position: 'fixed',
-            background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9))',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
+            background: theme === 'dark' 
+              ? 'linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9))'
+              : 'linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.9))',
+            boxShadow: theme === 'dark' ? '0 4px 12px rgba(0, 0, 0, 0.5)' : '0 4px 12px rgba(0, 0, 0, 0.1)',
             zIndex: 110
           }}
         >
@@ -188,13 +208,17 @@ export default function Header() {
 
         {/* Mobile dropdown menu - positioned below toggle button */}
         <div 
-          className={`mobile-menu-container fixed top-14 right-2 w-48 rounded-lg shadow-2xl border border-cyan-400/30 overflow-hidden transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}`}
+          className={`mobile-menu-container fixed top-14 right-2 w-48 rounded-lg shadow-2xl overflow-hidden transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}
+            ${theme === 'dark' ? 'border-cyan-400/30' : 'border-cyan-600/30'}`}
           style={{
             position: 'fixed',
-            background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9))',
-            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.5)',
+            background: theme === 'dark' 
+              ? 'linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9))'
+              : 'linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95))',
+            boxShadow: theme === 'dark' ? '0 8px 32px 0 rgba(0, 0, 0, 0.5)' : '0 8px 32px 0 rgba(0, 0, 0, 0.15)',
             transformOrigin: 'top right',
-            zIndex: 105
+            zIndex: 105,
+            border: `1px solid ${theme === 'dark' ? 'rgba(34, 211, 238, 0.3)' : 'rgba(8, 145, 178, 0.3)'}`
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -207,15 +231,30 @@ export default function Header() {
                   handleNavClick(e, to, scrollId)
                   setMobileMenuOpen(false)
                 }}
-                className={({ isActive }) => `flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 ${isActive ? 'border-cyan-500 bg-cyan-500/10 text-cyan-400 font-semibold' : 'border-transparent text-aura/80 hover:bg-cyan-400/10 hover:text-cyan-400 hover:border-cyan-400/50'}`}
+                className={({ isActive }) => `flex items-center gap-3 px-4 py-3.5 transition-all border-r-4 
+                  ${isActive 
+                    ? theme === 'dark'
+                      ? 'border-cyan-500 bg-cyan-500/10 text-cyan-400 font-semibold'
+                      : 'border-cyan-600 bg-cyan-600/10 text-cyan-600 font-semibold'
+                    : theme === 'dark'
+                      ? 'border-transparent text-slate-300 hover:bg-cyan-400/10 hover:text-cyan-400 hover:border-cyan-400/50'
+                      : 'border-transparent text-slate-600 hover:bg-cyan-600/10 hover:text-cyan-600 hover:border-cyan-600/50'
+                  }`}
               >
                 <Icon size={20} strokeWidth={2.5} />
                 <span className="text-base font-medium">{label}</span>
               </NavLink>
             ))}
             
+            {/* Theme toggle for mobile */}
+            <div className={`flex items-center justify-between px-4 py-3.5 border-t mt-2
+              ${theme === 'dark' ? 'border-cyan-400/20' : 'border-cyan-600/20'}`}>
+              <span className={`text-base font-medium ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>Theme</span>
+              <ThemeToggle />
+            </div>
+            
             {/* Auth buttons for mobile */}
-            <div className="border-t border-cyan-400/20 mt-2 pt-2">
+            <div className={`border-t pt-2 ${theme === 'dark' ? 'border-cyan-400/20' : 'border-cyan-600/20'}`}>
               {user ? (
                 <>
                   <Link
@@ -256,7 +295,7 @@ export default function Header() {
       {/* Backdrop overlay for mobile menu - blurs ONLY page content, NOT header */}
       {mobileMenuOpen && (
         <div 
-          className="sm:hidden fixed bg-black/50 transition-opacity duration-300"
+          className="sm:hidden fixed bg-aura-overlay transition-opacity duration-300"
           onClick={() => setMobileMenuOpen(false)}
           style={{ 
             top: '64px',
