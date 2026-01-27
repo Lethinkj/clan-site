@@ -213,7 +213,7 @@ export default function Admin() {
 
           {activeTab === 'members' && (
             <>
-              {isAdmin && <MemberForm onMemberAdded={fetchMembers} editingMember={editingMember} onEditComplete={() => { setEditingMember(null); fetchMembers(); }} />}
+              {(isAdmin || (isModerator && editingMember)) && <MemberForm onMemberAdded={fetchMembers} editingMember={editingMember} onEditComplete={() => { setEditingMember(null); fetchMembers(); }} />}
               <div className="bg-slate-900/80 border border-cyan-400/20 p-6 rounded-lg shadow-lg shadow-cyan-500/5">
                 <h2 className="text-2xl font-bold text-cyan-400 mb-4">Members ({members.length})</h2>
                 {loading ? (
@@ -224,30 +224,35 @@ export default function Admin() {
                   <div className="space-y-3 max-h-96 overflow-y-auto">
                     {members.map((member) => (
                       <div key={member.id} className="bg-slate-800/50 border border-cyan-400/10 p-4 rounded-lg flex justify-between items-center">
-                        <div className="flex-1">
-                          <p className="text-cyan-400 font-semibold">{member.username}</p>
-                          <p className="text-aura text-sm">@{member.username}</p>
-                          <p className="text-aura text-sm">Discord ID: {member.discord_user_id}</p>
-                          <p className="text-aura text-sm">
-                            {member.is_clan_member ? '✓ Clan Member' : 'Guest'}
-                          </p>
+                        <div className="flex items-center gap-4">
+                          <img
+                            src={member.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.username)}&background=0f172a&color=22d3ee&size=96&bold=true`}
+                            alt={member.username}
+                            className="w-12 h-12 rounded-full object-cover border border-slate-700"
+                          />
+                          <div>
+                            <p className="text-cyan-400 font-semibold">{member.username}</p>
+                            <p className="text-aura text-sm">@{member.username}</p>
+                            <p className="text-aura text-sm">Discord ID: {member.discord_user_id}</p>
+                            <p className="text-aura text-sm">{member.is_clan_member ? '✓ Clan Member' : 'Guest'}</p>
+                          </div>
                         </div>
                         <div className="flex gap-2">
+                          {isModerator && (
+                            <button
+                              onClick={() => setEditingMember(member)}
+                              className="px-3 py-2 bg-cyan-400/10 border border-cyan-400/30 text-cyan-400 rounded-lg hover:bg-cyan-400/20 transition-colors text-sm font-medium"
+                            >
+                              Edit
+                            </button>
+                          )}
                           {isAdmin && (
-                            <>
-                              <button
-                                onClick={() => setEditingMember(member)}
-                                className="px-3 py-2 bg-cyan-400/10 border border-cyan-400/30 text-cyan-400 rounded-lg hover:bg-cyan-400/20 transition-colors text-sm font-medium"
-                              >
-                                Edit
-                              </button>
-                              <button
-                                onClick={() => setMemberToDelete(member)}
-                                className="px-3 py-2 bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors text-sm font-medium"
-                              >
-                                Remove
-                              </button>
-                            </>
+                            <button
+                              onClick={() => setMemberToDelete(member)}
+                              className="px-3 py-2 bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors text-sm font-medium"
+                            >
+                              Remove
+                            </button>
                           )}
                         </div>
                       </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import ProfileCard from '../components/ProfileCard'
 import Stack from '../components/Stack'
 import { useTheme } from '../contexts/ThemeContext'
+import { supabase } from '../lib/supabase'
 
 type APIMember = {
   name: string
@@ -21,6 +22,7 @@ type Person = {
   portfolio?: string
   github?: string
   linkedin?: string
+  avatar_url?: string
 }
 
 // Captain role assignments
@@ -83,10 +85,27 @@ function SocialLink({ href, label }: { href?: string; label: string }) {
 export default function Members() {
   const { theme } = useTheme()
   const [members, setMembers] = useState<Person[]>([])
+  const [avatarsMap, setAvatarsMap] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    // Also fetch a simple map of usernames -> avatar_url as a reliable fallback
+    (async function fetchAvatarsMap() {
+      try {
+        const { data: users, error: usersError } = await supabase.from('users').select('username, avatar_url')
+        if (!usersError && users) {
+          const map: Record<string, string> = {}
+          users.forEach((u: any) => {
+            if (u.username && u.avatar_url) map[u.username.trim().toLowerCase()] = u.avatar_url
+          })
+          setAvatarsMap(map)
+        }
+      } catch (e) {
+        console.warn('Failed to fetch avatars map', e)
+      }
+    })()
+
     // Fetch with all fields including LinkedIn and domains
     fetch('https://terminal.bytebashblitz.org/api/clan/1?fields=name,github_username,portfolio_url,linkedin_url,primary_domain,secondary_domain', {
       method: 'GET',
@@ -102,10 +121,10 @@ export default function Members() {
         }
         return res.json()
       })
-      .then(data => {
+      .then(async data => {
         console.log('API Response:', data)
         if (data.success && data.data && data.data.members) {
-          const apiMembers: Person[] = data.data.members.map((m: APIMember) => {
+          const apiMembersBase: Person[] = data.data.members.map((m: APIMember) => {
             const roleInfo = captainRoles[m.name] || memberRoles[m.name] || {
               role: 'Team Member',
               specialization: 'Software Development',
@@ -127,11 +146,45 @@ export default function Members() {
               skills: skills,  // Override skills with domains from API
               portfolio: m.portfolio_url || undefined,
               github: m.github_username ? `https://github.com/${m.github_username}` : undefined,
-              linkedin: m.linkedin_url || undefined
+              linkedin: m.linkedin_url || undefined,
+              avatar_url: undefined
             }
           })
-          console.log('Processed members:', apiMembers)
-          setMembers(apiMembers)
+          // Try to fetch avatar_url from our users table and merge by username
+          try {
+            const { data: users, error: usersError } = await supabase
+              .from('users')
+              .select('username, avatar_url')
+
+            if (!usersError && users) {
+              const avatarMapFull: Record<string, string> = {}
+              const avatarMapFirst: Record<string, string> = {}
+              users.forEach((u: any) => {
+                if (u.username) {
+                  const full = (u.username || '').trim().toLowerCase()
+                  const first = full.split(/\s+/)[0]
+                  if (full) avatarMapFull[full] = u.avatar_url
+                  if (first) avatarMapFirst[first] = avatarMapFirst[first] || u.avatar_url
+                }
+              })
+
+              const apiMembers = apiMembersBase.map(m => {
+                const full = ((m.name || '') + '').trim().toLowerCase()
+                const first = full.split(/\s+/)[0]
+                const avatar = avatarMapFull[full] || avatarMapFirst[first] || undefined
+                return { ...m, avatar_url: avatar }
+              })
+              console.log('Avatar merge results:', apiMembers.map(m => ({ name: m.name, avatar: !!m.avatar_url })))
+              console.log('Processed members (with avatars):', apiMembers)
+              setMembers(apiMembers)
+            } else {
+              console.log('Processed members (no avatars):', apiMembersBase)
+              setMembers(apiMembersBase)
+            }
+          } catch (err) {
+            console.error('Error merging avatars:', err)
+            setMembers(apiMembersBase)
+          }
           setLoading(false)
         } else {
           throw new Error('Invalid API response format')
@@ -154,6 +207,9 @@ export default function Members() {
     <ProfileCard
       key={member.name}
       name={member.name}
+      avatar_url={member.avatar_url || avatarsMap[member.name.trim().toLowerCase()]}
+      avatarUrl={member.avatar_url || avatarsMap[member.name.trim().toLowerCase()]}
+      data-avatar={member.avatar_url ? 'yes' : 'no'}
       title={member.role}
       handle={member.name.toLowerCase().replace(/\s+/g, '')}
       status="Captain"
@@ -170,6 +226,9 @@ export default function Members() {
     <ProfileCard
       key={member.name}
       name={member.name}
+      avatar_url={member.avatar_url || avatarsMap[member.name.trim().toLowerCase()]}
+      avatarUrl={member.avatar_url || avatarsMap[member.name.trim().toLowerCase()]}
+      data-avatar={member.avatar_url ? 'yes' : 'no'}
       title={member.role}
       handle={member.name.toLowerCase().replace(/\s+/g, '')}
       status="Team Member"

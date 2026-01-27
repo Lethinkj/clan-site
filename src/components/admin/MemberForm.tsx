@@ -12,7 +12,8 @@ export default function MemberForm({ onMemberAdded, editingMember, onEditComplet
     discord_user_id: '',
     username: '',
     is_clan_member: true,
-    dob: '' // DD/MM format
+    dob: '', // DD/MM format
+    avatar_url: ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -24,14 +25,16 @@ export default function MemberForm({ onMemberAdded, editingMember, onEditComplet
         discord_user_id: editingMember.discord_user_id,
         username: editingMember.username,
         is_clan_member: editingMember.is_clan_member,
-        dob: ''
+        dob: '',
+        avatar_url: editingMember.avatar_url || ''
       })
     } else {
       setFormData({
         discord_user_id: '',
         username: '',
         is_clan_member: true,
-        dob: ''
+        dob: '',
+        avatar_url: ''
       })
     }
   }, [editingMember])
@@ -51,6 +54,7 @@ export default function MemberForm({ onMemberAdded, editingMember, onEditComplet
             discord_user_id: formData.discord_user_id,
             username: formData.username,
             is_clan_member: formData.is_clan_member
+            , avatar_url: formData.avatar_url
           })
           .eq('id', editingMember.id)
 
@@ -80,6 +84,7 @@ export default function MemberForm({ onMemberAdded, editingMember, onEditComplet
             discord_user_id: formData.discord_user_id,
             username: formData.username,
             is_clan_member: formData.is_clan_member
+            , avatar_url: formData.avatar_url
           }])
 
         if (userError) throw userError
@@ -168,6 +173,18 @@ export default function MemberForm({ onMemberAdded, editingMember, onEditComplet
               placeholder="Member Name"
             />
           </div>
+
+            <div>
+              <label className="block text-aura text-sm font-medium mb-2">Avatar URL</label>
+              <input
+                type="text"
+                name="avatar_url"
+                value={formData.avatar_url}
+                onChange={handleChange}
+                className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
+                placeholder="https://.../avatar.png"
+              />
+            </div>
 
           {!editingMember && (
             <div>

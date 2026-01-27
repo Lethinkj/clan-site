@@ -56,6 +56,7 @@ export interface User {
   is_clan_member: boolean
   joined_at: string
   last_active?: string
+  avatar_url?: string
 }
 
 export interface Birthday {

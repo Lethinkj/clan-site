@@ -3,6 +3,7 @@ import './ProfileCard.css';
 
 const ProfileCard = ({
   avatarUrl = '',
+  avatar_url = '',
   name = 'Member',
   title = 'Team Member',
   handle = 'member',
@@ -17,9 +18,21 @@ const ProfileCard = ({
 }) => {
   // Generate avatar URL from name if not provided
   const getAvatarUrl = () => {
+    const dbAvatar = avatar_url || ''
     if (avatarUrl && avatarUrl !== '<Placeholder for avatar URL>') return avatarUrl;
+    if (dbAvatar && dbAvatar !== '<Placeholder for avatar URL>') return dbAvatar;
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0f172a&color=22d3ee&size=400&bold=true`;
   };
+
+  // Debug: log avatar sources when running in the browser to help trace missing images
+  if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'production') {
+    try {
+      // eslint-disable-next-line no-console
+      console.debug('ProfileCard avatar props:', { name, avatarUrl, avatar_url, resolved: getAvatarUrl() })
+    } catch (e) {}
+  }
+
+  const resolvedAvatar = getAvatarUrl()
 
   return (
     <div className={`profile-card ${className}`.trim()}>
@@ -30,10 +43,13 @@ const ProfileCard = ({
       <div className="profile-card-header">
         <div className="profile-card-avatar">
           <img
-            src={getAvatarUrl()}
+            src={resolvedAvatar}
             alt={`${name} avatar`}
             loading="lazy"
             onError={(e) => {
+              // Log the failed URL to console for debugging
+              // eslint-disable-next-line no-console
+              console.warn('Avatar failed to load for', name, { url: resolvedAvatar, errorEvent: e })
               e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0f172a&color=22d3ee&size=400&bold=true`;
             }}
           />
@@ -51,6 +67,8 @@ const ProfileCard = ({
           <p>{bio}</p>
         </div>
       )}
+
+      {/* Dev overlay removed: avatar URL is still logged to console for debugging */}
 
       {/* Skills Section */}
       {skills && skills.length > 0 && (
