@@ -2,7 +2,9 @@ import React, { useEffect } from 'react'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import { Footer, Visuals } from './components/index'
-import Hyperspeed from './components/Hyperspeed'
+import { BackgroundBeams } from './components/ui/beams'
+import { StarfieldBackground } from './components/ui/starfield'
+import { OrbitsBackground } from './components/ui/orbits'
 import { Home, About, Members, Events, Login, Admin, AddMember } from './pages/index'
 import { Analytics } from "@vercel/analytics/react"
 import { AuthProvider } from './contexts/AuthContext'
@@ -88,9 +90,21 @@ function AppContent() {
         {/* Fixed full-viewport background (Hyperspeed on home, Visuals elsewhere) */}
         {location.pathname === '/home' ? (
           <div className="fixed inset-0 -z-10 pointer-events-none">
-            <Hyperspeed theme={theme} />
+            <StarfieldBackground />
           </div>
-        ) : (
+        ) : location.pathname === '/about' ? (
+          <div className="fixed inset-0 -z-10 pointer-events-none">
+            <BackgroundBeams startImmediately />
+          </div>
+        ) : location.pathname === '/events' ? (
+          <div className="fixed inset-0 -z-10 pointer-events-none">
+            <OrbitsBackground />
+          </div>
+        ) : location.pathname.startsWith('/admin') || location.pathname === '/moderator' ? (
+          <div className="fixed inset-0 -z-10 pointer-events-none">
+            <BackgroundBeams />
+          </div>
+        ) : location.pathname === '/members' ? null : (
           <div className="fixed inset-0 -z-10 pointer-events-none">
             <Visuals />
           </div>

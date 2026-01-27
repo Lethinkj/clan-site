@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import ProfileCard from '../components/ProfileCard'
-import Stack from '../components/Stack'
+import MemberCardMDB from '../components/MemberCardMDB'
 import { useTheme } from '../contexts/ThemeContext'
+import MemberProfileModal from '../components/MemberProfileModal'
+import Meteors from '../components/Meteors'
 import { supabase } from '../lib/supabase'
 
 type APIMember = {
@@ -201,45 +202,14 @@ export default function Members() {
 
   const captains = members.filter(m => captainNames.includes(m.name))
   const teamMembers = members.filter(m => !captainNames.includes(m.name))
+  const [modalIndex, setModalIndex] = useState<number | null>(null)
 
-  // Generate ProfileCard elements for Stack component with all data
-  const captainCards = useMemo(() => captains.map((member) => (
-    <ProfileCard
-      key={member.name}
-      name={member.name}
-      avatar_url={member.avatar_url || avatarsMap[member.name.trim().toLowerCase()]}
-      avatarUrl={member.avatar_url || avatarsMap[member.name.trim().toLowerCase()]}
-      data-avatar={member.avatar_url ? 'yes' : 'no'}
-      title={member.role}
-      handle={member.name.toLowerCase().replace(/\s+/g, '')}
-      status="Captain"
-      bio={member.bio}
-      skills={member.skills}
-      github={member.github}
-      linkedin={member.linkedin}
-      portfolio={member.portfolio}
-      showUserInfo={true}
-    />
-  )), [captains])
-
-  const teamCards = useMemo(() => teamMembers.map((member) => (
-    <ProfileCard
-      key={member.name}
-      name={member.name}
-      avatar_url={member.avatar_url || avatarsMap[member.name.trim().toLowerCase()]}
-      avatarUrl={member.avatar_url || avatarsMap[member.name.trim().toLowerCase()]}
-      data-avatar={member.avatar_url ? 'yes' : 'no'}
-      title={member.role}
-      handle={member.name.toLowerCase().replace(/\s+/g, '')}
-      status="Team Member"
-      bio={member.bio}
-      skills={member.skills}
-      github={member.github}
-      linkedin={member.linkedin}
-      portfolio={member.portfolio}
-      showUserInfo={true}
-    />
-  )), [teamMembers])
+  // resolved members with a stable `avatar` field (prefer avatar_url, then avatarsMap, then initials service)
+  const resolvedMembers = members.map(m => {
+    const key = (m.name || '').trim().toLowerCase()
+    const resolvedAvatar = m.avatar_url || avatarsMap[key] || `https://ui-avatars.com/api/?name=${encodeURIComponent(m.name)}&background=0D1117&color=fff&size=256`
+    return { ...m, avatar: resolvedAvatar }
+  })
 
   if (loading) {
     return (
@@ -254,79 +224,89 @@ export default function Members() {
   }
 
   return (
-    <div className="space-y-12 sm:space-y-16 pb-8">
+    <div className="relative">
+      <Meteors />
+      <div className="relative z-10 space-y-12 sm:space-y-16 pb-8">
       {/* Header */}
       <section className="text-center px-4 pt-8">
         <h1 id="members-title" className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-4 scroll-mt-24 ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>
-          Meet Our <span className={theme === 'dark' ? 'text-cyan-400' : 'text-cyan-600'}>Team</span>
+          meet our team
         </h1>
         <p className={`max-w-2xl mx-auto ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
           The brilliant minds behind Aura-7F — united by passion, driven by excellence
         </p>
       </section>
 
-      {/* Side by Side Layout: Captains (Left) & Team Members (Right) */}
       <section className="px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-            
-            {/* Captains - Left Side */}
-            <div className="flex flex-col items-center">
-              <div className="flex items-center gap-3 mb-6 justify-center">
-                <div className={`w-1 h-8 rounded-full ${theme === 'dark' ? 'bg-cyan-500' : 'bg-cyan-600'}`}></div>
-                <div className="text-center">
-                  <h2 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>Captain Bash</h2>
-                  <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>Leadership Team ({captains.length})</p>
-                </div>
-              </div>
-
-              <div className="relative w-72 h-[480px] sm:w-80 sm:h-[520px]">
-                <Stack
-                  cards={captainCards}
-                  randomRotation={true}
-                  sensitivity={150}
-                  sendToBackOnClick={true}
-                  autoplay={true}
-                  autoplayDelay={5000}
-                  pauseOnHover={true}
-                  mobileClickOnly={true}
-                  animationConfig={{ stiffness: 260, damping: 20 }}
-                />
-              </div>
-            </div>
-
-            {/* Team Members - Right Side */}
-            <div className="flex flex-col items-center">
-              <div className="flex items-center gap-3 mb-6 justify-center">
-                <div className={`w-1 h-8 rounded-full ${theme === 'dark' ? 'bg-purple-500' : 'bg-purple-600'}`}></div>
-                <div className="text-center">
-                  <h2 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>Team Members</h2>
-                  <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>Core Contributors ({teamMembers.length})</p>
-                </div>
-              </div>
-
-              <div className="relative w-72 h-[480px] sm:w-80 sm:h-[520px]">
-                <Stack
-                  cards={teamCards}
-                  randomRotation={true}
-                  sensitivity={150}
-                  sendToBackOnClick={true}
-                  autoplay={true}
-                  autoplayDelay={4000}
-                  pauseOnHover={true}
-                  mobileClickOnly={true}
-                  animationConfig={{ stiffness: 260, damping: 20 }}
-                />
-              </div>
-            </div>
-            
+          {/* Captains section */}
+          <div className="text-center mb-6">
+            <h2 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>Captain Bashes</h2>
+            <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>Leadership Team ({captains.length})</p>
           </div>
-          
-          <p className={`text-center text-sm mt-12 ${theme === 'dark' ? 'text-slate-500' : 'text-slate-500'}`}>
-            Drag or click cards to browse through team members
-          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+            {captains.map(member => {
+              const idx = members.findIndex(m => m.name === member.name)
+              return (
+                <div key={member.name}>
+                  <MemberCardMDB
+                    compact={true}
+                    compactSize="large"
+                    onClick={() => idx >= 0 && setModalIndex(idx)}
+                    name={member.name}
+                    title={member.role}
+                    avatar={resolvedMembers[idx]?.avatar}
+                    github={member.github}
+                    portfolio={member.portfolio}
+                    linkedin={member.linkedin}
+                    bio={member.bio}
+                    skills={member.skills ?? []}
+                    isCaptain={true}
+                  />
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Our team grid: 3 per row */}
+          <div className="text-center mb-6">
+            <h2 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>Our Team</h2>
+            <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>Core Contributors ({teamMembers.length})</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {teamMembers.map(member => {
+              const idx = members.findIndex(m => m.name === member.name)
+              return (
+                <div key={member.name}>
+                  <MemberCardMDB
+                    compact={true}
+                    compactSize="large"
+                    onClick={() => idx >= 0 && setModalIndex(idx)}
+                    name={member.name}
+                    title={member.role}
+                    avatar={resolvedMembers[idx]?.avatar}
+                    github={member.github}
+                    portfolio={member.portfolio}
+                    linkedin={member.linkedin}
+                    bio={member.bio}
+                    skills={member.skills ?? []}
+                  />
+                </div>
+              )
+            })}
+          </div>
         </div>
       </section>
+      </div>
+      {modalIndex !== null && (
+        <MemberProfileModal
+          members={resolvedMembers}
+          initialIndex={modalIndex}
+          onClose={() => setModalIndex(null)}
+        />
+      )}
     </div>
   )
 }

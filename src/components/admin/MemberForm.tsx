@@ -107,7 +107,8 @@ export default function MemberForm({ onMemberAdded, editingMember, onEditComplet
           discord_user_id: '',
           username: '',
           is_clan_member: true,
-          dob: ''
+          dob: '',
+          avatar_url: ''
         })
         onMemberAdded()
       }

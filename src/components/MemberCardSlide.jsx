@@ -1,6 +1,4 @@
-
 import MemberCardMDB from './MemberCardMDB'
 
-// Keep compatibility: export the new `MemberCardMDB` as `ProfileCard`
+// Re-export the modern card component to preserve old imports
 export default MemberCardMDB
-
