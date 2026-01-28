@@ -230,7 +230,7 @@ export default function Members() {
       {/* Header */}
       <section className="text-center px-4 pt-8">
         <h1 id="members-title" className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-4 scroll-mt-24 ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>
-          meet our team
+          Meet our team
         </h1>
         <p className={`max-w-2xl mx-auto ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
           The brilliant minds behind Aura-7F — united by passion, driven by excellence
