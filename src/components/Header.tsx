@@ -140,14 +140,31 @@ export default function Header() {
               }`}>AURA-7F</span>
           </Link>
 
-          {/* Desktop Navigation - Hidden (Dock is now at bottom) */}
-          <nav className="hidden">
-            {/* Navigation moved to floating Dock at bottom */}
+          {/* Desktop Navigation - Visible on sm+ */}
+          <nav className="hidden sm:flex items-center gap-2">
+            {navItems.map(({ to, icon: Icon, label, scrollId }) => (
+              <NavLink
+                key={to}
+                to={to}
+                onClick={(e) => handleNavClick(e, to, scrollId)}
+                className={({ isActive }) => `flex items-center gap-2 px-3 py-2 rounded-full transition-colors text-sm font-medium
+                  ${isActive
+                    ? theme === 'dark'
+                      ? 'bg-cyan-500/10 text-cyan-400'
+                      : 'bg-cyan-600/10 text-cyan-600'
+                    : theme === 'dark'
+                      ? 'text-slate-300 hover:bg-cyan-400/10 hover:text-cyan-400'
+                      : 'text-slate-700 hover:bg-cyan-600/10 hover:text-cyan-600'
+                  }`}>
+                <Icon size={18} className={location.pathname === to ? 'text-cyan-400' : theme === 'dark' ? 'text-slate-300' : 'text-slate-700'} />
+                <span>{label}</span>
+              </NavLink>
+            ))}
           </nav>
 
           {/* Auth buttons - Right */}
           <div className="hidden sm:flex items-center gap-2">
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
             {user ? (
               <>
                 <Link
@@ -313,7 +330,7 @@ export default function Header() {
 
     {/* Floating Dock Navigation - Desktop Only */}
     <div className="hidden sm:block fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
-      <Dock
+      {/* <Dock
         items={navItems.map(({ to, icon: Icon, label, scrollId }) => ({
           icon: <Icon size={24} className={location.pathname === to ? 'text-cyan-400' : 'text-slate-300'} />,
           label: label,
@@ -335,7 +352,7 @@ export default function Header() {
         distance={140}
         panelHeight={56}
         baseItemSize={44}
-      />
+      /> */}
     </div>
     </>
   )

@@ -78,7 +78,7 @@ export default function Home() {
 
           <div className="flex flex-wrap justify-center gap-4 pt-4 a-fade-up">
             <a 
-              href="#members" 
+              href="/members" 
               className={`px-6 py-3 font-semibold rounded-lg transition-all hover:shadow-lg
                 ${theme === 'dark'
                   ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 hover:shadow-cyan-500/25'
@@ -88,7 +88,7 @@ export default function Home() {
               Meet the Team
             </a>
             <a 
-              href="#events" 
+              href="/events" 
               className={`px-6 py-3 font-semibold rounded-lg border transition-all
                 ${theme === 'dark'
                   ? 'bg-slate-800 hover:bg-slate-700 text-white border-slate-700'
@@ -184,7 +184,7 @@ export default function Home() {
                 collaboration, and excellence.
               </p>
               <a 
-                href="#about" 
+                href="/about" 
                 className={`inline-flex items-center gap-2 px-6 py-3 font-semibold rounded-lg transition-all hover:shadow-lg
                   ${theme === 'dark'
                     ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-900 hover:shadow-cyan-500/25'
