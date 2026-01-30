@@ -8,9 +8,10 @@ import ModeratorManagement from '../components/admin/ModeratorManagement'
 import EventList from '../components/admin/EventList'
 import PasswordChange from '../components/admin/PasswordChange'
 import RegistrationManagement from '../components/admin/RegistrationManagement'
+import ProjectManagement from '../components/admin/ProjectManagement'
 import { ConfirmDialog } from '../components/ui/Modal'
 
-type Tab = 'events' | 'members' | 'moderators' | 'registrations' | 'settings'
+type Tab = 'events' | 'members' | 'moderators' | 'registrations' | 'projects' | 'settings'
 
 export default function Admin() {
   const { user, isAdmin, isModerator, loading: authLoading, signOut } = useAuth()
@@ -47,7 +48,7 @@ export default function Admin() {
       .from('events')
       .select('*')
       .order('date', { ascending: false })
-    
+
     if (error) {
       console.error('Error fetching events:', error)
     } else {
@@ -62,7 +63,7 @@ export default function Admin() {
       .from('users')
       .select('*')
       .order('joined_at', { ascending: false })
-    
+
     if (error) {
       console.error('Error fetching members:', error)
     } else {
@@ -77,7 +78,7 @@ export default function Admin() {
       .from('moderators')
       .select('*')
       .order('added_at', { ascending: false })
-    
+
     if (error) {
       console.error('Error fetching moderators:', error)
     } else {
@@ -88,7 +89,7 @@ export default function Admin() {
 
   const handleDeleteMember = async () => {
     if (!memberToDelete) return
-    
+
     setLoading(true)
     try {
       const { error } = await supabase
@@ -144,55 +145,59 @@ export default function Admin() {
         <div className="flex gap-2 mb-8 border-b border-cyan-400/20 overflow-x-auto">
           <button
             onClick={() => setActiveTab('events')}
-            className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
-              activeTab === 'events'
-                ? 'text-cyan-400 border-b-2 border-cyan-400'
-                : 'text-aura hover:text-cyan-400/70'
-            }`}
+            className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${activeTab === 'events'
+              ? 'text-cyan-400 border-b-2 border-cyan-400'
+              : 'text-aura hover:text-cyan-400/70'
+              }`}
           >
             Events
           </button>
           <button
             onClick={() => setActiveTab('members')}
-            className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
-              activeTab === 'members'
-                ? 'text-cyan-400 border-b-2 border-cyan-400'
-                : 'text-aura hover:text-cyan-400/70'
-            }`}
+            className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${activeTab === 'members'
+              ? 'text-cyan-400 border-b-2 border-cyan-400'
+              : 'text-aura hover:text-cyan-400/70'
+              }`}
           >
             Members
           </button>
           {isAdmin && (
             <button
               onClick={() => setActiveTab('moderators')}
-              className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
-                activeTab === 'moderators'
-                  ? 'text-cyan-400 border-b-2 border-cyan-400'
-                  : 'text-aura hover:text-cyan-400/70'
-              }`}
+              className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${activeTab === 'moderators'
+                ? 'text-cyan-400 border-b-2 border-cyan-400'
+                : 'text-aura hover:text-cyan-400/70'
+                }`}
             >
               Moderators
             </button>
           )}
           <button
             onClick={() => setActiveTab('registrations')}
-            className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
-              activeTab === 'registrations'
-                ? 'text-cyan-400 border-b-2 border-cyan-400'
-                : 'text-aura hover:text-cyan-400/70'
-            }`}
+            className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${activeTab === 'registrations'
+              ? 'text-cyan-400 border-b-2 border-cyan-400'
+              : 'text-aura hover:text-cyan-400/70'
+              }`}
           >
             Registrations
           </button>
           <button
             onClick={() => setActiveTab('settings')}
-            className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${
-              activeTab === 'settings'
-                ? 'text-cyan-400 border-b-2 border-cyan-400'
-                : 'text-aura hover:text-cyan-400/70'
-            }`}
+            className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${activeTab === 'settings'
+              ? 'text-cyan-400 border-b-2 border-cyan-400'
+              : 'text-aura hover:text-cyan-400/70'
+              }`}
           >
             Settings
+          </button>
+          <button
+            onClick={() => setActiveTab('projects')}
+            className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${activeTab === 'projects'
+              ? 'text-cyan-400 border-b-2 border-cyan-400'
+              : 'text-aura hover:text-cyan-400/70'
+              }`}
+          >
+            Projects
           </button>
         </div>
 
@@ -201,11 +206,11 @@ export default function Admin() {
           {activeTab === 'events' && (
             <>
               <EventForm onEventAdded={fetchEvents} isAdmin={isAdmin} />
-              <EventList 
-                events={events} 
-                onEventUpdated={fetchEvents} 
-                onEventDeleted={fetchEvents} 
-                isAdmin={isAdmin} 
+              <EventList
+                events={events}
+                onEventUpdated={fetchEvents}
+                onEventDeleted={fetchEvents}
+                isAdmin={isAdmin}
                 isModerator={isModerator}
               />
             </>
@@ -264,8 +269,8 @@ export default function Admin() {
           )}
 
           {activeTab === 'moderators' && isAdmin && (
-            <ModeratorManagement 
-              moderators={moderators} 
+            <ModeratorManagement
+              moderators={moderators}
               onModeratorAdded={fetchModerators}
               onModeratorRemoved={fetchModerators}
             />
@@ -277,6 +282,10 @@ export default function Admin() {
 
           {activeTab === 'settings' && (
             <PasswordChange />
+          )}
+
+          {activeTab === 'projects' && (
+            <ProjectManagement />
           )}
         </div>
 
@@ -290,6 +299,6 @@ export default function Admin() {
           type="danger"
         />
       </div>
-    </div>
+    </div >
   )
 }
