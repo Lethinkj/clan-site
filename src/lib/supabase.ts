@@ -77,6 +77,18 @@ export interface Moderator {
   added_by: string | null
 }
 
+export interface MemberProject {
+  id: string
+  user_id: string // Discord User ID
+  title: string
+  description: string
+  link?: string
+  github?: string
+  tags: string[]
+  image_url?: string
+  created_at: string
+}
+
 // Hash function for passwords using base64 encoding
 // Format: base64(email:password) - simple but effective for this use case
 export function hashPassword(email: string, password: string): string {

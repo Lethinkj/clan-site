@@ -69,7 +69,7 @@ export default function Gallery() {
             image: 'https://i.postimg.cc/vHytQh1G/Whats-App-Image-2026-01-30-at-3-30-00-PM-(2).jpg?auto=format&fit=crop&q=70&w=800',
             link: '/projects',
             title: 'Pass The Code',
-            description: 'A weekly bash pass the code event.'
+            description: 'In weekly bash pass the code event led by Archana.'
         },
         {
             image: 'https://i.postimg.cc/9fsN19L2/Whats-App-Image-2026-01-30-at-3-24-44-PM.jpg?auto=format&fit=crop&q=70&w=800',

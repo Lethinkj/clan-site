@@ -108,7 +108,7 @@ const EventCard = ({ event, showRegister = false, onRegister }: { event: Event; 
                 : 'bg-amber-900/30 border border-amber-500/30 text-amber-400 hover:bg-amber-900/50 hover:border-amber-400 hover:text-amber-200 hover:shadow-[0_0_20px_rgba(245,158,11,0.2)]'
                 }`}
             >
-              {isLive ? <><Sword size={16} /> Join Raid</> : <><Scroll size={16} /> Sign Contract</>}
+              {isLive ? <><Sword size={16} /> Join Raid</> : <><Scroll size={16} /> Welcome All</>}
             </button>
           )}
         </div>

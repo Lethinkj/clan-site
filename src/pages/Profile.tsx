@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Github, Linkedin, Globe, ArrowLeft, Shield, Zap, Target, Star, Award, Code, Sparkles } from 'lucide-react'
+import { Github, Linkedin, Globe, ArrowLeft, Shield, Zap, Target, Star, Award, Code, Sparkles, ExternalLink, Package } from 'lucide-react'
+import { supabase, MemberProject } from '../lib/supabase'
 import AnimateOnView from '../components/AnimateOnView'
 import { StarfieldBackground } from '../components/ui/starfield'
 
@@ -40,6 +41,7 @@ export default function Profile() {
     const { name } = useParams<{ name: string }>()
     const navigate = useNavigate()
     const [member, setMember] = useState<Member | null>(null)
+    const [projects, setProjects] = useState<MemberProject[]>([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -78,6 +80,17 @@ export default function Profile() {
                             linkedin: apiMember.linkedin_url || undefined,
                             avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(apiMember.name)}&background=0f0518&color=ffd700&size=512`
                         })
+
+                        // Now fetch projects for this member
+                        const { data: projectsData } = await supabase
+                            .from('member_projects')
+                            .select('*')
+                            .eq('user_id', apiMember.discord_user_id)
+                            .order('created_at', { ascending: false })
+
+                        if (projectsData) {
+                            setProjects(projectsData)
+                        }
                     }
                 }
             } catch (error) {
@@ -247,6 +260,58 @@ export default function Profile() {
                             </div>
                         </AnimateOnView>
 
+                        {/* Artifacts Forged / Projects Section */}
+                        {projects.length > 0 && (
+                            <div className="space-y-8 pt-6">
+                                <AnimateOnView animation="a-fade-up">
+                                    <h3 className="text-3xl font-cinzel font-bold text-white flex items-center gap-3">
+                                        <Package className="text-amber-500" />
+                                        Artifacts Forged
+                                    </h3>
+                                    <div className="w-20 h-1 bg-amber-500/30 mt-2"></div>
+                                </AnimateOnView>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    {projects.map((project, i) => (
+                                        <AnimateOnView key={project.id} animation="a-fade-up" style={{ transitionDelay: `${i * 100}ms` }}>
+                                            <div className="group relative h-full flex flex-col p-[1px] rounded-2xl overflow-hidden bg-gradient-to-br from-white/10 to-transparent hover:from-amber-500/30 transition-all duration-500">
+                                                <div className="flex-grow p-6 rounded-[21px] bg-slate-900/60 backdrop-blur-xl flex flex-col items-start gap-4">
+                                                    <div className="flex justify-between w-full items-start">
+                                                        <h4 className="text-xl font-cinzel font-bold text-white group-hover:text-amber-400 transition-colors">
+                                                            {project.title}
+                                                        </h4>
+                                                        <div className="flex gap-3">
+                                                            {project.github && (
+                                                                <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-white transition-colors">
+                                                                    <Github size={18} />
+                                                                </a>
+                                                            )}
+                                                            {project.link && (
+                                                                <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-white transition-colors">
+                                                                    <ExternalLink size={18} />
+                                                                </a>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    <p className="text-slate-400 font-lato text-sm leading-relaxed line-clamp-2">
+                                                        {project.description}
+                                                    </p>
+
+                                                    <div className="flex flex-wrap gap-2 mt-auto pt-2">
+                                                        {project.tags.map(tag => (
+                                                            <span key={tag} className="text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-white/5 text-amber-200/60 border border-white/10">
+                                                                {tag}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </AnimateOnView>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
