@@ -28,7 +28,7 @@ export function StarfieldBackground({
   children,
   count = 400,
   speed = 0.5,
-  starColor = "#1DA1F2",
+  starColor = "#fbbf24", // Amber-400
   twinkle = true,
 }: StarfieldBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
