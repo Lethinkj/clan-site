@@ -7,7 +7,7 @@ export default function MemberProfileModal({ members = [], initialIndex = 0, onC
   const thumbsRef = useRef([])
   const modalRef = useRef(null)
   const scrollRef = useRef(null)
-  
+
   const isDown = useRef(false)
   const isDragging = useRef(false)
   const startX = useRef(0)
@@ -46,10 +46,10 @@ export default function MemberProfileModal({ members = [], initialIndex = 0, onC
   const handleMouseMove = (e) => {
     if (!isDown.current) return
     const x = e.pageX - scrollRef.current.offsetLeft
-    const walk = (x - startX.current) * 2 
+    const walk = (x - startX.current) * 2
     if (Math.abs(walk) > 3) isDragging.current = true
     if (isDragging.current) {
-      e.preventDefault() 
+      e.preventDefault()
       scrollRef.current.scrollLeft = scrollLeftStart.current - walk
     }
   }
@@ -71,17 +71,17 @@ export default function MemberProfileModal({ members = [], initialIndex = 0, onC
   const contentColor = theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
 
   return (
-    <div 
-      ref={modalRef} 
-      tabIndex={0} 
-      onKeyDown={handleKeyDown} 
+    <div
+      ref={modalRef}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
       className={`fixed inset-0 z-50 flex items-center justify-center ${overlayBg} backdrop-blur-sm p-4 outline-none`}
       onClick={onClose}
     >
-      <div 
+      <div
         className={`relative w-full max-w-3xl rounded-2xl overflow-hidden ${panelBg} transition-all duration-500 shadow-xl
-          ${isCaptain ? 'ring-1 ring-cyan-500/40 shadow-[0_0_30px_-10px_rgba(6,182,212,0.4)]' : ''}`} 
-        onClick={e => e.stopPropagation()} 
+          ${isCaptain ? 'ring-1 ring-cyan-500/40 shadow-[0_0_30px_-10px_rgba(6,182,212,0.4)]' : ''}`}
+        onClick={e => e.stopPropagation()}
       >
         <div className="flex flex-col md:flex-row h-full">
           {/* Left Side: Image (smaller) */}
@@ -91,7 +91,7 @@ export default function MemberProfileModal({ members = [], initialIndex = 0, onC
               alt={member.name}
               className="w-full h-full object-cover"
             />
-            
+
             {isCaptain && (
               <div className="absolute top-4 left-4 z-10">
                 <div className="bg-yellow-400 text-black font-black text-[10px] px-2 py-0.5 rounded shadow-lg transform -rotate-12 border border-black uppercase tracking-wider animate-pulse">
@@ -113,10 +113,21 @@ export default function MemberProfileModal({ members = [], initialIndex = 0, onC
                     {member.role}
                   </p>
                 </div>
-                
+
                 <button onClick={onClose} className="md:hidden p-1">
-                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
+              </div>
+
+              {/* Cinematic Profile Link */}
+              <div className="mt-2">
+                <a
+                  href={`/profile/${member.name}`}
+                  className="inline-flex items-center gap-2 text-[10px] font-bold text-amber-500 hover:text-amber-400 uppercase tracking-widest transition-colors"
+                >
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                  View Cinematic Profile
+                </a>
               </div>
 
               {member.bio && (
@@ -156,7 +167,7 @@ export default function MemberProfileModal({ members = [], initialIndex = 0, onC
                 </button>
               </div>
 
-              <div 
+              <div
                 ref={scrollRef}
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
@@ -165,7 +176,7 @@ export default function MemberProfileModal({ members = [], initialIndex = 0, onC
                 className="flex gap-3 overflow-x-auto pb-2 pr-2 cursor-grab active:cursor-grabbing scroll-smooth"
               >
                 {members.map((m, i) => (
-                  <button 
+                  <button
                     key={i}
                     ref={el => (thumbsRef.current[i] = el)}
                     onClick={() => !isDragging.current && setIndex(i)}
@@ -174,7 +185,7 @@ export default function MemberProfileModal({ members = [], initialIndex = 0, onC
                     <div className={`w-16 h-16 mx-auto rounded-md overflow-hidden border ${i === index ? 'border-cyan-400 shadow-md' : 'border-transparent'}`}>
                       <img src={m.avatar || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(m.name) + '&background=0D1117&color=fff&size=128')} className="w-full h-full object-cover" alt={m.name} />
                     </div>
-                    <div className="text-xs mt-1 truncate w-20 text-center" style={{color: contentColor}}>{m.name}</div>
+                    <div className="text-xs mt-1 truncate w-20 text-center" style={{ color: contentColor }}>{m.name}</div>
                   </button>
                 ))}
               </div>

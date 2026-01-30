@@ -1,58 +1,46 @@
 import React from 'react'
-import { Heart } from 'lucide-react'
+import { Sparkles, Gem } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 
 export default function Footer() {
   const { theme } = useTheme()
-  const isDark = theme === 'dark'
+  const isDark = theme === 'dark' // We default to dark/fantasy now predominantly
 
   return (
     <footer
-      className="relative z-10"
+      className="relative z-10 mt-auto"
       style={{
-        background: isDark
-          ? 'rgba(3, 7, 18, 0.95)'
-          : 'rgba(248, 250, 252, 0.95)',
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
-        borderTop: isDark
-          ? '1px solid rgba(34, 211, 238, 0.12)'
-          : '1px solid rgba(8, 145, 178, 0.15)',
-        boxShadow: isDark
-          ? '0 -1px 6px rgba(0, 0, 0, 0.14)'
-          : '0 -1px 6px rgba(0, 0, 0, 0.05)',
+        background: 'linear-gradient(to top, #020105, #08040d)',
+        borderTop: '1px solid rgba(245, 158, 11, 0.15)', // Amber border instead of purple
+        boxShadow: '0 -10px 40px rgba(0,0,0,0.6)'
       }}
     >
+      {/* Decorative rune line */}
+      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-amber-500/30 to-transparent"></div>
+
       <div
         className="
-          container mx-auto px-3 md:px-4
-          h-7 md:h-6
-          flex items-center justify-center sm:justify-between
+          container mx-auto px-4 py-10
+          flex flex-col md:flex-row items-center justify-between
+          gap-6 md:gap-4
         "
       >
-        <p
-          className={`text-[9px] md:text-[8px] leading-none ${
-            isDark ? 'text-slate-400' : 'text-slate-500'
-          }`}
-        >
-          © 2026 Aura-7F. All rights reserved
-        </p>
+        <div className="flex items-center gap-2">
+          <Gem className="text-amber-500 size-4" />
+          <p className="text-xs text-amber-100/60 font-cinzel tracking-wider">
+            © 2026 CLAN AURA-7F. ESTABLISHED IN THE VOID.
+          </p>
+        </div>
 
         <p
-          className={`hidden sm:flex text-[9px] md:text-[8px] leading-none items-center gap-1 ${
-            isDark ? 'text-slate-400' : 'text-slate-500'
-          }`}
+          className="flex text-xs items-center gap-1.5 text-amber-100/40 font-cinzel tracking-wide"
         >
-          Made with
-          <Heart
-            size={8}
-            className={
-              isDark
-                ? 'text-cyan-400 fill-cyan-400'
-                : 'text-cyan-600 fill-cyan-600'
-            }
+          Forged with
+          <Sparkles
+            size={10}
+            className="text-amber-400 animate-pulse"
           />
-          by Aura-7F
+          by the High Council
         </p>
       </div>
     </footer>

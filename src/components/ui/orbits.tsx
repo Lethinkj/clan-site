@@ -27,7 +27,7 @@ export function OrbitsBackground({
   className,
   children,
   count = 5,
-  color = "#1DA1F2",
+  color = "#dc2626", // Red-600 base for fantasy raids
   speed = 1,
 }: OrbitsBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -62,7 +62,7 @@ export function OrbitsBackground({
         r: parseInt(result[1], 16),
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16),
-      } : { r: 6, g: 182, b: 212 }
+      } : { r: 220, g: 38, b: 38 } // Red-600 fallback
     }
 
     const rgb = hexToRgb(color)
@@ -134,15 +134,23 @@ export function OrbitsBackground({
     // Draw particle on orbit
     const drawParticle = (orbit: Orbit, particle: { angle: number; size: number }) => {
       const x = cx() + Math.cos(particle.angle) * orbit.radius * Math.cos(orbit.tiltY) -
-                Math.sin(particle.angle) * orbit.radius * orbit.tiltX * Math.sin(orbit.tiltY)
+        Math.sin(particle.angle) * orbit.radius * orbit.tiltX * Math.sin(orbit.tiltY)
       const y = cy() + Math.cos(particle.angle) * orbit.radius * Math.sin(orbit.tiltY) +
-                Math.sin(particle.angle) * orbit.radius * orbit.tiltX * Math.cos(orbit.tiltY)
+        Math.sin(particle.angle) * orbit.radius * orbit.tiltX * Math.cos(orbit.tiltY)
 
       // Glow
+      // Multi-colored fantasy particles
+      const particleColors = [
+        { r: 251, g: 191, b: 36 }, // Gold
+        { r: 220, g: 38, b: 38 },  // Red
+        { r: 147, g: 51, b: 234 }  // Purple
+      ]
+      const pColor = particleColors[Math.floor(Math.random() * particleColors.length)]
+
       const gradient = ctx.createRadialGradient(x, y, 0, x, y, particle.size * 6)
-      gradient.addColorStop(0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.8)`)
-      gradient.addColorStop(0.3, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`)
-      gradient.addColorStop(1, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0)`)
+      gradient.addColorStop(0, `rgba(${pColor.r}, ${pColor.g}, ${pColor.b}, 0.8)`)
+      gradient.addColorStop(0.3, `rgba(${pColor.r}, ${pColor.g}, ${pColor.b}, 0.3)`)
+      gradient.addColorStop(1, `rgba(${pColor.r}, ${pColor.g}, ${pColor.b}, 0)`)
       ctx.fillStyle = gradient
       ctx.beginPath()
       ctx.arc(x, y, particle.size * 6, 0, Math.PI * 2)
