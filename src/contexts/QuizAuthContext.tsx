@@ -24,15 +24,27 @@ export function QuizAuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check if user is logged in from localStorage
-    const storedUser = localStorage.getItem('quiz_user')
-    if (storedUser) {
-      const userData = JSON.parse(storedUser) as QuizAuthUser
-      setUser(userData)
-      // Verify ban status on page load
-      checkBanStatusForUser(userData.id)
+    const initializeAuth = async () => {
+      try {
+        // Check if user is logged in from localStorage
+        const storedUser = localStorage.getItem('quiz_user')
+        if (storedUser) {
+          const userData = JSON.parse(storedUser) as QuizAuthUser
+          setUser(userData)
+          console.log('✅ User restored from localStorage:', userData.email)
+
+          // Verify ban status on page load - WAIT for it to complete
+          await checkBanStatusForUser(userData.id)
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error)
+        // On error, keep user logged in anyway
+      } finally {
+        setLoading(false)
+      }
     }
-    setLoading(false)
+
+    initializeAuth()
   }, [])
 
   const checkBanStatusForUser = async (userId: string) => {

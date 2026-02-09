@@ -352,17 +352,18 @@ export default function LiveQuizParticipate() {
     }
   }, [tabSwitchCount, fullscreenExitCount, attempt, user, quizId])
 
-  // Auto-enter fullscreen on mobile
+  // Auto-enter fullscreen for ALL devices (mobile, desktop, tablet)
   useEffect(() => {
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-
-    if (isMobile && !isFullscreen && attempt && !loading) {
-      console.log('📱 Mobile detected - auto-entering fullscreen')
+    if (!isFullscreen && attempt && !loading && currentQuestion) {
+      console.log('🖥️ Auto-entering fullscreen for all devices')
       setTimeout(() => {
-        handleFullscreen()
-      }, 500) // Small delay to ensure page is ready
+        handleFullscreen().catch((err) => {
+          console.warn('Could not auto-enter fullscreen:', err)
+          // If fullscreen fails, that's OK - user can still use quiz
+        })
+      }, 800) // Delay to ensure page is fully rendered
     }
-  }, [attempt, loading])
+  }, [attempt, loading, currentQuestion])
 
   const handleAnswerSelect = (answer: 'A' | 'B' | 'C' | 'D') => {
     if (hasAnswered || !currentQuestion || !attempt) return
