@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 import { supabase, hashPassword, verifyPassword } from '../lib/supabase'
 
 interface AuthUser {
+  id: string
   email: string
   username: string
   isAdmin: boolean
@@ -57,6 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       const userData: AuthUser = {
+        id: moderator.id,
         email: moderator.email,
         username: moderator.username,
         isAdmin: moderator.is_admin,

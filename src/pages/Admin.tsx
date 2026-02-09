@@ -9,9 +9,12 @@ import EventList from '../components/admin/EventList'
 import PasswordChange from '../components/admin/PasswordChange'
 import RegistrationManagement from '../components/admin/RegistrationManagement'
 import ProjectManagement from '../components/admin/ProjectManagement'
+import QuizManagement from '../components/admin/QuizManagement'
+import QuizUserManagement from '../components/admin/QuizUserManagement'
+import LeaderboardManagement from '../components/admin/LeaderboardManagement'
 import { ConfirmDialog } from '../components/ui/Modal'
 
-type Tab = 'events' | 'members' | 'moderators' | 'registrations' | 'projects' | 'settings'
+type Tab = 'events' | 'members' | 'moderators' | 'registrations' | 'projects' | 'settings' | 'quizzes' | 'quiz-users' | 'leaderboard'
 
 export default function Admin() {
   const { user, isAdmin, isModerator, loading: authLoading, signOut } = useAuth()
@@ -199,6 +202,39 @@ export default function Admin() {
           >
             Projects
           </button>
+          {isModerator && (
+            <>
+              <button
+                onClick={() => setActiveTab('quizzes')}
+                className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${activeTab === 'quizzes'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
+                  : 'text-aura hover:text-cyan-400/70'
+                  }`}
+              >
+                Quizzes
+              </button>
+              {isAdmin && (
+                <button
+                  onClick={() => setActiveTab('quiz-users')}
+                  className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${activeTab === 'quiz-users'
+                    ? 'text-cyan-400 border-b-2 border-cyan-400'
+                    : 'text-aura hover:text-cyan-400/70'
+                    }`}
+                >
+                  Quiz Users
+                </button>
+              )}
+              <button
+                onClick={() => setActiveTab('leaderboard')}
+                className={`px-6 py-3 font-semibold transition-colors whitespace-nowrap ${activeTab === 'leaderboard'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
+                  : 'text-aura hover:text-cyan-400/70'
+                  }`}
+              >
+                Leaderboard
+              </button>
+            </>
+          )}
         </div>
 
         {/* Tab Content */}
@@ -286,6 +322,18 @@ export default function Admin() {
 
           {activeTab === 'projects' && (
             <ProjectManagement />
+          )}
+
+          {activeTab === 'quizzes' && isModerator && (
+            <QuizManagement />
+          )}
+
+          {activeTab === 'quiz-users' && isAdmin && (
+            <QuizUserManagement />
+          )}
+
+          {activeTab === 'leaderboard' && isModerator && (
+            <LeaderboardManagement />
           )}
         </div>
 

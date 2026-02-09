@@ -11,9 +11,17 @@ import { HackerBackground } from './components/ui/hacker-background'
 import SplashCursor from './components/SplashCursor'
 import ScrollToTop from './components/ScrollToTop'
 import { Home, About, Members, Events, Login, Admin, AddMember, Projects, Profile, Milestones } from './pages/index'
+import QuizAuth from './pages/QuizAuth'
+import QuizDashboard from './pages/QuizDashboard'
+import QuizTake from './pages/QuizTake'
+import QuizResults from './pages/QuizResults'
+import QuizLeaderboard from './pages/QuizLeaderboard'
+import LiveQuizHost from './pages/LiveQuizHost'
+import LiveQuizParticipate from './pages/LiveQuizParticipate'
 const Gallery = React.lazy(() => import('./pages/Gallery'))
 import { Analytics } from "@vercel/analytics/react"
 import { AuthProvider } from './contexts/AuthContext'
+import { QuizAuthProvider } from './contexts/QuizAuthContext'
 import { ThemeProvider, useTheme } from './contexts/ThemeContext'
 
 function AppContent() {
@@ -92,67 +100,76 @@ function AppContent() {
 
   return (
     <AuthProvider>
-      <ScrollToTop />
-      <div className="min-h-screen text-aura relative z-10" style={{ background: 'var(--aura-dark)', color: 'var(--aura-text)' }}>
-        {/* Global Splash Cursor Effect */}
-        {/* <SplashCursor
-          TRANSPARENT={true}
-          BACK_COLOR={{ r: 0.02, g: 0.01, b: 0.04 }}
-          SPLAT_RADIUS={0.25}
-          CURL={5}
-          COLOR_UPDATE_SPEED={8}
-        /> */}
-        {/* Fixed full-viewport background (Hyperspeed on home, Visuals elsewhere) */}
-        {location.pathname === '/home' || location.pathname === '/about' || location.pathname === '/milestones' || location.pathname.startsWith('/profile/') ? (
-          <div className="fixed inset-0 -z-10 pointer-events-none">
-            <StarfieldBackground />
-          </div>
-        ) : location.pathname === '/events' ? (
-          <div className="fixed inset-0 -z-10 pointer-events-none">
-            <HexagonsBackground />
-          </div>
-        ) : location.pathname.startsWith('/admin') || location.pathname === '/moderator' ? (
-          <div className="fixed inset-0 -z-10 pointer-events-none">
-            <BackgroundBeams />
-          </div>
-        ) : location.pathname === '/members' ? (
-          <div className="fixed inset-0 -z-10 pointer-events-none">
-            <HackerBackground color="#776c07" fontSize={16} speed={0.8} />
-          </div>
-        ) : location.pathname === '/gallery' ? (
-          null
-        ) : (
-          <div className="fixed inset-0 -z-10 pointer-events-none">
-            <Visuals />
-          </div>
-        )}
-        <Header />
-        <main className={`${location.pathname === '/gallery' ? 'w-full' : 'container mx-auto px-3 sm:px-6'} pt-20 pb-1 md:pb-2 lg:pb-2 min-h-screen overflow-hidden`}>
-          <div className={`${location.pathname === '/gallery' ? 'max-w-[95rem]' : 'max-w-6xl'} mx-auto p-0 relative z-20`}>
-            <Routes>
-              <Route path="/" element={<Navigate to="/home" replace />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/milestones" element={<Milestones />} />
-              <Route path="/members" element={<Members />} />
-              <Route path="/gallery" element={
-                <React.Suspense fallback={<div className="h-screen w-full bg-black flex items-center justify-center text-amber-500 font-cinzel">Loading Resonance...</div>}>
-                  <Gallery />
-                </React.Suspense>
-              } />
-              <Route path="/profile/:name" element={<Profile />} />
-              <Route path="/events" element={<Events />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/add-member" element={<AddMember />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="*" element={<Navigate to="/home" replace />} />
-            </Routes>
-          </div>
-        </main>
-        <Footer />
-        <Analytics />
-      </div>
+      <QuizAuthProvider>
+        <ScrollToTop />
+        <div className="min-h-screen text-aura relative z-10" style={{ background: 'var(--aura-dark)', color: 'var(--aura-text)' }}>
+          {/* Global Splash Cursor Effect */}
+          {/* <SplashCursor
+            TRANSPARENT={true}
+            BACK_COLOR={{ r: 0.02, g: 0.01, b: 0.04 }}
+            SPLAT_RADIUS={0.25}
+            CURL={5}
+            COLOR_UPDATE_SPEED={8}
+          /> */}
+          {/* Fixed full-viewport background (Hyperspeed on home, Visuals elsewhere) */}
+          {location.pathname === '/home' || location.pathname === '/about' || location.pathname === '/milestones' || location.pathname.startsWith('/profile/') ? (
+            <div className="fixed inset-0 -z-10 pointer-events-none">
+              <StarfieldBackground />
+            </div>
+          ) : location.pathname === '/events' ? (
+            <div className="fixed inset-0 -z-10 pointer-events-none">
+              <HexagonsBackground />
+            </div>
+          ) : location.pathname.startsWith('/admin') || location.pathname === '/moderator' ? (
+            <div className="fixed inset-0 -z-10 pointer-events-none">
+              <BackgroundBeams />
+            </div>
+          ) : location.pathname === '/members' ? (
+            <div className="fixed inset-0 -z-10 pointer-events-none">
+              <HackerBackground color="#776c07" fontSize={16} speed={0.8} />
+            </div>
+          ) : location.pathname === '/gallery' ? (
+            null
+          ) : (
+            <div className="fixed inset-0 -z-10 pointer-events-none">
+              <Visuals />
+            </div>
+          )}
+          {!location.pathname.startsWith('/quiz/take') && !location.pathname.startsWith('/quiz/live') && !location.pathname.startsWith('/admin/quiz/host') && <Header />}
+          <main className={`${location.pathname === '/gallery' ? 'w-full' : 'container mx-auto px-3 sm:px-6'} ${location.pathname.startsWith('/quiz/take') || location.pathname.startsWith('/quiz/live') || location.pathname.startsWith('/admin/quiz/host') ? 'pt-0' : 'pt-20'} pb-1 md:pb-2 lg:pb-2 min-h-screen overflow-hidden`}>
+            <div className={`${location.pathname === '/gallery' ? 'max-w-[95rem]' : 'max-w-6xl'} mx-auto p-0 relative z-20`}>
+              <Routes>
+                <Route path="/" element={<Navigate to="/home" replace />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/milestones" element={<Milestones />} />
+                <Route path="/members" element={<Members />} />
+                <Route path="/gallery" element={
+                  <React.Suspense fallback={<div className="h-screen w-full bg-black flex items-center justify-center text-amber-500 font-cinzel">Loading Resonance...</div>}>
+                    <Gallery />
+                  </React.Suspense>
+                } />
+                <Route path="/profile/:name" element={<Profile />} />
+                <Route path="/events" element={<Events />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/add-member" element={<AddMember />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/quiz/auth" element={<QuizAuth />} />
+                <Route path="/quiz/dashboard" element={<QuizDashboard />} />
+                <Route path="/quiz/take/:id" element={<QuizTake />} />
+                <Route path="/quiz/live/:id" element={<LiveQuizParticipate />} />
+                <Route path="/quiz/results/:attemptId" element={<QuizResults />} />
+                <Route path="/quiz/leaderboard" element={<QuizLeaderboard />} />
+                <Route path="/admin/quiz/host/:id" element={<LiveQuizHost />} />
+                <Route path="*" element={<Navigate to="/home" replace />} />
+              </Routes>
+            </div>
+          </main>
+          {!location.pathname.startsWith('/quiz/take') && !location.pathname.startsWith('/quiz/live') && !location.pathname.startsWith('/admin/quiz/host') && <Footer />}
+          <Analytics />
+        </div>
+      </QuizAuthProvider>
     </AuthProvider>
   )
 }

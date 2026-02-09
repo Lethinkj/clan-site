@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { NavLink, Link } from 'react-router-dom'
-import { Home, Users, Calendar, Info, Menu, X, LogIn, LogOut, Settings, Sparkles, Scroll, Crown, Sword, Code, Flag } from 'lucide-react'
+import { Home, Users, Calendar, Info, Menu, X, LogIn, LogOut, Settings, Sparkles, Scroll, Crown, Sword, Code, Flag, Brain } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import ThemeToggle from './ui/ThemeToggle'
@@ -14,6 +14,7 @@ const navItems = [
   { to: '/events', icon: Sword, label: 'Quests', scrollId: 'events-title' },
   { to: '/projects', icon: Code, label: 'Projects', scrollId: 'projects-title' },
   { to: '/milestones', icon: Flag, label: 'Milestones', scrollId: 'milestones-title' },
+  { to: '/quiz/auth', icon: Brain, label: 'Quiz', scrollId: '' },
   { to: '/gallery', icon: Sparkles, label: 'Gallery', scrollId: '' }
 ]
 
