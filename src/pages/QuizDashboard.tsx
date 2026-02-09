@@ -5,16 +5,26 @@ import { supabase, Quiz } from '../lib/supabase'
 import { StarfieldBackground } from '../components/ui/starfield'
 
 export default function QuizDashboard() {
-  const { user, signOut, checkBanStatus } = useQuizAuth()
+  const { user, loading: authLoading, signOut, checkBanStatus } = useQuizAuth()
   const [quizzes, setQuizzes] = useState<Quiz[]>([])
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => {
+    // WAIT for auth context to load user from localStorage
+    if (authLoading) {
+      console.log('⏳ Waiting for auth to load...')
+      return
+    }
+
+    // NOW check if user exists
     if (!user) {
+      console.log('❌ No user found, redirecting to login')
       navigate('/quiz/auth')
       return
     }
+
+    console.log('✅ User authenticated:', user.email)
 
     // Check ban status, but don't navigate away if there's an error
     const checkBan = async () => {
@@ -32,7 +42,7 @@ export default function QuizDashboard() {
     checkBan()
 
     loadQuizzes()
-  }, [user, navigate])
+  }, [user, navigate, authLoading])
 
   const loadQuizzes = async () => {
     try {

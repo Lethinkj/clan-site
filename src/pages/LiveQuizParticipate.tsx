@@ -5,7 +5,7 @@ import { supabase, Quiz, QuizQuestion, QuizAttempt } from '../lib/supabase'
 
 export default function LiveQuizParticipate() {
   const { id: quizId } = useParams<{ id: string }>()
-  const { user, checkBanStatus } = useQuizAuth()
+  const { user, loading: authLoading, checkBanStatus } = useQuizAuth()
   const navigate = useNavigate()
 
   const [quiz, setQuiz] = useState<Quiz | null>(null)
@@ -25,10 +25,20 @@ export default function LiveQuizParticipate() {
   const tabSwitchTracked = useRef(false)
 
   useEffect(() => {
+    // WAIT for auth context to load user from localStorage
+    if (authLoading) {
+      console.log('⏳ Waiting for auth to load...')
+      return
+    }
+
+    // NOW check if user exists
     if (!user) {
+      console.log('❌ No user found, redirecting to login')
       navigate('/quiz/auth')
       return
     }
+
+    console.log('✅ User authenticated:', user.email)
 
     // Check ban status, but don't navigate away if there's an error
     const checkBan = async () => {
@@ -52,7 +62,7 @@ export default function LiveQuizParticipate() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
     }
-  }, [quizId, user])
+  }, [quizId, user, authLoading])
 
   // Subscribe to quiz changes (when admin shows questions)
   useEffect(() => {
