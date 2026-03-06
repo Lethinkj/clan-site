@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useTheme } from '../contexts/ThemeContext'
-import { Sparkles, KeyRound, Scroll } from 'lucide-react'
+import { Sparkles, KeyRound } from 'lucide-react'
 
 export default function Login() {
   const { theme } = useTheme() // Unused but kept for context if needed
@@ -94,19 +94,6 @@ export default function Login() {
               )}
             </button>
           </form>
-
-          <div className="mt-8 pt-6 border-t border-amber-500/10 text-center relative z-10">
-            <p className="text-xs text-slate-400 mb-4 font-lato">
-              Only Guild Managers and High Council members may pass beyond this point.
-            </p>
-            <Link
-              to="/add-member"
-              className="inline-flex items-center gap-2 text-sm text-amber-400/80 hover:text-amber-300 transition-colors font-cinzel tracking-wide"
-            >
-              <Scroll size={14} />
-              Summon New Member
-            </Link>
-          </div>
         </div>
       </div>
     </div>
