@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function AddMember() {
   const navigate = useNavigate()
+  const { user, isAdmin, loading: authLoading } = useAuth()
   const [formData, setFormData] = useState({
     discord_user_id: '',
     username: '',
@@ -13,6 +15,13 @@ export default function AddMember() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+
+  // Check if user is logged in and is admin
+  useEffect(() => {
+    if (!authLoading && (!user || !isAdmin)) {
+      navigate('/login', { replace: true })
+    }
+  }, [user, isAdmin, authLoading, navigate])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
@@ -85,12 +94,29 @@ export default function AddMember() {
     }
   }
 
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="max-w-2xl w-full">
+          <div className="bg-slate-900/90 border-2 border-cyan-400/30 p-8 rounded-2xl shadow-[0_0_30px_rgba(34,211,238,0.15)] backdrop-blur-sm">
+            <h1 className="text-3xl font-bold text-cyan-400 mb-2 text-center">Add New Member</h1>
+            <p className="text-aura text-center mb-6">Checking authentication...</p>
+            <div className="flex justify-center items-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-cyan-400"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="max-w-2xl w-full">
         <div className="bg-slate-900/90 border-2 border-cyan-400/30 p-8 rounded-2xl shadow-[0_0_30px_rgba(34,211,238,0.15)] backdrop-blur-sm">
           <h1 className="text-3xl font-bold text-cyan-400 mb-2 text-center">Add New Member</h1>
-          <p className="text-aura text-center mb-6">Register a new clan member to the system</p>
+          <p className="text-aura text-center mb-6">Register a new clan member to the system (Admin only)</p>
 
           {error && (
             <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg mb-4">
