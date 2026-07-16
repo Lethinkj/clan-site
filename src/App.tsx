@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import { Footer, Visuals } from './components/index'
@@ -98,6 +98,12 @@ function AppContent() {
     }
   }, [location.pathname])
 
+  const [underConstruction] = useState(true)
+
+  if (underConstruction) {
+    return <UnderConstructionModal />
+  }
+
   return (
     <AuthProvider>
       <QuizAuthProvider>
@@ -171,6 +177,29 @@ function AppContent() {
         </div>
       </QuizAuthProvider>
     </AuthProvider>
+  )
+}
+
+function UnderConstructionModal() {
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#05020a]">
+      <div className="bg-slate-900/95 border border-cyan-400/30 rounded-lg max-w-md w-full p-8 mx-4 text-center">
+        <div className="flex justify-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ffd700" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+            <path d="M9 9l2 2 4-4"/>
+          </svg>
+        </div>
+        <h2 className="text-3xl font-cinzel font-bold gradient-text mb-3">
+          Under Construction
+        </h2>
+        <p className="text-aura text-lg">
+          This site is currently being built. Check back soon!
+        </p>
+      </div>
+    </div>
   )
 }
 
