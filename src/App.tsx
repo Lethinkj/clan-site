@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import { Footer, Visuals } from './components/index'
@@ -98,9 +98,9 @@ function AppContent() {
     }
   }, [location.pathname])
 
-  const [underConstruction] = useState(true)
+  const showUnderConstruction = import.meta.env.VITE_DEV !== 'true'
 
-  if (underConstruction) {
+  if (showUnderConstruction) {
     return <UnderConstructionModal />
   }
 
