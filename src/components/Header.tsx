@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { NavLink, Link } from 'react-router-dom'
-import { Home, Users, Calendar, Info, Menu, X, LogIn, LogOut, Settings, Sparkles, Scroll, Crown, Sword, Code, Flag, Brain } from 'lucide-react'
+import { Home, Users, Calendar, Info, Menu, X, LogIn, LogOut, Settings, Sparkles, Scroll, Crown, Sword, Code, Flag, Brain, Gem } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import ThemeToggle from './ui/ThemeToggle'
@@ -9,6 +9,7 @@ import { Navbar, NavBody, MobileNav } from './ui/resizable-navbar'
 
 const navItems = [
   { to: '/home', icon: Home, label: 'Home', scrollId: 'home-title' },
+  { to: '/newhome', icon: Gem, label: 'NewHome', scrollId: 'home-title' },
   { to: '/about', icon: Scroll, label: 'Lore', scrollId: 'about-title' },
   { to: '/members', icon: Users, label: 'Clan', scrollId: 'members-title' },
   { to: '/events', icon: Sword, label: 'Quests', scrollId: 'events-title' },

@@ -11,6 +11,7 @@ import { HackerBackground } from './components/ui/hacker-background'
 import SplashCursor from './components/SplashCursor'
 import ScrollToTop from './components/ScrollToTop'
 import { Home, About, Members, Events, Login, Admin, AddMember, Projects, Profile, Milestones } from './pages/index'
+import NewHome from './pages/NewHome'
 import QuizAuth from './pages/QuizAuth'
 import QuizDashboard from './pages/QuizDashboard'
 import QuizTake from './pages/QuizTake'
@@ -27,6 +28,11 @@ import { ThemeProvider, useTheme } from './contexts/ThemeContext'
 function AppContent() {
   const location = useLocation()
   const { theme } = useTheme()
+
+  const hideNavAndFooter = location.pathname.startsWith('/quiz/take') ||
+    location.pathname.startsWith('/quiz/live') ||
+    location.pathname.startsWith('/admin/quiz/host') ||
+    location.pathname.startsWith('/newhome');
 
   // Add page-load and scroll-based animations for text and cards.
   useEffect(() => {
@@ -134,19 +140,20 @@ function AppContent() {
             <div className="fixed inset-0 -z-10 pointer-events-none">
               <HackerBackground color="#776c07" fontSize={16} speed={0.8} />
             </div>
-          ) : location.pathname === '/gallery' ? (
+          ) : location.pathname === '/gallery' || location.pathname.startsWith('/newhome') ? (
             null
           ) : (
             <div className="fixed inset-0 -z-10 pointer-events-none">
               <Visuals />
             </div>
           )}
-          {!location.pathname.startsWith('/quiz/take') && !location.pathname.startsWith('/quiz/live') && !location.pathname.startsWith('/admin/quiz/host') && <Header />}
-          <main className={`${location.pathname === '/gallery' ? 'w-full' : 'container mx-auto px-3 sm:px-6'} ${location.pathname.startsWith('/quiz/take') || location.pathname.startsWith('/quiz/live') || location.pathname.startsWith('/admin/quiz/host') ? 'pt-0' : 'pt-20'} pb-1 md:pb-2 lg:pb-2 min-h-screen overflow-hidden`}>
-            <div className={`${location.pathname === '/gallery' ? 'max-w-[95rem]' : 'max-w-6xl'} mx-auto p-0 relative z-20`}>
+          {!hideNavAndFooter && <Header />}
+          <main className={`${location.pathname === '/gallery' || location.pathname.startsWith('/newhome') ? 'w-full' : 'container mx-auto px-3 sm:px-6'} ${hideNavAndFooter ? 'pt-0' : 'pt-20'} pb-1 md:pb-2 lg:pb-2 min-h-screen overflow-hidden`}>
+            <div className={`${location.pathname === '/gallery' ? 'max-w-[95rem]' : location.pathname.startsWith('/newhome') ? 'w-full max-w-none' : 'max-w-6xl'} mx-auto p-0 relative z-20`}>
               <Routes>
                 <Route path="/" element={<Navigate to="/home" replace />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/newhome" element={<NewHome />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/milestones" element={<Milestones />} />
@@ -172,7 +179,7 @@ function AppContent() {
               </Routes>
             </div>
           </main>
-          {!location.pathname.startsWith('/quiz/take') && !location.pathname.startsWith('/quiz/live') && !location.pathname.startsWith('/admin/quiz/host') && <Footer />}
+          {!hideNavAndFooter && <Footer />}
           <Analytics />
         </div>
       </QuizAuthProvider>
@@ -186,10 +193,10 @@ function UnderConstructionModal() {
       <div className="bg-slate-900/95 border border-cyan-400/30 rounded-lg max-w-md w-full p-8 mx-4 text-center">
         <div className="flex justify-center mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ffd700" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-            <line x1="8" y1="21" x2="16" y2="21"/>
-            <line x1="12" y1="17" x2="12" y2="21"/>
-            <path d="M9 9l2 2 4-4"/>
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
+            <path d="M9 9l2 2 4-4" />
           </svg>
         </div>
         <h2 className="text-3xl font-cinzel font-bold gradient-text mb-3">
