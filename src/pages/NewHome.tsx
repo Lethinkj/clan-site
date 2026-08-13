@@ -1,5 +1,6 @@
 import React from 'react'
 import { Sword, Scroll, Sparkles, Crown, Shield, BookOpen, Zap, Target, Rocket, Code, Server, Brain, ArrowRight, Quote } from 'lucide-react'
+import FantasyNavbar from '../components/FantasyNavbar'
 
 export default function NewHome() {
   const features = [
@@ -84,6 +85,8 @@ export default function NewHome() {
   return (
     <div className="min-h-screen pb-12 relative overflow-hidden bg-[#0d1117]">
 
+      <FantasyNavbar />
+
       {/* Custom Background Image (Dark Edition) */}
       <div
         className="fixed inset-0 pointer-events-none z-0"
@@ -102,16 +105,16 @@ export default function NewHome() {
       </div>
 
       {/* Hero Section */}
-      <section id="home-title" className="relative text-center px-4 pt-16 sm:pt-24 pb-20 z-10">
+      <section id="home-title" className="relative text-center px-4 pt-48 sm:pt-60 md:pt-72 lg:pt-[360px] pb-20 z-10 mt-10 md:mt-16">
         <div className="max-w-5xl mx-auto space-y-8 relative z-10">
 
           {/* Main Top Logo */}
-          <div className="inline-flex items-center justify-center mb-2 animate-fade-in-up">
+          <div className="inline-flex items-center justify-center mb-6 animate-fade-in-up">
             <div className="relative">
               <img
-                src="/aura.png"
+                src="/logonew.png"
                 alt="Aura-7F Logo"
-                className="relative w-64 h-auto sm:w-80 md:w-96 object-contain"
+                className="relative w-[320px] h-auto sm:w-[650px] md:w-[650px] lg:w-[750px] object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] hover:scale-105 transition-transform duration-700"
               />
             </div>
           </div>
