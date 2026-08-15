@@ -3,7 +3,7 @@ import AnimateOnView from '../components/AnimateOnView';
 import { Boxes } from '../components/ui/background-boxes';
 import { Code, ExternalLink, Github, Layout, Server, Database, Globe } from 'lucide-react';
 
-const projects = [
+export const projects = [
     {
         title: 'Bash Ballot',
         description: 'Platform for voting and managing elections for all the bash clans.',

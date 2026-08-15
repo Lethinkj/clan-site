@@ -2,308 +2,186 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aura-7F Realm</title>
-  
-  <!-- Add Font Imports -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Tailwind Config -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            cinzel: ['Cinzel', 'serif'],
-            lato: ['Lato', 'sans-serif'],
-          },
-          keyframes: {
-            'fade-in-up': {
-              '0%': { opacity: '0', transform: 'translateY(20px)' },
-              '100%': { opacity: '1', transform: 'translateY(0)' },
-            },
-            'shine': {
-              '0%': { transform: 'translateX(-100%)' },
-              '100%': { transform: 'translateX(100%)' },
-            }
-          },
-          animation: {
-            'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
-            'shine': 'shine 1.5s linear infinite',
-          }
-        }
-      }
+  <title>Clash of Clans Theme - Gallery Buttons</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Titan+One&display=swap');
+
+    body {
+      background: radial-gradient(circle, #3d6a2f 0%, #1c3614 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      gap: 28px;
+      font-family: 'Titan One', cursive, sans-serif;
     }
-  </script>
-  
-  <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+    /* Base CoC Button */
+    .coc-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 14px 28px;
+      font-size: 22px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+      border: 3.5px solid #1a0f05;
+      border-radius: 14px;
+      transition: all 0.08s ease-in-out;
+      
+      /* Comic text stroke & inner text shadow */
+      -webkit-text-stroke: 1.5px #111;
+      text-shadow: 
+        0 3px 0 #000,
+        0 -1px 0 #000,
+        1px 0 0 #000,
+        -1px 0 0 #000;
+    }
+
+    /* Top Highlight Rim */
+    .coc-btn::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 6px;
+      right: 6px;
+      height: 38%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.05) 100%);
+      border-radius: 8px 8px 12px 12px;
+      pointer-events: none;
+    }
+
+    /* --- Theme 1: Golden Yellow (Classic Shop Style) --- */
+    .coc-btn-gold {
+      background: linear-gradient(180deg, #ffdf43 0%, #f39c12 50%, #c0392b 100%);
+      box-shadow: 
+        inset 0 2px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -4px 0 #7e1d13,
+        0 6px 0 #3a1c06,
+        0 10px 8px rgba(0, 0, 0, 0.45);
+    }
+    .coc-btn-gold:active {
+      transform: translateY(5px);
+      box-shadow: 
+        inset 0 2px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -2px 0 #7e1d13,
+        0 1px 0 #3a1c06,
+        0 3px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    /* --- Theme 2: Elixir Purple / Pink --- */
+    .coc-btn-elixir {
+      background: linear-gradient(180deg, #ff71ce 0%, #d81182 50%, #6e0049 100%);
+      box-shadow: 
+        inset 0 2px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -4px 0 #3b0027,
+        0 6px 0 #200215,
+        0 10px 8px rgba(0, 0, 0, 0.45);
+    }
+    .coc-btn-elixir:active {
+      transform: translateY(5px);
+      box-shadow: 
+        inset 0 2px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -2px 0 #3b0027,
+        0 1px 0 #200215,
+        0 3px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    /* --- Theme 3: Gem Green --- */
+    .coc-btn-green {
+      background: linear-gradient(180deg, #8ae922 0%, #43a012 50%, #1e5a08 100%);
+      box-shadow: 
+        inset 0 2px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -4px 0 #0f3504,
+        0 6px 0 #081a02,
+        0 10px 8px rgba(0, 0, 0, 0.45);
+    }
+    .coc-btn-green:active {
+      transform: translateY(5px);
+      box-shadow: 
+        inset 0 2px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -2px 0 #0f3504,
+        0 1px 0 #081a02,
+        0 3px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    /* --- Theme 4: Circular HUD Icon Button --- */
+    .coc-btn-icon {
+      width: 76px;
+      height: 76px;
+      padding: 0;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #ffde43 0%, #e67e22 50%, #a93226 100%);
+      box-shadow: 
+        inset 0 2px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -4px 0 #5c1710,
+        0 6px 0 #2a1102,
+        0 10px 8px rgba(0, 0, 0, 0.45);
+    }
+    .coc-btn-icon::before {
+      top: 3px;
+      left: 12px;
+      right: 12px;
+      height: 42%;
+      border-radius: 50% 50% 40% 40%;
+    }
+    .coc-btn-icon:active {
+      transform: translateY(5px);
+      box-shadow: 
+        inset 0 2px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -2px 0 #5c1710,
+        0 1px 0 #2a1102,
+        0 3px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    /* SVG Icon Styling */
+    .btn-svg {
+      width: 28px;
+      height: 28px;
+      filter: drop-shadow(0 2px 0 #000);
+    }
+  </style>
 </head>
-<body class="bg-[#0d1117] text-slate-300">
+<body>
 
-  <div class="min-h-screen pb-12 relative overflow-hidden bg-[#0d1117]">
+  <!-- Classic Gold Gallery Button -->
+  <button class="coc-btn coc-btn-gold">
+    <svg class="btn-svg" viewBox="0 0 24 24" fill="#FFFFFF">
+      <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+    </svg>
+    <span>Gallery</span>
+  </button>
 
-    <!-- Immersive Image-based Nav Bar -->
-    <nav class="absolute top-0 left-0 w-full z-50 pointer-events-none">
-      <div class="relative w-full flex items-start justify-end drop-shadow-[0_15px_30px_rgba(0,0,0,0.9)]">
+  <!-- Elixir Style Button -->
+  <button class="coc-btn coc-btn-elixir">
+    <svg class="btn-svg" viewBox="0 0 24 24" fill="#FFFFFF">
+      <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/>
+    </svg>
+    <span>Photos</span>
+  </button>
 
-        <img src="public/nav4.png" alt="Navigation Banner" class="w-full h-auto object-contain" onerror="this.src='nav4.png'; this.onerror='';">
+  <!-- Gem Green Style Button -->
+  <button class="coc-btn coc-btn-green">
+    <svg class="btn-svg" viewBox="0 0 24 24" fill="#FFFFFF">
+      <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+    </svg>
+    <span>View Gallery</span>
+  </button>
 
-        <div class="absolute inset-0 flex items-start justify-end pr-[6%] md:pr-[8%] xl:pr-[9%] pt-[6%] sm:pt-[5.5%] md:pt-[4.5%] lg:pt-[3.8%] 2xl:pt-[3%]">
-          <div class="flex items-center gap-6 md:gap-10 xl:gap-14 pointer-events-auto">
-            
-            <div class="hidden lg:flex items-center gap-10 xl:gap-14">
-              <a href="#campaigns" class="relative group px-2 py-2">
-                <span class="font-cinzel font-bold text-[#e1d5c5] tracking-[0.15em] group-hover:text-[#ffe58f] transition-all duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] uppercase text-sm md:text-base xl:text-lg">Campaigns</span>
-                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent group-hover:w-full transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
-              </a>
-              <a href="#guilds" class="relative group px-2 py-2">
-                <span class="font-cinzel font-bold text-[#e1d5c5] tracking-[0.15em] group-hover:text-[#ffe58f] transition-all duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] uppercase text-sm md:text-base xl:text-lg">Guilds</span>
-                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent group-hover:w-full transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
-              </a>
-              <a href="#rankings" class="relative group px-2 py-2">
-                <span class="font-cinzel font-bold text-[#e1d5c5] tracking-[0.15em] group-hover:text-[#ffe58f] transition-all duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] uppercase text-sm md:text-base xl:text-lg">Rankings</span>
-                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent group-hover:w-full transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
-              </a>
-            </div>
+  <!-- Circular Bottom-Right HUD Style Button -->
+  <button class="coc-btn coc-btn-icon" title="Open Gallery">
+    <svg class="btn-svg" style="width: 36px; height: 36px;" viewBox="0 0 24 24" fill="#FFFFFF">
+      <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+    </svg>
+  </button>
 
-            <div class="flex items-center gap-4 md:gap-6 xl:gap-8">
-              <a href="/login" class="hidden sm:block text-sm md:text-base xl:text-lg font-cinzel font-bold text-[#c4b69d] hover:text-[#ffe58f] transition-colors tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">Sign In</a>
-              <a href="/join" class="group relative flex items-center justify-center px-4 md:px-8 xl:px-10 py-2 md:py-2.5 xl:py-3 bg-gradient-to-b from-[#5c3e21] to-[#261a12] border-[2px] border-[#b28b49] rounded-md hover:border-[#ffe58f] hover:from-[#6b4827] transition-all duration-300 shadow-[0_5px_15px_rgba(0,0,0,0.8)] overflow-hidden">
-                <div class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,229,143,0.1)_50%,transparent_75%)] bg-[length:250%_250%,100%_100%] group-hover:animate-shine opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <span class="relative font-cinzel font-bold text-[#ffe58f] tracking-widest uppercase text-xs md:text-sm xl:text-base drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">Enter Realm</span>
-              </a>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Custom Background Image -->
-    <div class="fixed inset-0 pointer-events-none z-0" style="background-image: url('https://www.boot.dev/img/bg-blue-gray.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
-
-    <!-- Background Ambience -->
-    <div class="fixed inset-0 pointer-events-none z-0">
-      <div class="absolute top-0 left-1/4 w-96 h-96 bg-purple-900/10 rounded-full blur-[100px] animate-pulse"></div>
-      <div class="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-amber-900/10 rounded-full blur-[120px]"></div>
-    </div>
-
-    <!-- Hero Section -->
-    <section id="home-title" class="relative text-center px-4 pt-32 sm:pt-40 lg:pt-48 pb-20 z-10">
-      <div class="max-w-5xl mx-auto space-y-8 relative z-10">
-        
-        <div class="inline-flex items-center justify-center mb-2 animate-fade-in-up">
-          <div class="relative">
-            <img src="public/aura.png" alt="Aura-7F Logo" class="relative w-64 h-auto sm:w-80 md:w-96 object-contain" onerror="this.src='aura.png'; this.onerror='';">
-          </div>
-        </div>
-
-        <h1 class="text-4xl sm:text-5xl md:text-7xl font-cinzel font-bold leading-tight text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">
-          Forge your skills,
-          <span class="block mt-2 bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(245,158,11,0.4)]">
-            but for real.
-          </span>
-        </h1>
-
-        <p class="text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed text-slate-300 font-lato font-light tracking-wide">
-          Welcome to the most captivating, finger-flying, addictive way to master career-forging skills.
-        </p>
-
-        <div class="flex flex-wrap justify-center gap-6 pt-8">
-          <a href="/members" class="group relative px-8 py-4 bg-amber-600/20 rounded-lg overflow-hidden border border-amber-500/50 transition-all hover:scale-105 hover:bg-amber-600/30 hover:border-amber-400 hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]">
-            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/20 to-transparent -translate-x-full group-hover:animate-shine"></div>
-            <span class="relative flex items-center gap-2 font-cinzel font-bold text-amber-300 tracking-wider">
-              <i data-lucide="sword" class="w-5 h-5"></i>
-              Demo the Learning Path
-            </span>
-          </a>
-          <a href="/events" class="px-8 py-4 bg-purple-900/20 rounded-lg border border-purple-500/30 text-purple-200 font-cinzel font-bold tracking-wider hover:bg-purple-900/40 hover:border-purple-400 transition-all hover:shadow-[0_0_20px_rgba(168,85,247,0.25)] flex items-center gap-2">
-            <i data-lucide="scroll" class="w-5 h-5"></i>
-            View Quests
-          </a>
-        </div>
-
-        <div class="pt-8 space-y-3">
-          <p class="text-sm text-slate-500 font-lato">Join <span class="text-amber-400 font-semibold">1,200,000+ students</span> learning to code with the guild</p>
-          <div class="flex flex-wrap justify-center items-center gap-8 opacity-60">
-            <span class="font-cinzel text-lg text-slate-400 tracking-widest">GOOGLE</span>
-            <span class="font-cinzel text-lg text-slate-400 tracking-widest">STRIPE</span>
-            <span class="font-cinzel text-lg text-slate-400 tracking-widest">NETFLIX</span>
-            <span class="font-cinzel text-lg text-slate-400 tracking-widest">MICROSOFT</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Features -->
-    <section class="px-4 py-16">
-      <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16 space-y-4">
-          <p class="text-sm font-bold uppercase tracking-widest text-amber-500/80 font-cinzel">Why Aura-7F</p>
-          <h2 class="text-3xl sm:text-5xl font-cinzel font-bold text-white drop-shadow-lg">Mediocrity doesn't cut it anymore</h2>
-          <div class="h-1 w-24 bg-gradient-to-r from-transparent via-amber-500 to-transparent mx-auto rounded-full"></div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="group p-8 rounded-2xl border border-white/5 bg-slate-900/40 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_0_25px_rgba(126,34,206,0.15)] hover:border-purple-500/30 hover:-translate-y-2 relative overflow-hidden">
-            <div class="absolute -right-10 -top-10 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all"></div>
-            <div class="w-12 h-12 flex items-center justify-center rounded-xl border border-white/10 bg-black/50 mb-6 transition-transform group-hover:scale-110 shadow-inner">
-              <i data-lucide="code" class="w-5 h-5 text-amber-400"></i>
-            </div>
-            <h3 class="text-lg font-cinzel font-bold mb-2 text-slate-200 group-hover:text-amber-400 transition-colors">Write a ton of code</h3>
-            <p class="text-sm leading-relaxed text-slate-400 group-hover:text-slate-300">Skip tutorial hell. We craft legendary software artifacts through real, hands-on projects from day one.</p>
-          </div>
-          
-          <div class="group p-8 rounded-2xl border border-white/5 bg-slate-900/40 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_0_25px_rgba(126,34,206,0.15)] hover:border-purple-500/30 hover:-translate-y-2 relative overflow-hidden">
-            <div class="absolute -right-10 -top-10 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all"></div>
-            <div class="w-12 h-12 flex items-center justify-center rounded-xl border border-white/10 bg-black/50 mb-6 transition-transform group-hover:scale-110 shadow-inner">
-              <i data-lucide="sparkles" class="w-5 h-5 text-purple-400"></i>
-            </div>
-            <h3 class="text-lg font-cinzel font-bold mb-2 text-slate-200 group-hover:text-amber-400 transition-colors">Stay motivated</h3>
-            <p class="text-sm leading-relaxed text-slate-400 group-hover:text-slate-300">A game-like guild curriculum keeps you leveling up with quests, XP, and achievements.</p>
-          </div>
-
-          <div class="group p-8 rounded-2xl border border-white/5 bg-slate-900/40 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_0_25px_rgba(126,34,206,0.15)] hover:border-purple-500/30 hover:-translate-y-2 relative overflow-hidden">
-            <div class="absolute -right-10 -top-10 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all"></div>
-            <div class="w-12 h-12 flex items-center justify-center rounded-xl border border-white/10 bg-black/50 mb-6 transition-transform group-hover:scale-110 shadow-inner">
-              <i data-lucide="sword" class="w-5 h-5 text-red-400"></i>
-            </div>
-            <h3 class="text-lg font-cinzel font-bold mb-2 text-slate-200 group-hover:text-amber-400 transition-colors">Prove your skills</h3>
-            <p class="text-sm leading-relaxed text-slate-400 group-hover:text-slate-300">Build portfolio relics that show recruiters exactly what you can forge.</p>
-          </div>
-
-          <div class="group p-8 rounded-2xl border border-white/5 bg-slate-900/40 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_0_25px_rgba(126,34,206,0.15)] hover:border-purple-500/30 hover:-translate-y-2 relative overflow-hidden">
-            <div class="absolute -right-10 -top-10 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all"></div>
-            <div class="w-12 h-12 flex items-center justify-center rounded-xl border border-white/10 bg-black/50 mb-6 transition-transform group-hover:scale-110 shadow-inner">
-              <i data-lucide="book-open" class="w-5 h-5 text-cyan-400"></i>
-            </div>
-            <h3 class="text-lg font-cinzel font-bold mb-2 text-slate-200 group-hover:text-amber-400 transition-colors">Go deeper</h3>
-            <p class="text-sm leading-relaxed text-slate-400 group-hover:text-slate-300">Foundational concepts, not surface-level tutorials. Understand the arcane inner workings.</p>
-          </div>
-
-          <div class="group p-8 rounded-2xl border border-white/5 bg-slate-900/40 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_0_25px_rgba(126,34,206,0.15)] hover:border-purple-500/30 hover:-translate-y-2 relative overflow-hidden">
-            <div class="absolute -right-10 -top-10 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all"></div>
-            <div class="w-12 h-12 flex items-center justify-center rounded-xl border border-white/10 bg-black/50 mb-6 transition-transform group-hover:scale-110 shadow-inner">
-              <i data-lucide="server" class="w-5 h-5 text-emerald-400"></i>
-            </div>
-            <h3 class="text-lg font-cinzel font-bold mb-2 text-slate-200 group-hover:text-amber-400 transition-colors">Learn flexibly</h3>
-            <p class="text-sm leading-relaxed text-slate-400 group-hover:text-slate-300">Online and self-paced, without interrupting your life or your raid schedule.</p>
-          </div>
-
-          <div class="group p-8 rounded-2xl border border-white/5 bg-slate-900/40 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_0_25px_rgba(126,34,206,0.15)] hover:border-purple-500/30 hover:-translate-y-2 relative overflow-hidden">
-            <div class="absolute -right-10 -top-10 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all"></div>
-            <div class="w-12 h-12 flex items-center justify-center rounded-xl border border-white/10 bg-black/50 mb-6 transition-transform group-hover:scale-110 shadow-inner">
-              <i data-lucide="shield" class="w-5 h-5 text-amber-500"></i>
-            </div>
-            <h3 class="text-lg font-cinzel font-bold mb-2 text-slate-200 group-hover:text-amber-400 transition-colors">For a fraction of the cost</h3>
-            <p class="text-sm leading-relaxed text-slate-400 group-hover:text-slate-300">Minimize financial risk. World-class guild training for 1% of a college degree.</p>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- Paths Section -->
-    <section class="px-4 py-16">
-      <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16 space-y-4">
-          <p class="text-sm font-bold uppercase tracking-widest text-amber-500/80 font-cinzel">Choose your questline</p>
-          <h2 class="text-3xl sm:text-5xl font-cinzel font-bold text-white drop-shadow-lg">
-            Pick a <span class="text-amber-500">Learning Path</span>
-          </h2>
-          <p class="text-slate-400 max-w-xl mx-auto text-lg font-lato">Roadmaps designed to take you from beginner to job-ready</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="group relative p-8 rounded-2xl border border-white/5 bg-gradient-to-b from-slate-900/60 to-black/40 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_0_25px_rgba(245,158,11,0.15)] hover:border-amber-500/30 hover:-translate-y-2 overflow-hidden flex flex-col">
-            <div class="w-14 h-14 flex items-center justify-center rounded-xl border border-amber-500/20 bg-amber-900/20 mb-6 transition-transform group-hover:scale-110 shadow-inner">
-              <i data-lucide="server" class="w-6 h-6 text-amber-400"></i>
-            </div>
-            <h3 class="text-xl font-cinzel font-bold mb-3 text-slate-200 group-hover:text-amber-400 transition-colors">Frontend Path</h3>
-            <p class="text-sm leading-relaxed text-slate-400 mb-6 flex-1">Master crafting pixel-perfect interfaces with React, design systems, and performance.</p>
-            <a href="/projects" class="inline-flex items-center gap-2 text-amber-400 font-cinzel text-sm tracking-wider group-hover:text-amber-300 transition-colors">
-              Explore the roadmap <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-            </a>
-          </div>
-
-          <div class="group relative p-8 rounded-2xl border border-white/5 bg-gradient-to-b from-slate-900/60 to-black/40 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_0_25px_rgba(245,158,11,0.15)] hover:border-amber-500/30 hover:-translate-y-2 overflow-hidden flex flex-col">
-            <div class="w-14 h-14 flex items-center justify-center rounded-xl border border-amber-500/20 bg-amber-900/20 mb-6 transition-transform group-hover:scale-110 shadow-inner">
-              <i data-lucide="crown" class="w-6 h-6 text-purple-400"></i>
-            </div>
-            <h3 class="text-xl font-cinzel font-bold mb-3 text-slate-200 group-hover:text-amber-400 transition-colors">Backend Path</h3>
-            <p class="text-sm leading-relaxed text-slate-400 mb-6 flex-1">Learn APIs, authentication, databases, and CDNs — the engine room of the realm.</p>
-            <a href="/projects" class="inline-flex items-center gap-2 text-amber-400 font-cinzel text-sm tracking-wider group-hover:text-amber-300 transition-colors">
-              Explore the roadmap <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-            </a>
-          </div>
-
-          <div class="group relative p-8 rounded-2xl border border-white/5 bg-gradient-to-b from-slate-900/60 to-black/40 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_0_25px_rgba(245,158,11,0.15)] hover:border-amber-500/30 hover:-translate-y-2 overflow-hidden flex flex-col">
-            <div class="w-14 h-14 flex items-center justify-center rounded-xl border border-amber-500/20 bg-amber-900/20 mb-6 transition-transform group-hover:scale-110 shadow-inner">
-              <i data-lucide="rocket" class="w-6 h-6 text-cyan-400"></i>
-            </div>
-            <h3 class="text-xl font-cinzel font-bold mb-3 text-slate-200 group-hover:text-amber-400 transition-colors">DevOps Path</h3>
-            <p class="text-sm leading-relaxed text-slate-400 mb-6 flex-1">Command Linux, Docker, CI/CD, cloud deployments, and Kubernetes like a battle-mage.</p>
-            <a href="/projects" class="inline-flex items-center gap-2 text-amber-400 font-cinzel text-sm tracking-wider group-hover:text-amber-300 transition-colors">
-              Explore the roadmap <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Stats -->
-    <section class="px-4 py-16">
-      <div class="max-w-6xl mx-auto">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div class="group relative p-8 rounded-xl border border-white/5 bg-black/40 backdrop-blur-md text-center transition-all duration-300 hover:-translate-y-2 hover:border-amber-500/30 hover:shadow-[0_0_20px_rgba(245,158,11,0.1)]">
-            <div class="relative text-3xl sm:text-5xl font-cinzel font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 group-hover:to-amber-200">50K+</div>
-            <div class="relative text-xs sm:text-sm font-bold uppercase tracking-widest text-slate-500 group-hover:text-amber-500/80 transition-colors">lessons completed</div>
-          </div>
-          <div class="group relative p-8 rounded-xl border border-white/5 bg-black/40 backdrop-blur-md text-center transition-all duration-300 hover:-translate-y-2 hover:border-amber-500/30 hover:shadow-[0_0_20px_rgba(245,158,11,0.1)]">
-            <div class="relative text-3xl sm:text-5xl font-cinzel font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 group-hover:to-amber-200">800+</div>
-            <div class="relative text-xs sm:text-sm font-bold uppercase tracking-widest text-slate-500 group-hover:text-amber-500/80 transition-colors">courses completed</div>
-          </div>
-          <div class="group relative p-8 rounded-xl border border-white/5 bg-black/40 backdrop-blur-md text-center transition-all duration-300 hover:-translate-y-2 hover:border-amber-500/30 hover:shadow-[0_0_20px_rgba(245,158,11,0.1)]">
-            <div class="relative text-3xl sm:text-5xl font-cinzel font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 group-hover:to-amber-200">1.2M</div>
-            <div class="relative text-xs sm:text-sm font-bold uppercase tracking-widest text-slate-500 group-hover:text-amber-500/80 transition-colors">xp earned</div>
-          </div>
-          <div class="group relative p-8 rounded-xl border border-white/5 bg-black/40 backdrop-blur-md text-center transition-all duration-300 hover:-translate-y-2 hover:border-amber-500/30 hover:shadow-[0_0_20px_rgba(245,158,11,0.1)]">
-            <div class="relative text-3xl sm:text-5xl font-cinzel font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 group-hover:to-amber-200">50+</div>
-            <div class="relative text-xs sm:text-sm font-bold uppercase tracking-widest text-slate-500 group-hover:text-amber-500/80 transition-colors">guild members</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="px-4 py-20">
-      <div class="max-w-5xl mx-auto">
-        <div class="relative p-10 sm:p-20 rounded-3xl border border-amber-500/20 bg-gradient-to-br from-slate-900/90 to-black/90 backdrop-blur-xl overflow-hidden text-center shadow-2xl">
-          <div class="absolute top-0 right-0 w-96 h-96 rounded-full blur-[100px] bg-amber-600/10 animate-pulse"></div>
-          <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full blur-[80px] bg-purple-600/10"></div>
-          <div class="relative z-10 space-y-8">
-            <h2 class="text-3xl sm:text-5xl font-cinzel font-bold text-white">Ready to level up?</h2>
-            <p class="max-w-2xl mx-auto text-slate-300 text-lg">Join the guild and start forging real skills today. Cancel anytime — no risk, only XP.</p>
-            <a href="/about" class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-cinzel font-bold tracking-wider rounded-lg shadow-lg hover:shadow-amber-500/20 transition-all transform hover:scale-105">
-              Start Learning Today
-              <i data-lucide="zap" class="w-4 h-4"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </div>
-
-  <script>
-    // Initialize icons
-    lucide.createIcons();
-  </script>
 </body>
 </html>
