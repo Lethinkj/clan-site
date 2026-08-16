@@ -3,6 +3,9 @@ module.exports = {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
 		extend: {
+			fontFamily: {
+				sans: ['Clash', 'Titan One', 'sans-serif'],
+			},
 			colors: {
 				blue: {
 					'50': '#f8f5fe',

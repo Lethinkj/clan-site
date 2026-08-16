@@ -2,18 +2,38 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
 import { projects } from './Projects';
+import ProfileModal from '../components/ProfileModal';
+import SettingsModal from '../components/SettingsModal';
 
 export default function NewBase() {
     const [isGalleryOpen, setIsGalleryOpen] = useState(false);
     const [isProjectsOpen, setIsProjectsOpen] = useState(false);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+    // Background Video Audio State (Must start at 0 to pass browser autoplay policies)
+    const [volume, setVolume] = useState(0);
+    const videoRef = React.useRef<HTMLVideoElement>(null);
+
+    React.useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.volume = volume;
+            videoRef.current.muted = volume === 0;
+
+            // Force play promise recovery in case the browser paused it when re-rendering
+            videoRef.current.play().catch(() => { });
+        }
+    }, [volume]);
+
     return (
-        <div className="relative w-full h-screen overflow-hidden font-sans select-none">
+        <div className="relative font-sans select-none overflow-hidden w-screen h-[100dvh] portrait:w-[100dvh] portrait:h-[100dvw] portrait:origin-top-left portrait:rotate-90 portrait:translate-x-[100dvw]">
             {/* Background Video */}
             <div className="absolute inset-0 w-full h-full -z-10 bg-black">
                 <video
+                    ref={videoRef}
                     autoPlay
                     loop
-                    muted
+                    muted // starts muted for autoplay policy, will be unmuted explicitly on slider change
                     playsInline
                     className="w-full h-full object-cover"
                 >
@@ -21,26 +41,59 @@ export default function NewBase() {
                 </video>
             </div>
 
+            {/* Top Left Action Button */}
+            <div className="absolute -top-[110px] -left-[15px] z-50 w-[300px] h-[300px] flex items-center justify-center pointer-events-none scale-[0.6] sm:scale-[0.75] md:scale-90 lg:scale-100 origin-top-left transition-transform">
+                <button
+                    onClick={() => setIsProfileOpen(true)}
+                    className="relative w-[160px] h-[160px] rounded-full pointer-events-auto transition-all hover:brightness-110 active:translate-y-2 active:scale-95 drop-shadow-2xl flex items-center justify-center"
+                    title="Open Profile"
+                >
+                    <img src="/profile.png" alt="Profile" className="absolute w-[300px] h-[300px] max-w-none object-contain pointer-events-none" />
+                </button>
+            </div>
+
             {/* Left Side Action Buttons */}
-            <div className="absolute -bottom-[80px] -left-[40px] z-50">
+            <div className="absolute -bottom-[70px] -left-[80px] z-50 w-[300px] h-[300px] flex items-center justify-center pointer-events-none scale-[0.6] sm:scale-[0.75] md:scale-90 lg:scale-100 origin-bottom-left transition-transform">
+                <Link
+                    to="/events"
+                    className="relative w-[160px] h-[160px] rounded-full pointer-events-auto inline-flex items-center justify-center transition-all hover:brightness-110 active:translate-y-2 active:scale-95 drop-shadow-2xl"
+                    title="Open Events"
+                >
+                    <img src="/events.png" alt="Events" className="absolute w-[300px] h-[300px] max-w-none object-contain pointer-events-none" />
+                </Link>
+            </div>
+
+            {/* Top Right Action Button */}
+            <div className="absolute -top-[80px] -right-[80px] z-50 w-[300px] h-[300px] flex items-center justify-center pointer-events-none scale-[0.6] sm:scale-[0.75] md:scale-90 lg:scale-100 origin-top-right transition-transform">
                 <button
                     onClick={() => setIsProjectsOpen(true)}
-                    className="relative transition-all hover:brightness-110 active:translate-y-2 active:scale-95 drop-shadow-2xl"
+                    className="relative w-[160px] h-[160px] rounded-full pointer-events-auto transition-all hover:brightness-110 active:translate-y-2 active:scale-95 drop-shadow-2xl flex items-center justify-center"
                     title="Open Projects"
                 >
-                    <img src="/projects.png" alt="Projects" className="w-[300px] h-[300px] object-contain pointer-events-none" />
+                    <img src="/projects.png" alt="Projects" className="absolute w-[300px] h-[300px] max-w-none object-contain pointer-events-none" />
+                </button>
+            </div>
+
+            {/* Settings Button (Top of Gallery) */}
+            <div className="absolute bottom-[30px] -right-[50px] z-50 w-[300px] h-[300px] flex items-center justify-center pointer-events-none scale-[0.4] sm:scale-[0.45] md:scale-[0.5] lg:scale-[0.6] origin-right transition-transform">
+                <button
+                    onClick={() => setIsSettingsOpen(true)}
+                    className="relative w-[160px] h-[160px] rounded-full pointer-events-auto transition-all hover:brightness-110 active:translate-y-2 active:scale-95 drop-shadow-2xl flex items-center justify-center"
+                    title="Settings"
+                >
+                    <img src="/settings.png" alt="Settings" className="absolute w-[300px] h-[300px] max-w-none object-contain pointer-events-none drop-shadow-2xl" />
                 </button>
             </div>
 
             {/* Right Side Action Buttons */}
-            <div className="absolute -bottom-[80px] -right-[40px] z-50">
+            <div className="absolute -bottom-[70px] -right-[80px] z-50 w-[300px] h-[300px] flex items-center justify-center pointer-events-none scale-[0.6] sm:scale-[0.75] md:scale-90 lg:scale-100 origin-bottom-right transition-transform">
                 {/* Gallery Button over the glowing star */}
                 <button
                     onClick={() => setIsGalleryOpen(true)}
-                    className="relative transition-all hover:brightness-110 active:translate-y-2 active:scale-95 drop-shadow-2xl"
+                    className="relative w-[160px] h-[160px] rounded-full pointer-events-auto transition-all hover:brightness-110 active:translate-y-2 active:scale-95 drop-shadow-2xl flex items-center justify-center"
                     title="Open Gallery"
                 >
-                    <img src="/gallerybutton.png" alt="Gallery" className="w-[300px] h-[300px] object-contain pointer-events-none" />
+                    <img src="/gallerybutton.png" alt="Gallery" className="absolute w-[300px] h-[300px] max-w-none object-contain pointer-events-none" />
                 </button>
             </div>
 
@@ -205,6 +258,16 @@ export default function NewBase() {
                     </div>
                 </div>
             )}
+
+            {/* Profile Popup Modal */}
+            {isProfileOpen && <ProfileModal onClose={() => setIsProfileOpen(false)} />}
+
+            {/* Settings Popup Modal */}
+            {isSettingsOpen && <SettingsModal
+                onClose={() => setIsSettingsOpen(false)}
+                volume={volume}
+                onVolumeChange={setVolume}
+            />}
         </div>
     );
 }

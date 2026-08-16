@@ -1,4 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Titan+One&display=swap');
+
+@font-face {
+  font-family: 'Clash';
+  src: url('/Clash_Regular.otf.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Clash';
+  src: url('/Clash_Bold.otf.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 /* Fantasy Theme Overhaul - Deep Void & Magical Gold */
 @tailwind base;
 @tailwind components;
@@ -106,7 +121,7 @@ body::-webkit-scrollbar,
 body {
   background: radial-gradient(circle at 50% 0%, #1a0b2e 0%, var(--aura-dark) 60%) !important;
   color: var(--aura-text) !important;
-  font-family: 'Lato', 'Inter', sans-serif;
+  font-family: 'Clash', 'Titan One', 'Lato', 'Inter', sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
 }
@@ -118,7 +133,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Cinzel', serif;
+  font-family: 'Clash', 'Titan One', 'Cinzel', serif;
   color: var(--aura-text-strong);
   letter-spacing: 0.02em;
 }
@@ -283,6 +298,7 @@ h6 {
     opacity: 0.08;
   }
 }
+
 /* Mobile Menu Background Blur Synergy */
 body.mobile-menu-active main,
 body.mobile-menu-active .fixed.inset-0.-z-10,
@@ -293,6 +309,25 @@ body.mobile-menu-active footer {
   user-select: none;
 }
 
-main, .fixed.inset-0.-z-10, footer {
+main,
+.fixed.inset-0.-z-10,
+footer {
   transition: filter 0.5s ease;
+}
+@media (orientation: portrait) {
+  .responsive-profile-modal {
+    transform: scale(min(calc((100vh - 80px) / 1050), calc((100vw - 40px) / 820), 1)) !important;
+  }
+  .responsive-settings-modal {
+    transform: scale(min(calc((100vh - 80px) / 900), calc((100vw - 40px) / 600), 1)) !important;
+  }
+}
+
+@media (orientation: landscape) {
+  .responsive-profile-modal {
+    transform: scale(min(calc((100vw - 80px) / 1050), calc((100vh - 60px) / 820), 1)) !important;
+  }
+  .responsive-settings-modal {
+    transform: scale(min(calc((100vw - 80px) / 900), calc((100vh - 60px) / 600), 1)) !important;
+  }
 }
