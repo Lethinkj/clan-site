@@ -4,12 +4,14 @@ import { X } from 'lucide-react';
 import { projects } from './Projects';
 import ProfileModal from '../components/ProfileModal';
 import SettingsModal from '../components/SettingsModal';
+import DiscordLoginModal from '../components/DiscordLoginModal';
 
 export default function NewBase() {
     const [isGalleryOpen, setIsGalleryOpen] = useState(false);
     const [isProjectsOpen, setIsProjectsOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [showDiscordLogin, setShowDiscordLogin] = useState(false);
 
     // Background Video Audio State (Must start at 0 to pass browser autoplay policies)
     const [volume, setVolume] = useState(0);
@@ -26,9 +28,10 @@ export default function NewBase() {
     }, [volume]);
 
     return (
-        <div className="relative font-sans select-none overflow-hidden w-screen h-[100dvh] portrait:w-[100dvh] portrait:h-[100dvw] portrait:origin-top-left portrait:rotate-90 portrait:translate-x-[100dvw]">
-            {/* Background Video */}
-            <div className="absolute inset-0 w-full h-full -z-10 bg-black">
+        <>
+            <div className="relative font-sans select-none overflow-hidden w-screen h-[100dvh] portrait:w-[100dvh] portrait:h-[100dvw] portrait:origin-top-left portrait:rotate-90 portrait:translate-x-[100dvw]">
+                {/* Background Video */}
+                <div className="absolute inset-0 w-full h-full -z-10 bg-black">
                 <video
                     ref={videoRef}
                     autoPlay
@@ -267,7 +270,21 @@ export default function NewBase() {
                 onClose={() => setIsSettingsOpen(false)}
                 volume={volume}
                 onVolumeChange={setVolume}
+                onLoginClick={() => setShowDiscordLogin(true)}
             />}
+
+            {/* Discord Login Modal from Settings */}
+            <DiscordLoginModal
+                isOpen={showDiscordLogin}
+                onClose={() => setShowDiscordLogin(false)}
+                onLoginSuccess={() => {
+                    setShowDiscordLogin(false);
+                    setIsSettingsOpen(false);
+                }}
+                title="Guild Authentication"
+                subtitle="Login to access all features"
+            />
         </div>
+        </>
     );
 }
