@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTheme } from '../contexts/ThemeContext'
 import { Sparkles, KeyRound } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 
 // Discord OAuth Configuration
 const DISCORD_CLIENT_ID = import.meta.env.VITE_DISCORD_CLIENT_ID
@@ -24,11 +25,13 @@ export default function Login() {
   // Handle Discord callback
   useEffect(() => {
     const code = searchParams.get('code')
-    if (code && handledDiscordCode !== code) {
+    if (code && !handledDiscordCode) {
       setHandledDiscordCode(code)
-      handleDiscordCallback(code)
+      const returnTo = sessionStorage.getItem(DISCORD_RETURN_PATH_KEY)
+      const targetPath = returnTo && returnTo !== '/login' ? returnTo : '/newbase'
+      navigate(`${targetPath}?code=${code}`, { replace: true })
     }
-  }, [searchParams, handledDiscordCode])
+  }, [searchParams, handledDiscordCode, navigate])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -65,75 +68,13 @@ export default function Login() {
     window.location.href = discordAuthUrl.toString()
   }
 
-  // Handle Discord OAuth Callback
-  const handleDiscordCallback = async (code: string) => {
-    setDiscordLoading(true)
-    setError('')
-
-    try {
-      // Exchange code for Discord user info
-      const response = await fetch('https://discord.com/api/oauth2/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          client_id: DISCORD_CLIENT_ID!,
-          client_secret: import.meta.env.VITE_DISCORD_CLIENT_SECRET || '',
-          code: code,
-          grant_type: 'authorization_code',
-          redirect_uri: DISCORD_REDIRECT_URI!,
-          scope: 'identify email',
-        }).toString(),
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to authenticate with Discord')
-      }
-
-      const tokenData = await response.json()
-      const accessToken = tokenData.access_token
-
-      // Get user info from Discord
-      const userResponse = await fetch('https://discord.com/api/users/@me', {
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      })
-
-      if (!userResponse.ok) {
-        throw new Error('Failed to get Discord user info')
-      }
-
-      const discordUser = await userResponse.json()
-
-      // Store Discord user data (without database for now)
-      const discordUserData = {
-        id: discordUser.id,
-        username: discordUser.username,
-        email: discordUser.email,
-        avatar: discordUser.avatar,
-        discriminator: discordUser.discriminator,
-        loginTime: new Date().toISOString(),
-      }
-
-      // Store in sessionStorage (temporary, no database)
-      sessionStorage.setItem('discordUser', JSON.stringify(discordUserData))
-      localStorage.setItem('discordAccessToken', accessToken)
-
-      // Show success and navigate
-      console.log('Discord login successful:', discordUserData)
-      const returnTo = sessionStorage.getItem(DISCORD_RETURN_PATH_KEY)
-      sessionStorage.removeItem(DISCORD_RETURN_PATH_KEY)
-      const targetPath = returnTo && returnTo !== '/login' ? returnTo : '/newbase'
-      navigate(targetPath, { replace: true })
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Discord authentication failed'
-      setError(`Discord login failed: ${errorMessage}. Make sure your CLIENT_SECRET is correct.`)
-      console.error('Discord auth error:', err)
-    } finally {
-      setDiscordLoading(false)
-    }
+  if (searchParams.get('code')) {
+    // Just a basic fallback in case the effect hasn't routed them yet
+    return (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center bg-[#0d1117]">
+        <Sparkles size={48} className="text-amber-500 animate-spin" />
+      </div>
+    )
   }
 
   return (
@@ -228,8 +169,8 @@ export default function Login() {
               ) : (
                 <>
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20.317 4.491c-1.923-.9-3.954-1.406-6.083-1.431-.275-.038-.541.042-.689.135-.6.324-.598.325-.698.385-.245.135-1.678.813-1.678.813.3-.091.586-.182.889-.27.319-.087.615-.177.905-.245 1.816-.369 3.598-.309 5.205.236.418.14.957.314 1.466.573-1.022-.635-2.679-1.42-4.618-1.42-.393 0-.779.046-1.155.135-.077.014-.155.028-.231.043-.414.077-.828.155-1.242.232.378-.108.757-.216 1.135-.324 1.834-.477 3.636-.356 5.343.24z"/>
-                    <path d="M4.692 6.846c.915-1.049 2.118-1.971 3.511-2.511.108 1.562.906 2.969 2.079 4.018-.975-.261-1.922-.654-2.822-1.191-.36-.227-.703-.479-1.019-.776-.233-.209-.448-.43-.648-.659-.027.077-.053.15-.08.23-.322.896-.28 1.97.183 2.868.1.19.21.37.33.54-.22-.056-.438-.12-.653-.19-.943-.313-1.78-.814-2.388-1.467-.23-.249-.431-.52-.604-.806-.141-.228-.265-.468-.369-.715-.151-.375-.237-.778-.217-1.176.01-.19.036-.378.075-.562z"/>
+                    <path d="M20.317 4.491c-1.923-.9-3.954-1.406-6.083-1.431-.275-.038-.541.042-.689.135-.6.324-.598.325-.698.385-.245.135-1.678.813-1.678.813.3-.091.586-.182.889-.27.319-.087.615-.177.905-.245 1.816-.369 3.598-.309 5.205.236.418.14.957.314 1.466.573-1.022-.635-2.679-1.42-4.618-1.42-.393 0-.779.046-1.155.135-.077.014-.155.028-.231.043-.414.077-.828.155-1.242.232.378-.108.757-.216 1.135-.324 1.834-.477 3.636-.356 5.343.24z" />
+                    <path d="M4.692 6.846c.915-1.049 2.118-1.971 3.511-2.511.108 1.562.906 2.969 2.079 4.018-.975-.261-1.922-.654-2.822-1.191-.36-.227-.703-.479-1.019-.776-.233-.209-.448-.43-.648-.659-.027.077-.053.15-.08.23-.322.896-.28 1.97.183 2.868.1.19.21.37.33.54-.22-.056-.438-.12-.653-.19-.943-.313-1.78-.814-2.388-1.467-.23-.249-.431-.52-.604-.806-.141-.228-.265-.468-.369-.715-.151-.375-.237-.778-.217-1.176.01-.19.036-.378.075-.562z" />
                   </svg>
                   Login with Discord
                 </>

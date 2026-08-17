@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, RefreshCcw, Music, Volume2, User } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { RefreshCcw, Music, Volume2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 interface SettingsModalProps {
@@ -13,10 +13,23 @@ export default function SettingsModal({ onClose, volume, onVolumeChange, onLogin
     const { user, signOut } = useAuth();
     const [musicLevel, setMusicLevel] = React.useState(1);
     const [scale, setScale] = React.useState(1);
+    const [discordUserData, setDiscordUserData] = React.useState<{ username: string; avatar: string | null; id: string } | null>(null);
+
+    // Parse discord user from session on mount and on changes
+    useEffect(() => {
+        const stored = sessionStorage.getItem('discordUser');
+        if (stored) {
+            try { setDiscordUserData(JSON.parse(stored)); } catch { setDiscordUserData(null); }
+        } else {
+            setDiscordUserData(null);
+        }
+    }, []);
 
     // Check if user is logged in (either regular auth or Discord)
-    const discordUser = sessionStorage.getItem('discordUser');
-    const isLoggedIn = user !== null || discordUser !== null;
+    const isLoggedIn = user !== null || discordUserData !== null;
+    const discordAvatarUrl = discordUserData?.avatar && discordUserData?.id
+        ? `https://cdn.discordapp.com/avatars/${discordUserData.id}/${discordUserData.avatar}.png?size=64`
+        : null;
 
     // Ensure Discord modal stays closed unless explicitly opened
     React.useEffect(() => {
@@ -45,9 +58,10 @@ export default function SettingsModal({ onClose, volume, onVolumeChange, onLogin
         if (isLoggedIn) {
             // Logout
             signOut();
-            if (discordUser) {
+            if (discordUserData) {
                 sessionStorage.removeItem('discordUser');
                 localStorage.removeItem('discordAccessToken');
+                setDiscordUserData(null);
             }
             onClose();
         } else {
@@ -93,57 +107,94 @@ export default function SettingsModal({ onClose, volume, onVolumeChange, onLogin
     return (
         <div className="absolute inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 p-4 font-sans select-none overflow-hidden">
 
-                {/* The Main Settings Frame */}
-                <div
-                    className="relative w-[850px] shrink-0 flex flex-col bg-gradient-to-b from-[#e6e2d6] to-[#c7c3b5] border-[4px] border-[#4b4841] rounded-[24px] shadow-[inset_0_0_20px_rgba(255,255,255,0.5),0_20px_40px_rgba(0,0,0,0.8)] pb-5 animate-in zoom-in-95 duration-200 origin-center"
-                    style={{ transform: `scale(${scale})` }}
-                >
+            {/* The Main Settings Frame */}
+            <div
+                className="relative w-[850px] shrink-0 flex flex-col bg-gradient-to-b from-[#e6e2d6] to-[#c7c3b5] border-[4px] border-[#4b4841] rounded-[24px] shadow-[inset_0_0_20px_rgba(255,255,255,0.5),0_20px_40px_rgba(0,0,0,0.8)] pb-5 animate-in zoom-in-95 duration-200 origin-center"
+                style={{ transform: `scale(${scale})` }}
+            >
 
-                    {/* Header Profile - Dark Gray Bar */}
-                    <div className="relative h-[64px] bg-gradient-to-b from-[#8f8c85] via-[#66635c] to-[#4d4a45] rounded-t-[20px] border-b-[3px] border-[#2a2825] flex items-center justify-center shadow-inner shrink-0">
-                        <h2 className="text-[28px] font-black tracking-widest text-[#f4f4f4] drop-shadow-[0_3px_2px_rgba(0,0,0,0.8)] leading-none mt-1" style={{ fontFamily: '"Clash", "Titan One", sans-serif', WebkitTextStroke: '2px #000', textShadow: '0 4px 0 #1b120c, 0 4px 8px rgba(0,0,0,0.8)' }}>
-                            Settings
-                        </h2>
+                {/* Header Profile - Dark Gray Bar */}
+                <div className="relative h-[64px] bg-gradient-to-b from-[#8f8c85] via-[#66635c] to-[#4d4a45] rounded-t-[20px] border-b-[3px] border-[#2a2825] flex items-center justify-center shadow-inner shrink-0">
+                    <h2 className="text-[28px] font-black tracking-widest text-[#f4f4f4] drop-shadow-[0_3px_2px_rgba(0,0,0,0.8)] leading-none mt-1" style={{ fontFamily: '"Clash", "Titan One", sans-serif', WebkitTextStroke: '2px #000', textShadow: '0 4px 0 #1b120c, 0 4px 8px rgba(0,0,0,0.8)' }}>
+                        Settings
+                    </h2>
 
-                        {/* Close Button - Red right corner */}
-                        <button
-                            onClick={onClose}
-                            className="absolute right-2 top-2 w-[46px] h-[46px] bg-gradient-to-b from-[#ff6b6b] via-[#cc0000] to-[#8a0000] border-[2.5px] border-[#4a0000] rounded-[10px] shadow-[0_4px_0_#4a0000] flex items-center justify-center active:translate-y-1 active:shadow-none transition-all group overflow-hidden z-50"
-                        >
-                            <div className="absolute top-[1px] left-[2px] right-[2px] h-[40%] bg-gradient-to-b from-white/70 to-white/10 rounded-t-[6px] pointer-events-none group-active:opacity-80 transition-opacity"></div>
-                            <span className="relative z-10 text-white font-black text-2xl drop-shadow-[0_2px_1px_rgba(0,0,0,0.6)]" style={{ WebkitTextStroke: '1px #4a0000' }}>X</span>
-                        </button>
+                    {/* Close Button - Red right corner */}
+                    <button
+                        onClick={onClose}
+                        className="absolute right-2 top-2 w-[46px] h-[46px] bg-gradient-to-b from-[#ff6b6b] via-[#cc0000] to-[#8a0000] border-[2.5px] border-[#4a0000] rounded-[10px] shadow-[0_4px_0_#4a0000] flex items-center justify-center active:translate-y-1 active:shadow-none transition-all group overflow-hidden z-50"
+                    >
+                        <div className="absolute top-[1px] left-[2px] right-[2px] h-[40%] bg-gradient-to-b from-white/70 to-white/10 rounded-t-[6px] pointer-events-none group-active:opacity-80 transition-opacity"></div>
+                        <span className="relative z-10 text-white font-black text-2xl drop-shadow-[0_2px_1px_rgba(0,0,0,0.6)]" style={{ WebkitTextStroke: '1px #4a0000' }}>X</span>
+                    </button>
 
-                        {/* Glossy top edge highlight for the header */}
-                        <div className="absolute top-[2px] left-[4px] right-[4px] h-[8px] bg-gradient-to-b from-white/40 to-transparent rounded-t-[20px] pointer-events-none"></div>
-                    </div>
+                    {/* Glossy top edge highlight for the header */}
+                    <div className="absolute top-[2px] left-[4px] right-[4px] h-[8px] bg-gradient-to-b from-white/40 to-transparent rounded-t-[20px] pointer-events-none"></div>
+                </div>
 
-                    {/* Byte Bash Blitz Banner */}
-                    <div className="w-full bg-gradient-to-b from-[#359eff] to-[#0d73d6] border-b-[4px] border-[#0a4a8c] py-4 px-8 flex items-center justify-between shadow-[inset_0_4px_8px_rgba(255,255,255,0.4)] shrink-0 z-10 transition-all">
-                        {/* Left: Branding */}
-                        <div className="flex items-center gap-1">
-                            <span className="text-white text-[22px] sm:text-[26px] tracking-tight drop-shadow-[0_2px_1px_rgba(0,0,0,0.8)] mb-1" style={{ fontFamily: '"Clash", "Titan One", sans-serif', WebkitTextStroke: '1.5px #000' }}>BYTE BASH BLITZ</span>
-                        </div>
+                {/* CoC-style ID Banner */}
+                <div className="w-full bg-gradient-to-b from-[#3aafff] via-[#1d8de8] to-[#0d73d6] border-b-[4px] border-[#0a4a8c] px-5 py-3 flex items-center justify-between gap-3 shadow-[inset_0_4px_10px_rgba(255,255,255,0.35),inset_0_-2px_4px_rgba(0,0,0,0.2)] shrink-0 z-10">
 
-                        {/* Right: Dedicated Login/Logout Button */}
-                        <div className="flex items-center">
-                            <button
-                                onClick={handleLoginLogout}
-                                className={`h-[44px] px-8 rounded-[10px] shadow-[0_3px_0] flex items-center justify-center active:translate-y-[3px] active:shadow-none transition-all group relative overflow-hidden border-[2.5px]
-                                    ${isLoggedIn
-                                        ? 'bg-gradient-to-b from-[#ff6b6b] via-[#cc0000] to-[#8a0000] border-[#4a0000] shadow-[0_3px_0_#4a0000]'
-                                        : 'bg-gradient-to-b from-[#4bc2ff] to-[#1d8de8] border-[#0a4a8c] shadow-[0_3px_0_#0a4a8c]'
-                                    }`}
-                            >
-                                <div className="absolute top-[1.5px] left-[2.5px] right-[2.5px] h-[35%] bg-gradient-to-b from-white/60 to-transparent rounded-t-[6px] pointer-events-none"></div>
-                                <span className="text-white text-[16px] tracking-wide drop-shadow-[0_2px_1px_rgba(0,0,0,0.8)] relative z-10 uppercase mt-0.5 font-black" style={{ fontFamily: '"Clash", "Titan One", sans-serif', WebkitTextStroke: '1px #000' }}>
-                                    {isLoggedIn ? 'Log Out' : 'Log In'}
-                                </span>
-                            </button>
+                    {/* Left: Logo label like "SUPERCELL ID" => "BYTE BASH ID" */}
+                    <div className="flex items-center gap-2 shrink-0">
+                        <div className="bg-white rounded-md px-2 py-0.5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.15)]">
+                            <span className="text-[#1d8de8] text-[13px] font-black tracking-tight leading-none" style={{ fontFamily: '"Titan One", sans-serif' }}>BYTE BASH</span>
+                            <span className="ml-1 bg-[#1d8de8] text-white text-[11px] font-black px-1.5 py-0.5 rounded" style={{ fontFamily: '"Titan One", sans-serif' }}>ID</span>
                         </div>
                     </div>
 
-                    {/* Sliders Section */}
+                    {/* Center: Avatar + Username (if logged in) */}
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                        {isLoggedIn ? (
+                            <>
+                                {/* Avatar */}
+                                <div className="w-10 h-10 rounded-full border-[2.5px] border-white/80 shadow-md overflow-hidden shrink-0 bg-[#0a4a8c]">
+                                    {discordAvatarUrl ? (
+                                        <img src={discordAvatarUrl} alt="avatar" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center">
+                                            <span className="text-white text-lg font-black">{discordUserData?.username?.charAt(0).toUpperCase() ?? user?.username?.charAt(0).toUpperCase() ?? '?'}</span>
+                                        </div>
+                                    )}
+                                </div>
+                                {/* Username + Tag */}
+                                <div className="flex flex-col min-w-0">
+                                    <span className="text-white text-[15px] font-black leading-tight drop-shadow-[0_1px_1px_rgba(0,0,0,0.7)] truncate" style={{ fontFamily: '"Titan One", sans-serif', WebkitTextStroke: '0.5px #0a4a8c' }}>
+                                        {discordUserData?.username ?? user?.username ?? 'Player'}
+                                    </span>
+                                    <span className="text-white/70 text-[11px] font-bold leading-none truncate">
+                                        #{discordUserData?.id?.slice(-6) ?? '000000'}
+                                    </span>
+                                </div>
+                                {/* Refresh Icon */}
+                                <button className="ml-1 w-8 h-8 rounded-full bg-white/20 border border-white/50 flex items-center justify-center hover:bg-white/30 transition-all active:scale-90 shrink-0">
+                                    <RefreshCcw size={14} className="text-white" />
+                                </button>
+                            </>
+                        ) : (
+                            <span className="text-white/80 text-[13px] font-bold italic">
+                                Not signed in
+                            </span>
+                        )}
+                    </div>
+
+                    {/* Right: Action Button ("Log In" / "Log Out") CoC-style */}
+                    <button
+                        onClick={handleLoginLogout}
+                        className={`h-[40px] px-6 rounded-[10px] flex items-center justify-center active:translate-y-[2px] active:shadow-none transition-all relative overflow-hidden border-[2.5px] shrink-0
+                                ${isLoggedIn
+                                ? 'bg-gradient-to-b from-[#ff6b6b] via-[#cc0000] to-[#8a0000] border-[#4a0000] shadow-[0_3px_0_#4a0000]'
+                                : 'bg-gradient-to-b from-[#5fd6ff] via-[#28b6ff] to-[#0080e0] border-[#004a99] shadow-[0_3px_0_#004a99]'
+                            }`}
+                    >
+                        <div className="absolute top-[1.5px] left-[2.5px] right-[2.5px] h-[38%] bg-gradient-to-b from-white/60 to-transparent rounded-t-[6px] pointer-events-none"></div>
+                        <span className="text-white text-[15px] font-black drop-shadow-[0_2px_1px_rgba(0,0,0,0.8)] relative z-10 tracking-wide" style={{ fontFamily: '"Titan One", sans-serif', WebkitTextStroke: '0.8px #000' }}>
+                            {isLoggedIn ? 'Log Out' : 'Log In'}
+                        </span>
+                    </button>
+                </div>
+
+                {/* Sliders Section */}
                 <div className="w-full flex px-16 pt-5 pb-3 shrink-0 relative z-0">
                     {/* Watermark map styling overlay (subtle in bg) */}
                     <div className="absolute inset-x-0 top-0 h-[200px] opacity-[0.06] pointer-events-none mix-blend-overlay" style={{ backgroundImage: 'radial-gradient(#333 25%, transparent 25%)', backgroundSize: '12px 12px' }}></div>
@@ -252,7 +303,7 @@ export default function SettingsModal({ onClose, volume, onVolumeChange, onLogin
 
                 </div>
 
-                </div>
             </div>
+        </div>
     );
 }

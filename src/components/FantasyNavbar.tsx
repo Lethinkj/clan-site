@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import DiscordLoginModal from './DiscordLoginModal';
 
 export default function FantasyNavbar() {
+    const [showDiscordLogin, setShowDiscordLogin] = useState(false);
+
     return (
         <nav className="absolute top-4 left-0 w-full z-50 pointer-events-none">
             <div className="relative w-full drop-shadow-[0_15px_30px_rgba(0,0,0,0.9)]">
@@ -19,10 +22,10 @@ export default function FantasyNavbar() {
                   height = 118 / 1856 = 6.357%
                 */}
                 <div
-                    className="absolute left-0 w-full flex items-center justify-end px-[4%] sm:px-[8%] lg:px-[12%] pointer-events-auto"
+                    className="absolute left-0 w-full flex items-center justify-end px-[2%] sm:px-[6%] lg:px-[10%] xl:px-[12%] pointer-events-auto"
                     style={{ top: '0.431%', height: '6.357%' }}
                 >
-                    <div className="flex items-center gap-6 sm:gap-10 md:gap-14 xl:gap-20 h-full">
+                    <div className="flex items-center gap-1.5 sm:gap-4 md:gap-8 lg:gap-12 xl:gap-20 h-full">
                         {[
                             { id: 'Home', url: '/newhome', img: '/gen_home_new.png' },
                             { id: 'Events', url: '/events', img: '/gen_events_new.png' },
@@ -38,7 +41,7 @@ export default function FantasyNavbar() {
                                            transition-transform duration-300 hover:scale-110 active:scale-95"
                             >
                                 {btn.img ? (
-                                    <div className="relative w-20 sm:w-24 md:w-28 lg:w-32 xl:w-40 overflow-hidden flex items-center justify-center 
+                                    <div className="relative w-9 sm:w-14 md:w-20 lg:w-28 xl:w-36 overflow-hidden flex items-center justify-center 
                                                     drop-shadow-[0_5px_10px_rgba(0,0,0,0.8)] group-hover:drop-shadow-[0_0_15px_rgba(245,158,11,0.6)] group-hover:brightness-110 transition-all duration-300"
                                         style={{ aspectRatio: "auto" }}>
                                         <img
@@ -49,7 +52,7 @@ export default function FantasyNavbar() {
                                     </div>
                                 ) : (
                                     <>
-                                        <span className="font-cinzel text-amber-200/90 font-bold text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg tracking-[0.15em] md:tracking-[0.25em] uppercase
+                                        <span className="font-cinzel text-amber-200/90 font-bold text-[8px] sm:text-xs md:text-sm lg:text-base xl:text-lg tracking-[0.1em] md:tracking-[0.25em] uppercase
                                                          group-hover:text-yellow-400 group-hover:drop-shadow-[0_0_8px_rgba(250,210,50,0.8)]
                                                          drop-shadow-[0_2px_4px_rgba(0,0,0,1)] transition-all duration-300">
                                             {btn.id}
@@ -63,11 +66,14 @@ export default function FantasyNavbar() {
                         ))}
 
                         {/* Login Button using login.png */}
-                        <a
-                            href="#login"
-                            className="relative flex flex-col items-center group transition-transform duration-300 hover:scale-105 active:scale-95 ml-1 sm:ml-2"
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setShowDiscordLogin(true);
+                            }}
+                            className="relative flex flex-col items-center group transition-transform duration-300 hover:scale-105 active:scale-95 ml-0.5 sm:ml-2"
                         >
-                            <div className="relative w-16 sm:w-20 md:w-24 lg:w-28 xl:w-32 overflow-hidden flex items-center justify-center 
+                            <div className="relative w-[34px] sm:w-14 md:w-20 lg:w-28 xl:w-32 overflow-hidden flex items-center justify-center 
                                             drop-shadow-[0_5px_10px_rgba(0,0,0,0.8)] group-hover:drop-shadow-[0_0_15px_rgba(245,158,11,0.6)] group-hover:brightness-110 transition-all duration-300"
                                 style={{ aspectRatio: "918 / 377" }}>
                                 <img
@@ -77,11 +83,20 @@ export default function FantasyNavbar() {
                                     style={{ width: "148.8%", height: "180%" }}
                                 />
                             </div>
-                        </a>
+                        </button>
                     </div>
 
                 </div>
             </div>
+
+            {/* Discord Login Modal */}
+            <DiscordLoginModal
+                isOpen={showDiscordLogin}
+                onClose={() => setShowDiscordLogin(false)}
+                onLoginSuccess={() => setShowDiscordLogin(false)}
+                title="Guild Authentication"
+                subtitle="Login to access all features"
+            />
         </nav>
     );
 }

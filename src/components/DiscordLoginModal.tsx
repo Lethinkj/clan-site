@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { Sparkles } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 
 // Discord OAuth Configuration
 const DISCORD_CLIENT_ID = import.meta.env.VITE_DISCORD_CLIENT_ID
@@ -37,6 +38,13 @@ export default function DiscordLoginModal({
       handleDiscordCallback(code)
     }
   }, [code])
+
+  // Automatically start Discord login if opened and not handling a callback
+  useEffect(() => {
+    if (isOpen && !shouldHandleCallback && !error && !discordLoading) {
+      handleDiscordLogin()
+    }
+  }, [isOpen, shouldHandleCallback, error, discordLoading])
 
   // Discord Login Handler
   const handleDiscordLogin = () => {
@@ -102,6 +110,17 @@ export default function DiscordLoginModal({
 
       const discordUser = await userResponse.json()
 
+      // Check if user exists in the database
+      const { data: dbUser, error: dbError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('discord_user_id', discordUser.id)
+        .single()
+
+      if (dbError || !dbUser) {
+        throw new Error('Access Denied: Your Discord account is not registered in the Aura-7F guild database.')
+      }
+
       // Store Discord user data
       const discordUserData = {
         id: discordUser.id,
@@ -127,14 +146,12 @@ export default function DiscordLoginModal({
         onClose()
       }
 
-      // Clean callback query params and return user back to previous page.
-      const returnTo = sessionStorage.getItem(DISCORD_RETURN_PATH_KEY)
+      // Clean callback query params and force redirection to /newhome
       sessionStorage.removeItem(DISCORD_RETURN_PATH_KEY)
-      const targetPath = returnTo && returnTo !== '/login' ? returnTo : '/newbase'
-      navigate(targetPath, { replace: true })
+      navigate('/newhome', { replace: true })
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Discord authentication failed'
-      setError(`Discord login failed: ${errorMessage}. Make sure your CLIENT_SECRET is correct.`)
+      setError(errorMessage)
       console.error('Discord auth error:', err)
     } finally {
       setDiscordLoading(false)
@@ -144,61 +161,18 @@ export default function DiscordLoginModal({
   if (!isOpen && !shouldHandleCallback) return null
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center px-4 overflow-hidden">
-      {/* Background Overlay */}
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
-
-      {/* Modal Content */}
-      <div className="relative z-10 max-w-md w-full">
-        <div className="border-2 border-indigo-500/30 bg-slate-950/95 backdrop-blur-md p-8 rounded-2xl shadow-[0_0_60px_rgba(99,102,241,0.3)] relative group">
-
-          <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/20 to-purple-600/20 rounded-2xl blur opacity-30 group-hover:opacity-50 transition-opacity duration-1000"></div>
-
-          <div className="flex flex-col items-center mb-8 relative z-10">
-            <div className="w-16 h-16 rounded-full bg-indigo-500/10 border-2 border-indigo-500/50 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
-              <svg className="w-8 h-8 text-indigo-400" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20.317 4.491c-1.923-.9-3.954-1.406-6.083-1.431-.275-.038-.541.042-.689.135-.6.324-.598.325-.698.385-.245.135-1.678.813-1.678.813.3-.091.586-.182.889-.27.319-.087.615-.177.905-.245 1.816-.369 3.598-.309 5.205.236.418.14.957.314 1.466.573-1.022-.635-2.679-1.42-4.618-1.42-.393 0-.779.046-1.155.135-.077.014-.155.028-.231.043-.414.077-.828.155-1.242.232.378-.108.757-.216 1.135-.324 1.834-.477 3.636-.356 5.343.24z"/>
-                <path d="M4.692 6.846c.915-1.049 2.118-1.971 3.511-2.511.108 1.562.906 2.969 2.079 4.018-.975-.261-1.922-.654-2.822-1.191-.36-.227-.703-.479-1.019-.776-.233-.209-.448-.43-.648-.659-.027.077-.053.15-.08.23-.322.896-.28 1.97.183 2.868.1.19.21.37.33.54-.22-.056-.438-.12-.653-.19-.943-.313-1.78-.814-2.388-1.467-.23-.249-.431-.52-.604-.806-.141-.228-.265-.468-.369-.715-.151-.375-.237-.778-.217-1.176.01-.19.036-.378.075-.562z"/>
-              </svg>
-            </div>
-            <h2 className="text-3xl font-cinzel font-bold text-indigo-400 drop-shadow-[0_0_10px_rgba(99,102,241,0.5)]">
-              {title}
-            </h2>
-            <p className="text-slate-400 text-sm mt-2 font-cinzel tracking-wider">{subtitle}</p>
+    <div className="fixed inset-0 z-[200] flex items-center justify-center px-4 overflow-hidden bg-black/80 backdrop-blur-sm">
+      <div className="flex flex-col items-center gap-4">
+        <Sparkles size={48} className="text-indigo-500 animate-spin" />
+        <h2 className="text-2xl font-cinzel font-bold text-indigo-400 drop-shadow-[0_0_10px_rgba(99,102,241,0.5)]">
+          {discordLoading || shouldHandleCallback ? 'Authenticating...' : 'Connecting to Discord...'}
+        </h2>
+        {error && (
+          <div className="bg-red-900/30 border-2 border-red-500/50 text-red-200 px-4 py-3 rounded-lg mt-4 text-sm flex items-center gap-2 max-w-md text-center">
+            <span className="text-red-400 text-lg">⚠</span> {error}
+            <button onClick={onClose} className="ml-2 text-indigo-300 underline">Close</button>
           </div>
-
-          {error && (
-            <div className="bg-red-900/30 border-2 border-red-500/50 text-red-200 px-4 py-3 rounded-lg mb-6 text-sm flex items-center gap-2 relative z-10">
-              <span className="text-red-400 text-lg">⚠</span> {error}
-            </div>
-          )}
-
-          <div className="space-y-4 relative z-10">
-            <button
-              onClick={handleDiscordLogin}
-              disabled={discordLoading}
-              className="w-full py-3.5 px-6 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-cinzel font-bold tracking-wider rounded-lg shadow-[0_0_30px_rgba(79,70,229,0.4)] hover:shadow-[0_0_40px_rgba(79,70,229,0.6)] transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {discordLoading ? (
-                <>
-                  <Sparkles size={16} className="animate-spin" /> Connecting...
-                </>
-              ) : (
-                <>
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20.317 4.491c-1.923-.9-3.954-1.406-6.083-1.431-.275-.038-.541.042-.689.135-.6.324-.598.325-.698.385-.245.135-1.678.813-1.678.813.3-.091.586-.182.889-.27.319-.087.615-.177.905-.245 1.816-.369 3.598-.309 5.205.236.418.14.957.314 1.466.573-1.022-.635-2.679-1.42-4.618-1.42-.393 0-.779.046-1.155.135-.077.014-.155.028-.231.043-.414.077-.828.155-1.242.232.378-.108.757-.216 1.135-.324 1.834-.477 3.636-.356 5.343.24z"/>
-                    <path d="M4.692 6.846c.915-1.049 2.118-1.971 3.511-2.511.108 1.562.906 2.969 2.079 4.018-.975-.261-1.922-.654-2.822-1.191-.36-.227-.703-.479-1.019-.776-.233-.209-.448-.43-.648-.659-.027.077-.053.15-.08.23-.322.896-.28 1.97.183 2.868.1.19.21.37.33.54-.22-.056-.438-.12-.653-.19-.943-.313-1.78-.814-2.388-1.467-.23-.249-.431-.52-.604-.806-.141-.228-.265-.468-.369-.715-.151-.375-.237-.778-.217-1.176.01-.19.036-.378.075-.562z"/>
-                  </svg>
-                  Login with Discord
-                </>
-              )}
-            </button>
-
-            <p className="text-xs text-slate-400 text-center font-cinzel">
-              Enter with your Discord credentials to access the guild
-            </p>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   )
