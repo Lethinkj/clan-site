@@ -9,3 +9,4 @@ export { default as Projects } from './Projects';
 export { default as Profile } from './Profile';
 export { default as Gallery } from './Gallery';
 export { default as Milestones } from './Milestones';
+export { default as BetterHome } from './BetterHome';
