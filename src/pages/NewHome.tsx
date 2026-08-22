@@ -105,7 +105,7 @@ export default function NewHome() {
       </div>
 
       {/* Hero Section */}
-      <section id="home-title" className="relative text-center px-4 pt-48 sm:pt-60 md:pt-72 lg:pt-[360px] pb-20 z-10 mt-10 md:mt-16">
+      <section id="home-title" className="relative text-center px-4 pt-24 sm:pt-32 md:pt-30 lg:pt-[150px] pb-20 z-10">
         <div className="max-w-5xl mx-auto space-y-8 relative z-10">
 
           {/* Main Top Logo */}

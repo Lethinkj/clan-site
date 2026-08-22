@@ -22,6 +22,7 @@ import QuizLeaderboard from './pages/QuizLeaderboard'
 import LiveQuizHost from './pages/LiveQuizHost'
 import LiveQuizParticipate from './pages/LiveQuizParticipate'
 const Gallery = React.lazy(() => import('./pages/Gallery'))
+const NewGallery = React.lazy(() => import('./pages/NewGallery'))
 import { Analytics } from "@vercel/analytics/react"
 import { AuthProvider } from './contexts/AuthContext'
 import { QuizAuthProvider } from './contexts/QuizAuthContext'
@@ -37,7 +38,8 @@ function AppContent() {
     location.pathname.startsWith('/base') ||
     location.pathname.startsWith('/newbase') ||
     location.pathname.startsWith('/newhome') ||
-    location.pathname.startsWith('/betterhome');
+    location.pathname.startsWith('/betterhome') ||
+    location.pathname.startsWith('/newgallery');
 
   // Add page-load and scroll-based animations for text and cards.
   useEffect(() => {
@@ -145,7 +147,7 @@ function AppContent() {
             <div className="fixed inset-0 -z-10 pointer-events-none">
               <HackerBackground color="#776c07" fontSize={16} speed={0.8} />
             </div>
-          ) : location.pathname === '/gallery' || location.pathname.startsWith('/newhome') || location.pathname.startsWith('/betterhome') || location.pathname.startsWith('/base') || location.pathname.startsWith('/newbase') ? (
+          ) : location.pathname === '/gallery' || location.pathname === '/newgallery' || location.pathname.startsWith('/newhome') || location.pathname.startsWith('/betterhome') || location.pathname.startsWith('/base') || location.pathname.startsWith('/newbase') ? (
             null
           ) : (
             <div className="fixed inset-0 -z-10 pointer-events-none">
@@ -153,8 +155,8 @@ function AppContent() {
             </div>
           )}
           {!hideNavAndFooter && <Header />}
-          <main className={`${location.pathname === '/gallery' || location.pathname.startsWith('/newhome') || location.pathname.startsWith('/betterhome') || location.pathname.startsWith('/base') || location.pathname.startsWith('/newbase') ? 'w-full' : 'container mx-auto px-3 sm:px-6'} ${hideNavAndFooter ? 'pt-0 pb-0' : 'pt-20 pb-1 md:pb-2 lg:pb-2'} min-h-screen overflow-hidden`}>
-            <div className={`${location.pathname === '/gallery' ? 'max-w-[95rem]' : (location.pathname.startsWith('/newhome') || location.pathname.startsWith('/betterhome') || location.pathname.startsWith('/base') || location.pathname.startsWith('/newbase')) ? 'w-full max-w-none' : 'max-w-6xl'} mx-auto p-0 relative z-20`}>
+          <main className={`${location.pathname === '/gallery' || location.pathname === '/newgallery' || location.pathname.startsWith('/newhome') || location.pathname.startsWith('/betterhome') || location.pathname.startsWith('/base') || location.pathname.startsWith('/newbase') ? 'w-full' : 'container mx-auto px-3 sm:px-6'} ${hideNavAndFooter ? 'pt-0 pb-0' : 'pt-20 pb-1 md:pb-2 lg:pb-2'} min-h-screen overflow-hidden`}>
+            <div className={`${location.pathname === '/gallery' || location.pathname === '/newgallery' ? 'max-w-[95rem]' : (location.pathname.startsWith('/newhome') || location.pathname.startsWith('/betterhome') || location.pathname.startsWith('/base') || location.pathname.startsWith('/newbase')) ? 'w-full max-w-none' : 'max-w-6xl'} mx-auto p-0 relative z-20`}>
               <Routes>
                 <Route path="/" element={<Navigate to="/home" replace />} />
                 <Route path="/home" element={<Home />} />
@@ -169,6 +171,11 @@ function AppContent() {
                 <Route path="/gallery" element={
                   <React.Suspense fallback={<div className="h-screen w-full bg-black flex items-center justify-center text-amber-500 font-cinzel">Loading Resonance...</div>}>
                     <Gallery />
+                  </React.Suspense>
+                } />
+                <Route path="/newgallery" element={
+                  <React.Suspense fallback={<div className="h-screen w-full bg-[#1e231b] flex items-center justify-center text-[#a4f542] font-black font-sans uppercase">Loading Vault...</div>}>
+                    <NewGallery />
                   </React.Suspense>
                 } />
                 <Route path="/profile/:name" element={<Profile />} />
