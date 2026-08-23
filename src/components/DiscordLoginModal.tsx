@@ -146,9 +146,13 @@ export default function DiscordLoginModal({
         onClose()
       }
 
-      // Clean callback query params and force redirection to /newhome
+      // Clean callback query params and redirect based on role
       sessionStorage.removeItem(DISCORD_RETURN_PATH_KEY)
-      navigate('/newhome', { replace: true })
+      if (dbUser.role && dbUser.role.toLowerCase() === 'captain bash') {
+        navigate('/admindashboard', { replace: true })
+      } else {
+        navigate('/guestdashboard', { replace: true })
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Discord authentication failed'
       setError(errorMessage)
@@ -158,19 +162,37 @@ export default function DiscordLoginModal({
     }
   }
 
+  const handleClose = () => {
+    if (onClose) onClose()
+    if (shouldHandleCallback) {
+      navigate(window.location.pathname, { replace: true })
+    }
+  }
+
   if (!isOpen && !shouldHandleCallback) return null
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center px-4 overflow-hidden bg-black/80 backdrop-blur-sm">
-      <div className="flex flex-col items-center gap-4">
-        <Sparkles size={48} className="text-indigo-500 animate-spin" />
-        <h2 className="text-2xl font-cinzel font-bold text-indigo-400 drop-shadow-[0_0_10px_rgba(99,102,241,0.5)]">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center px-4 overflow-hidden bg-black/80 backdrop-blur-sm pointer-events-auto">
+      <div className="flex flex-col items-center gap-6">
+        <div className="relative flex items-center justify-center">
+          {/* Outer Ring */}
+          <div className="w-20 h-20 border-[3px] border-indigo-950 border-t-indigo-500 rounded-full animate-spin drop-shadow-[0_0_15px_rgba(99,102,241,0.6)]"></div>
+          {/* Middle Ring */}
+          <div className="absolute w-14 h-14 border-[3px] border-purple-950 border-r-purple-500 rounded-full animate-[spin_1.5s_linear_infinite_reverse]"></div>
+          {/* Inner Core */}
+          <div className="absolute w-6 h-6 bg-indigo-500/20 rounded-full animate-pulse shadow-[0_0_10px_rgba(99,102,241,1)]"></div>
+        </div>
+        <h2 className="text-2xl font-cinzel font-bold text-indigo-400 drop-shadow-[0_0_10px_rgba(99,102,241,0.5)] tracking-widest uppercase mt-4">
           {discordLoading || shouldHandleCallback ? 'Authenticating...' : 'Connecting to Discord...'}
         </h2>
         {error && (
-          <div className="bg-red-900/30 border-2 border-red-500/50 text-red-200 px-4 py-3 rounded-lg mt-4 text-sm flex items-center gap-2 max-w-md text-center">
-            <span className="text-red-400 text-lg">⚠</span> {error}
-            <button onClick={onClose} className="ml-2 text-indigo-300 underline">Close</button>
+          <div className="bg-red-950/80 border border-red-500/50 text-red-200 px-6 py-4 rounded-xl mt-2 text-sm flex flex-col items-center gap-4 max-w-md text-center shadow-[0_0_20px_rgba(239,68,68,0.2)]">
+            <p><span className="text-red-400 text-lg mr-2">⚠</span>{error}</p>
+            <button
+              onClick={handleClose}
+              className="px-6 py-2 bg-red-900/50 hover:bg-red-600/60 border border-red-500/50 rounded-lg text-red-100 font-cinzel font-bold tracking-widest transition-all hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+              Close
+            </button>
           </div>
         )}
       </div>

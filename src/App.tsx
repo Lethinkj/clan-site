@@ -23,6 +23,11 @@ import LiveQuizHost from './pages/LiveQuizHost'
 import LiveQuizParticipate from './pages/LiveQuizParticipate'
 const Gallery = React.lazy(() => import('./pages/Gallery'))
 const NewGallery = React.lazy(() => import('./pages/NewGallery'))
+const NewEvents = React.lazy(() => import('./pages/NewEvents'))
+const NewProjects = React.lazy(() => import('./pages/NewProjects'))
+const NewMembers = React.lazy(() => import('./pages/NewMembers'))
+const AdminDashboard = React.lazy(() => import('./pages/AdminDashboard'))
+const GuestDashboard = React.lazy(() => import('./pages/GuestDashboard'))
 import { Analytics } from "@vercel/analytics/react"
 import { AuthProvider } from './contexts/AuthContext'
 import { QuizAuthProvider } from './contexts/QuizAuthContext'
@@ -39,7 +44,12 @@ function AppContent() {
     location.pathname.startsWith('/newbase') ||
     location.pathname.startsWith('/newhome') ||
     location.pathname.startsWith('/betterhome') ||
-    location.pathname.startsWith('/newgallery');
+    location.pathname.startsWith('/newgallery') ||
+    location.pathname.startsWith('/newevents') ||
+    location.pathname.startsWith('/newprojects') ||
+    location.pathname.startsWith('/newmembers') ||
+    location.pathname.startsWith('/admindashboard') ||
+    location.pathname.startsWith('/guestdashboard');
 
   // Add page-load and scroll-based animations for text and cards.
   useEffect(() => {
@@ -147,7 +157,7 @@ function AppContent() {
             <div className="fixed inset-0 -z-10 pointer-events-none">
               <HackerBackground color="#776c07" fontSize={16} speed={0.8} />
             </div>
-          ) : location.pathname === '/gallery' || location.pathname === '/newgallery' || location.pathname.startsWith('/newhome') || location.pathname.startsWith('/betterhome') || location.pathname.startsWith('/base') || location.pathname.startsWith('/newbase') ? (
+          ) : location.pathname === '/gallery' || location.pathname === '/newgallery' || location.pathname === '/newevents' || location.pathname === '/newprojects' || location.pathname === '/newmembers' || location.pathname.startsWith('/admindashboard') || location.pathname.startsWith('/guestdashboard') || location.pathname.startsWith('/newhome') || location.pathname.startsWith('/betterhome') || location.pathname.startsWith('/base') || location.pathname.startsWith('/newbase') ? (
             null
           ) : (
             <div className="fixed inset-0 -z-10 pointer-events-none">
@@ -155,8 +165,8 @@ function AppContent() {
             </div>
           )}
           {!hideNavAndFooter && <Header />}
-          <main className={`${location.pathname === '/gallery' || location.pathname === '/newgallery' || location.pathname.startsWith('/newhome') || location.pathname.startsWith('/betterhome') || location.pathname.startsWith('/base') || location.pathname.startsWith('/newbase') ? 'w-full' : 'container mx-auto px-3 sm:px-6'} ${hideNavAndFooter ? 'pt-0 pb-0' : 'pt-20 pb-1 md:pb-2 lg:pb-2'} min-h-screen overflow-hidden`}>
-            <div className={`${location.pathname === '/gallery' || location.pathname === '/newgallery' ? 'max-w-[95rem]' : (location.pathname.startsWith('/newhome') || location.pathname.startsWith('/betterhome') || location.pathname.startsWith('/base') || location.pathname.startsWith('/newbase')) ? 'w-full max-w-none' : 'max-w-6xl'} mx-auto p-0 relative z-20`}>
+          <main className={`${location.pathname === '/gallery' || location.pathname === '/newgallery' || location.pathname === '/newevents' || location.pathname === '/newprojects' || location.pathname === '/newmembers' || location.pathname.startsWith('/admindashboard') || location.pathname.startsWith('/guestdashboard') || location.pathname.startsWith('/newhome') || location.pathname.startsWith('/betterhome') || location.pathname.startsWith('/base') || location.pathname.startsWith('/newbase') ? 'w-full' : 'container mx-auto px-3 sm:px-6'} ${hideNavAndFooter ? 'pt-0 pb-0' : 'pt-20 pb-1 md:pb-2 lg:pb-2'} min-h-screen overflow-hidden`}>
+            <div className={`${location.pathname === '/gallery' || location.pathname === '/newgallery' || location.pathname === '/newevents' || location.pathname === '/newprojects' || location.pathname === '/newmembers' || location.pathname.startsWith('/admindashboard') || location.pathname.startsWith('/guestdashboard') ? 'max-w-[95rem]' : (location.pathname.startsWith('/newhome') || location.pathname.startsWith('/betterhome') || location.pathname.startsWith('/base') || location.pathname.startsWith('/newbase')) ? 'w-full max-w-none' : 'max-w-6xl'} mx-auto p-0 relative z-20`}>
               <Routes>
                 <Route path="/" element={<Navigate to="/home" replace />} />
                 <Route path="/home" element={<Home />} />
@@ -176,6 +186,31 @@ function AppContent() {
                 <Route path="/newgallery" element={
                   <React.Suspense fallback={<div className="h-screen w-full bg-[#1e231b] flex items-center justify-center text-[#a4f542] font-black font-sans uppercase">Loading Vault...</div>}>
                     <NewGallery />
+                  </React.Suspense>
+                } />
+                <Route path="/newevents" element={
+                  <React.Suspense fallback={<div className="h-screen w-full bg-[#1e231b] flex items-center justify-center text-[#a4f542] font-black font-sans uppercase">Loading Board...</div>}>
+                    <NewEvents />
+                  </React.Suspense>
+                } />
+                <Route path="/newprojects" element={
+                  <React.Suspense fallback={<div className="h-screen w-full bg-[#1e231b] flex items-center justify-center text-[#a4f542] font-black font-sans uppercase">Loading Vault...</div>}>
+                    <NewProjects />
+                  </React.Suspense>
+                } />
+                <Route path="/newmembers" element={
+                  <React.Suspense fallback={<div className="h-screen w-full bg-[#1e231b] flex items-center justify-center text-[#a4f542] font-black font-sans uppercase">Loading Roster...</div>}>
+                    <NewMembers />
+                  </React.Suspense>
+                } />
+                <Route path="/admindashboard" element={
+                  <React.Suspense fallback={<div className="h-screen w-full bg-[#0d1117] flex items-center justify-center text-red-500 font-cinzel font-bold text-xl uppercase">Loading Command Center...</div>}>
+                    <AdminDashboard />
+                  </React.Suspense>
+                } />
+                <Route path="/guestdashboard" element={
+                  <React.Suspense fallback={<div className="h-screen w-full bg-[#0d1117] flex items-center justify-center text-slate-500 font-cinzel font-bold text-xl uppercase">Loading Welcome Room...</div>}>
+                    <GuestDashboard />
                   </React.Suspense>
                 } />
                 <Route path="/profile/:name" element={<Profile />} />

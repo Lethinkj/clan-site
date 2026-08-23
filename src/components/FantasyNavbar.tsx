@@ -12,10 +12,10 @@ export default function FantasyNavbar() {
     const [isEntering, setIsEntering] = useState(true);
 
     useEffect(() => {
-        // Trigger the gates opening animation shortly after component mounts
+        // Trigger the clouds opening animation shortly after component mounts
         const t = setTimeout(() => {
             setIsEntering(false);
-        }, 50);
+        }, 1000);
         return () => clearTimeout(t);
     }, []);
 
@@ -27,15 +27,15 @@ export default function FantasyNavbar() {
             return;
         }
 
-        setIsExiting(true); // Close the gates
+        setIsExiting(true); // Close the clouds
         setTimeout(() => {
             navigate(url);
-        }, 500); // Navigate once gates cover the screen
+        }, 500); // Navigate once clouds cover the screen
     };
 
-    // determine gate positions
-    const leftGateClass = isExiting ? "translate-x-0" : (isEntering ? "translate-x-0" : "-translate-x-[130%]");
-    const rightGateClass = isExiting ? "translate-x-0" : (isEntering ? "translate-x-0" : "translate-x-[130%]");
+    // determine cloud positions
+    const leftCloudClass = isExiting ? "translate-x-0" : (isEntering ? "translate-x-0" : "-translate-x-[130%]");
+    const rightCloudClass = isExiting ? "translate-x-0" : (isEntering ? "translate-x-0" : "translate-x-[130%]");
 
     return (
         <>
@@ -55,9 +55,9 @@ export default function FantasyNavbar() {
                         <div className="flex items-center gap-1.5 sm:gap-4 md:gap-8 lg:gap-12 xl:gap-20 h-full">
                             {[
                                 { id: 'Home', url: '/newhome', img: '/home2.png', imgClass: 'scale-[1.4]' },
-                                { id: 'Events', url: '/events', img: '/events1.png', imgClass: 'scale-[1.4]' },
-                                { id: 'Projects', url: '/projects', img: '/projects1.png', imgClass: 'scale-[1.4]' },
-                                { id: 'Members', url: '/members', img: '/members.png', imgClass: 'scale-[1.4]' },
+                                { id: 'Events', url: '/newevents', img: '/events1.png', imgClass: 'scale-[1.4]' },
+                                { id: 'Projects', url: '/newprojects', img: '/projects1.png', imgClass: 'scale-[1.4]' },
+                                { id: 'Members', url: '/newmembers', img: '/members.png', imgClass: 'scale-[1.4]' },
                                 { id: 'Gallery', url: '/newgallery', img: '/gallery.png', imgClass: 'scale-[1.4]' },
                             ].map((btn) => {
                                 const isActive = location.pathname.startsWith(btn.url);
@@ -121,32 +121,44 @@ export default function FantasyNavbar() {
                 />
             </nav>
 
-            {/* Dark Fantasy Cinematic Gate Screen Transition */}
+            {/* Clash of Clans Style Cloud Battle Screen Transition */}
             <div className="fixed inset-0 z-[99999] pointer-events-none overflow-hidden h-[100dvh]">
 
-                {/* GATES CONTAINER */}
-                <div className="absolute inset-0 w-full h-full drop-shadow-[0_0_50px_rgba(0,0,0,1)]">
-                    {/* LEFT GATE */}
+                {/* CLOUDS CONTAINER with Unified Drop Shadow */}
+                <div className="absolute inset-0 w-full h-full drop-shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+                    {/* LEFT CLOUD */}
                     <div
-                        className={`absolute top-0 bottom-0 left-0 w-[52vw] bg-[#0c0d10] flex flex-col justify-center items-end
-                                    transition-transform duration-500 ease-in-out border-r-[3px] border-[#20222a] shadow-[inset_-20px_0_50px_rgba(0,0,0,0.9)] ${leftGateClass}`}
+                        className={`absolute top-0 bottom-0 left-0 w-[52vw] bg-[#f8f9fa] flex flex-col justify-center items-end
+                                    transition-transform duration-500 ease-in-out ${leftCloudClass}`}
                     >
-                        <div className="absolute top-0 bottom-0 right-0 w-[1px] bg-gradient-to-b from-transparent via-amber-500/50 to-transparent"></div>
+                        <div className="absolute top-[-5vh] bottom-[-5vh] right-0 w-[10vh] pointer-events-none flex flex-col justify-between overflow-visible">
+                            {Array.from({ length: 18 }).map((_, i) => (
+                                <div key={i} className="absolute bg-[#f8f9fa] rounded-full w-[15vh] h-[15vh]"
+                                    style={{ top: `${i * 6 - 5}vh`, right: '-7.5vh' }}>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
-                    {/* RIGHT GATE */}
+                    {/* RIGHT CLOUD */}
                     <div
-                        className={`absolute top-0 bottom-0 right-0 w-[52vw] bg-[#0c0d10] flex flex-col justify-center items-start
-                                    transition-transform duration-500 ease-in-out border-l-[3px] border-[#20222a] shadow-[inset_20px_0_50px_rgba(0,0,0,0.9)] ${rightGateClass}`}
+                        className={`absolute top-0 bottom-0 right-0 w-[52vw] bg-[#f8f9fa] flex flex-col justify-center items-start
+                                    transition-transform duration-500 ease-in-out ${rightCloudClass}`}
                     >
-                        <div className="absolute top-0 bottom-0 left-0 w-[1px] bg-gradient-to-b from-transparent via-amber-500/50 to-transparent"></div>
+                        <div className="absolute top-[-5vh] bottom-[-5vh] left-0 w-[10vh] pointer-events-none flex flex-col justify-between overflow-visible">
+                            {Array.from({ length: 18 }).map((_, i) => (
+                                <div key={i} className="absolute bg-[#f8f9fa] rounded-full w-[15vh] h-[15vh]"
+                                    style={{ top: `${i * 6 - 5}vh`, left: '-7.5vh' }}>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
-                {/* Center Graphic that appears when gates meet */}
+                {/* Clash Center Graphic that appears when clouds meet */}
                 <div
                     className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 delay-200 z-50
-                                ${isExiting ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}
+                                ${isExiting || isEntering ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}
                 >
                     <div className="relative flex items-center justify-center">
                         {/* Intense golden explosion backdrop */}

@@ -25,6 +25,7 @@ export interface Event {
   status: 'upcoming' | 'live' | 'ended' | 'completed'
   image_url?: string
   max_registrations?: number
+  has_slots?: boolean
   created_at: string
   updated_at: string
 }
@@ -180,4 +181,25 @@ export function hashPassword(email: string, password: string): string {
 // Verify password against hash
 export function verifyPassword(email: string, password: string, hash: string): boolean {
   return hashPassword(email, password) === hash
+}
+
+// Slot System Types
+export interface EventSlot {
+  id: string
+  event_id: string
+  day_number: number
+  slot_date: string
+  start_time: string
+  end_time: string
+  capacity: number
+  created_at: string
+}
+
+export interface EventSlotRegistration {
+  id: string
+  slot_id: string
+  event_id: string
+  user_email: string
+  event_registration_id: string
+  created_at: string
 }
