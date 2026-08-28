@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { supabase, Event, EventRegistration } from '../lib/supabase'
+import { formatTime12h } from '../lib/utils'
 import Modal, { Alert } from '../components/ui/Modal'
 import { useTheme } from '../contexts/ThemeContext'
 import { Scroll, Sword, Skull, Sparkles, MapPin, Calendar as CalIcon } from 'lucide-react'
@@ -86,7 +87,7 @@ const EventCard = ({ event, showRegister = false, onRegister }: { event: Event; 
         <div className="space-y-3 mb-6 text-sm">
           <div className="flex items-center gap-3 text-slate-400">
             <CalIcon size={14} className="text-amber-500/70" />
-            <span className="font-lato">{event.date} • <span className="text-slate-500">{event.time}</span></span>
+            <span className="font-lato">{event.date} • <span className="text-slate-500">{formatTime12h(event.time)}</span></span>
           </div>
           <div className="flex items-center gap-3 text-slate-400">
             <MapPin size={14} className="text-amber-500/70" />

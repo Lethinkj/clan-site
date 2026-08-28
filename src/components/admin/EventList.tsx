@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Event, EventRegistration } from '../../lib/supabase'
 import { supabase } from '../../lib/supabase'
+import { formatTime12h } from '../../lib/utils'
 import EventForm from './EventForm'
 import { ConfirmDialog } from '../ui/Modal'
 
@@ -119,7 +120,7 @@ export default function EventList({ events, onEventUpdated, onEventDeleted, isAd
             </div>
 
             <div className="text-aura text-sm mb-2">
-              <p>📅 {event.date} | 🕐 {event.time}{event.end_time && ` - ${event.end_time}`}</p>
+              <p>📅 {event.date} | 🕐 {formatTime12h(event.time)}{event.end_time && ` - ${formatTime12h(event.end_time)}`}</p>
               <p>📍 {event.location} | 👥 {event.attendees} attendees</p>
               {event.rating && <p>⭐ {event.rating}</p>}
               {event.max_registrations && <p>📋 Max registrations: {event.max_registrations}</p>}

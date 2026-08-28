@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { supabase, Event, EventRegistration } from '../../lib/supabase'
 import Modal, { ConfirmDialog } from '../ui/Modal'
+import { formatTime12h } from '../../lib/utils'
 
 export default function RegistrationManagement() {
   const [events, setEvents] = useState<Event[]>([])
@@ -174,7 +175,7 @@ export default function RegistrationManagement() {
                   <div className="mb-4 pb-4 border-b border-cyan-400/10">
                     <h4 className="text-lg font-bold text-cyan-400">{event.title}</h4>
                     <p className="text-sm text-aura mt-1">
-                      📅 {event.date} | 🕐 {event.time} | 📍 {event.location}
+                      📅 {event.date} | 🕐 {formatTime12h(event.time)} | 📍 {event.location}
                     </p>
                     <p className="text-sm text-aura mt-1">
                       📋 {registrations.length}

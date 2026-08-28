@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ShieldCheck, LogOut } from 'lucide-react';
 
 interface Tab {
     id: 'users' | 'members' | 'events' | 'projects';
@@ -20,69 +21,55 @@ export default function AdminNav({ tabs, activeTab, setActiveTab }: AdminNavProp
         sessionStorage.removeItem('discordUser');
         navigate('/newhome');
     };
+
     return (
-        <div
-            className="lg:fixed lg:top-0 lg:left-0 lg:w-[320px] lg:h-screen w-full relative z-40 p-6 flex flex-col mb-8 lg:mb-0"
-            style={{ backgroundImage: 'url(/leftnav1.png)', backgroundSize: '1500px auto', backgroundPosition: 'left top', backgroundRepeat: 'no-repeat' }}
-        >
-            {/* Subtle Wood-like Grain Overlay using noise/gradient */}
-            <div className="absolute inset-0 opacity-20 pointer-events-none z-0" style={{ backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px)' }}></div>
+        <aside className="lg:fixed lg:top-0 lg:left-0 lg:w-[268px] lg:h-screen w-full relative z-40 flex flex-col bg-[#0b1120] border-r border-white/[0.06]">
+            {/* Brand */}
+            <div className="flex items-center gap-3 px-6 h-[72px] border-b border-white/[0.06] shrink-0">
+                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 to-sky-500 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30">
+                    <ShieldCheck size={20} />
+                </div>
+                <div className="leading-tight">
+                    <p className="text-sm font-semibold text-white">Aura Admin</p>
+                    <p className="text-[11px] text-slate-500">Control Panel</p>
+                </div>
+            </div>
 
-            {/* Accent Glow inside sidebar */}
-            <div className="absolute inset-x-0 -top-10 h-24 bg-gradient-to-b from-amber-500/20 to-transparent blur-2xl opacity-50 pointer-events-none z-0"></div>
-
-            {/* Header */}
-            {/* <div className="mb-8 pb-4 border-b border-amber-800/40 relative z-10 flex items-center justify-between">
-                <span className="font-cinzel font-black text-amber-500 tracking-[0.2em] uppercase text-sm drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">
-                    Operations
-                </span>
-                <div className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,1)] animate-pulse border border-amber-200"></div>
-            </div> */}
-
-            <nav className="flex flex-col space-y-4 relative z-10">
+            {/* Navigation */}
+            <nav className="flex-1 px-3 py-5 space-y-1 overflow-y-auto">
+                <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-600">Management</p>
                 {tabs.map((tab) => {
                     const isActive = activeTab === tab.id;
-                    let tabImg = '';
-                    if (tab.id === 'users') tabImg = '/profile.png';
-                    if (tab.id === 'members') tabImg = '/members.png';
-                    if (tab.id === 'events') tabImg = '/events1.png';
-                    if (tab.id === 'projects') tabImg = '/projects1.png';
-
                     return (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as any)}
-                            className="relative w-full flex flex-col items-center justify-center transition-transform duration-300 group hover:scale-110 active:scale-95 py-2"
+                            className={`group relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                                isActive
+                                    ? 'bg-white/[0.08] text-white ring-1 ring-white/10'
+                                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
+                            }`}
                         >
-                            {isActive && tabImg ? (
-                                <div className="relative w-32 lg:w-40 overflow-visible flex items-center justify-center drop-shadow-[0_5px_10px_rgba(0,0,0,0.8)] group-hover:drop-shadow-[0_0_15px_rgba(245,158,11,0.6)] group-hover:brightness-110 transition-all duration-300">
-                                    <img
-                                        src={tabImg}
-                                        alt={tab.label}
-                                        className="w-full h-auto object-contain"
-                                    />
-                                </div>
-                            ) : (
-                                <span className="font-cinzel text-amber-100/70 font-bold text-sm lg:text-base tracking-[0.1em] md:tracking-[0.2em] uppercase group-hover:text-amber-400 group-hover:drop-shadow-[0_0_8px_rgba(245,158,11,0.5)] drop-shadow-[0_2px_4px_rgba(0,0,0,1)] transition-colors duration-300 py-4">
-                                    {tab.label}
-                                </span>
+                            {isActive && (
+                                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-indigo-500"></span>
                             )}
+                            <span className={isActive ? 'text-indigo-400' : 'text-slate-500 group-hover:text-slate-300'}>{tab.icon}</span>
+                            {tab.label}
                         </button>
                     );
                 })}
             </nav>
 
-            {/* Logout Button */}
-            <div className="mt-auto relative z-10 w-full pt-8 pb-4">
+            {/* Logout */}
+            <div className="p-3 border-t border-white/[0.06] shrink-0">
                 <button
                     onClick={handleLogout}
-                    className="relative w-full flex flex-col items-center justify-center transition-transform duration-300 group hover:scale-110 active:scale-95 py-2"
+                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-400/80 hover:text-red-300 hover:bg-red-500/10 transition-all"
                 >
-                    <span className="font-cinzel text-red-500/80 font-bold text-sm lg:text-base tracking-[0.1em] md:tracking-[0.2em] uppercase group-hover:text-red-400 group-hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.5)] drop-shadow-[0_2px_4px_rgba(0,0,0,1)] transition-colors duration-300 py-4">
-                        Logout
-                    </span>
+                    <LogOut size={18} />
+                    Logout
                 </button>
             </div>
-        </div>
+        </aside>
     );
 }

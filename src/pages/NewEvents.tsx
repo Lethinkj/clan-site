@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase, Event } from '../lib/supabase';
+import { formatTime12h } from '../lib/utils';
 import { getAvailableSlots, bookSlot } from '../lib/slotApi';
 import FantasyNavbar from '../components/FantasyNavbar';
 import { useNavigate } from 'react-router-dom';
@@ -87,7 +88,7 @@ export default function NewEvents() {
                 <div className="space-y-2 mb-4 text-xs font-lato">
                     <div className="flex items-center gap-2 text-slate-400">
                         <CalIcon size={14} className={isLive ? 'text-red-500/70' : 'text-amber-500/70'} />
-                        <span>{event.date} • <span className="text-slate-500">{event.time}</span></span>
+                        <span>{event.date} • <span className="text-slate-500">{formatTime12h(event.time)}</span></span>
                     </div>
                     <div className="flex items-center gap-2 text-slate-400">
                         <MapPin size={14} className={isLive ? 'text-red-500/70' : 'text-amber-500/70'} />

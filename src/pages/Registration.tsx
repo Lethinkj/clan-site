@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase, Event } from '../lib/supabase';
 import { getAvailableSlots, bookSlot } from '../lib/slotApi';
+import { formatTime12h } from '../lib/utils';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Sparkles, Calendar as CalIcon, Shield, ArrowLeft } from 'lucide-react';
 import FantasyNavbar from '../components/FantasyNavbar';
@@ -267,7 +268,7 @@ export default function Registration() {
                                                                             : 'bg-black/60 border-white/10 hover:border-amber-500/40 text-slate-300 hover:-translate-y-1'
                                                                 }`}
                                                             >
-                                                                <span className="font-bold text-lg">{slot.start_time.substring(0, 5)}</span>
+                                                                <span className="font-bold text-lg">{formatTime12h(slot.start_time)}</span>
                                                                 <span className={`text-[10px] mt-1 tracking-wider font-bold uppercase ${isFull ? 'text-red-500/50' : 'text-amber-500/70'}`}>
                                                                     {isFull ? 'FULL' : `${slot.spots_remaining} Spots`}
                                                                 </span>
