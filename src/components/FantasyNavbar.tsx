@@ -39,7 +39,7 @@ export default function FantasyNavbar() {
 
     return (
         <>
-            <nav className="absolute top-4 left-0 w-full z-40 pointer-events-none">
+            <nav className="absolute top-0 left-0 w-full z-40 pointer-events-none">
                 <div className="relative w-full drop-shadow-[0_15px_30px_rgba(0,0,0,0.9)]">
 
                     <img
